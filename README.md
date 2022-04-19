@@ -1,1 +1,1 @@
-# spectravel_v2
+# spectrometer_v2
