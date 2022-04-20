@@ -1,0 +1,21 @@
+[submodule "generators/windowing"]
+	path = generators/windowing
+	url = https://github.com/milovanovic/windowing.git
+[submodule "generators/sdf-fft"]
+	path = generators/sdf-fft
+	url = https://github.com/milovanovic/sdf-fft.git
+[submodule "generators/dsptools"]
+	path = generators/dsptools
+	url = https://github.com/milovanovic/dsptools.git
+[submodule "generators/accumulator"]
+	path = generators/accumulator
+	url = https://github.com/milovanovic/accumulator.git
+[submodule "generators/logMagMux"]
+	path = generators/logMagMux
+	url = https://github.com/milovanovic/logMagMux.git
+[submodule "generators/dsp-utils"]
+	path = generators/dsp-utils
+	url = https://github.com/milovanovic/dsp-utils.git
+[submodule "generators/xWRdataPreProc"]
+	path = generators/xWRdataPreProc
+	url = https://github.com/milovanovic/xWRdataPreProc.git
