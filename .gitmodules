@@ -16,3 +16,6 @@
 [submodule "generators/xWRdataPreProc"]
 	path = generators/xWRdataPreProc
 	url = https://github.com/milovanovic/xWRdataPreProc.git
+[submodule "generators/cfar"]
+	path = generators/cfar
+	url = https://github.com/milovanovic/cfar.git
