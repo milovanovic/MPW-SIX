@@ -43,18 +43,23 @@ val commonSettings = Seq(
     "edu.berkeley.cs" %% "rocket-dsptools" % "1.2-SNAPSHOT"
   )
 )
+lazy val windowing = (project in file("generators/windowing"))
+  .settings(commonSettings: _*)
 
 lazy val fft = (project in file("generators/sdf-fft"))
   .settings(commonSettings: _*)
   
 lazy val logMagMux = (project in file("generators/logMagMux"))
   .settings(commonSettings: _*)
+
+lazy val cfar = (project in file("generators/cfar"))
+  .settings(commonSettings: _*)
   
 lazy val accumulator = (project in file("generators/accumulator"))
   .settings(commonSettings: _*)
 
 lazy val spectrometer_v2 = (project in file("."))
-  .dependsOn(fft, logMagMux, accumulator)
+  .dependsOn(windowing, fft, logMagMux, cfar, accumulator)
   .settings(commonSettings: _*)
   .settings( // Settings for scalafix
     semanticdbEnabled := true,
