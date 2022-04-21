@@ -72,11 +72,13 @@ abstract class Spectrometer [T <: Data : Real: BinaryRepresentation, D, U, E, O,
   /* Type of Blocks */
   type Block = AXI4DspBlock
 
+  val one2N = AXI4StreamWidthAdapter.nToOne(beatBytes)
   val win  : Option[Block] = if (params.winParams  != None) Some(LazyModule(new WindowingBlock(csrAddress = params.winParams.get.winCSRAddress, ramAddress = params.winParams.get.winRAMAddress, params.winParams.get.winParams, beatBytes = beatBytes))) else None
   val fft  : Option[Block] = if (params.fftParams  != None) Some(LazyModule(new AXI4FFTBlock(address = params.fftParams.get.fftAddress, params = params.fftParams.get.fftParams, _beatBytes = beatBytes, configInterface = false))) else None
   val mag  : Option[Block] = if (params.magParams  != None) Some(LazyModule(new AXI4LogMagMuxBlock(params.magParams.get.magParams, params.magParams.get.magAddress, _beatBytes = beatBytes))) else None
   val acc  : Option[Block] = if (params.accParams  != None) Some(LazyModule(new AXI4AccChainBlock(params.accParams.get.accParams, params.accParams.get.accAddress, params.accParams.get.accQueueBase, beatBytes))) else None
   val cfar : Option[Block] = if (params.cfarParams != None) Some(LazyModule(new AXI4CFARBlock(params.cfarParams.get.cfarParams, params.cfarParams.get.cfarAddress, _beatBytes = beatBytes))) else None
+  val n2One = AXI4StreamWidthAdapter.oneToN(6)
 
   /* Blocks */
   val blocks: Seq[Block]  = Seq(win, fft, mag, acc, cfar).flatten
@@ -88,8 +90,10 @@ abstract class Spectrometer [T <: Data : Real: BinaryRepresentation, D, U, E, O,
     lhs.streamNode := AXI4StreamBuffer() := rhs.streamNode
   }
 
+  blocks.head.streamNode := one2N
+  n2One := blocks.last.streamNode
   /* Optional streamNode */
-  val streamNode = NodeHandle(blocks.head.streamNode, blocks.last.streamNode)
+  val streamNode = NodeHandle(one2N, n2One)
 
   lazy val module = new LazyModuleImp(this) {}
 }
@@ -107,17 +111,17 @@ trait AXI4SpectrometerPins extends AXI4Spectrometer[FixedPoint] {
   }}
 
   // streamNode
-  val ioInNode = BundleBridgeSource(() => new AXI4StreamBundle(AXI4StreamBundleParameters(n = beatBytes)))
+  val ioInNode = BundleBridgeSource(() => new AXI4StreamBundle(AXI4StreamBundleParameters(n = 1)))
   val ioOutNode = BundleBridgeSink[AXI4StreamBundle]()
 
-  ioOutNode := AXI4StreamToBundleBridge(AXI4StreamSlaveParameters()) := streamNode := BundleBridgeToAXI4Stream(AXI4StreamMasterParameters(n = beatBytes)) := ioInNode
+  ioOutNode := AXI4StreamToBundleBridge(AXI4StreamSlaveParameters()) := streamNode := BundleBridgeToAXI4Stream(AXI4StreamMasterParameters(n = 1)) := ioInNode
 
   val in = InModuleBody { ioInNode.makeIO() }
   val out = InModuleBody { ioOutNode.makeIO() }
 }
 
 
-class SpectrometerParams(fftSize: Int = 1024) {
+class SpectrometerParams(fftSize: Int = 512) {
   val params : SpectrometerParameters[FixedPoint] = SpectrometerParameters (
     winParams = Some(WinParamsAndAddresses(
       winParams = WindowingParams.fixed(
@@ -163,14 +167,15 @@ class SpectrometerParams(fftSize: Int = 1024) {
       ),
       magAddress = AddressSet(0x60001200, 0xFF),
     )),
-    accParams = Some(AccParamsAndAddresses(
-      accParams = AccParams(
-        proto    = FixedPoint(16.W, 10.BP),
-        protoAcc = FixedPoint(32.W, 10.BP),
-      ),
-      accAddress   = AddressSet(0x60001300, 0xFF),
-      accQueueBase = 0x60002000
-    )),
+    accParams = None,
+    // Some(AccParamsAndAddresses(
+    //   accParams = AccParams(
+    //     proto    = FixedPoint(16.W, 10.BP),
+    //     protoAcc = FixedPoint(32.W, 10.BP),
+    //   ),
+    //   accAddress   = AddressSet(0x60001300, 0xFF),
+    //   accQueueBase = 0x60002000
+    // )),
     cfarParams = Some(CFARParamsAndAddresses(
       cfarParams = CFARParams(
         protoIn = FixedPoint(16.W, 10.BP),
