@@ -4,9 +4,6 @@
 [submodule "generators/sdf-fft"]
 	path = generators/sdf-fft
 	url = https://github.com/milovanovic/sdf-fft.git
-[submodule "generators/dsptools"]
-	path = generators/dsptools
-	url = https://github.com/milovanovic/dsptools.git
 [submodule "generators/accumulator"]
 	path = generators/accumulator
 	url = https://github.com/milovanovic/accumulator.git
