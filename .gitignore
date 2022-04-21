@@ -5,4 +5,6 @@ test_run_dir/
 *.json
 
 target/
-project/
+project/target
+project/project
+project/build.properties
