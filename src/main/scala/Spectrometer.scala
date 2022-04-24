@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package spectrometer
+package spectrometer_v2
 
 import chisel3._
 import chisel3.stage.{ChiselGeneratorAnnotation, ChiselStage}
@@ -201,8 +201,11 @@ object SpectrometerApp extends App
 {
   implicit val p: Parameters = Parameters.empty
 
+  // Input argument
+  val fftSize = args(0).toInt
+  
   val params = (new SpectrometerParams).params
   val lazyDut = LazyModule(new AXI4Spectrometer(params, 4) with AXI4SpectrometerPins)
 
-  (new ChiselStage).execute(Array("--target-dir", "verilog/Spectrometer"), Seq(ChiselGeneratorAnnotation(() => lazyDut.module)))
+  (new ChiselStage).execute(Array("--target-dir", "verilog_modules/SpectrometerV2"), Seq(ChiselGeneratorAnnotation(() => lazyDut.module)))
 }
