@@ -19,3 +19,6 @@
 [submodule "generators/cfar"]
 	path = generators/cfar
 	url = https://github.com/milovanovic/cfar.git
+[submodule "verilog_modules/wb2axip"]
+	path = verilog_modules/wb2axip
+	url = https://github.com/milovanovic/wb2axip.git
