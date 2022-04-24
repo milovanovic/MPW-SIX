@@ -121,7 +121,7 @@ trait AXI4SpectrometerPins extends AXI4Spectrometer[FixedPoint] {
 }
 
 
-class SpectrometerParams(fftSize: Int = 512) {
+class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
   val params : SpectrometerParameters[FixedPoint] = SpectrometerParameters (
     winParams = Some(WinParamsAndAddresses(
       winParams = WindowingParams.fixed(
@@ -149,7 +149,7 @@ class SpectrometerParams(fftSize: Int = 512) {
         //sdfRadix = "2",
         expandLogic = Array.fill(log2Up(fftSize))(0),//(1).zipWithIndex.map { case (e,ind) => if (ind < 4) 1 else 0 }, // expand first four stages, other do not grow
         keepMSBorLSB = Array.fill(log2Up(fftSize))(true),
-        minSRAMdepth = fftSize, // memories larger than 64 should be mapped on block ram
+        minSRAMdepth = minSRAMdepth, // memories larger than 64 should be mapped on block ram
         binPoint = 10
       ),
       fftAddress = AddressSet(0x60001100, 0xFF)
@@ -201,11 +201,30 @@ object SpectrometerApp extends App
 {
   implicit val p: Parameters = Parameters.empty
 
-  // Input argument
-  val fftSize = args(0).toInt
+  // Input arguments
+  val fftParams: Seq[Int] = if (args.length == 0) {
+    println("Arguments were not provided. Setting default arguments. FFTSize = 512, MinSRAMDepth = 512.")
+    Seq(512, 512)
+  }
+  else if (args.length == 1) {
+    println(s"Only one arguments was provided. Setting FTSize to ${args(0).toInt}, and MinSRAMDepth to default value 512.")
+    Seq(args(0).toInt, 512)
+  }
+  else {
+    println(s"Both arguments were provided. Setting FTSize = ${args(0).toInt}, MinSRAMDepth = ${args(1).toInt}.")
+    Seq(args(0).toInt, args(1).toInt)
+  }
+
   
-  val params = (new SpectrometerParams).params
+  val params = (new SpectrometerParams(fftParams(0), fftParams(1))).params
   val lazyDut = LazyModule(new AXI4Spectrometer(params, 4) with AXI4SpectrometerPins)
 
-  (new ChiselStage).execute(Array("--target-dir", "verilog_modules/SpectrometerV2"), Seq(ChiselGeneratorAnnotation(() => lazyDut.module)))
+  val arguments = Array(
+    "-X", "verilog",
+    "--repl-seq-mem","-c:AXI4Spectrometer:-o:./verilog_modules/SpectrometerV2/mem.conf",
+    "--log-level", "info",
+    "--target-dir", "verilog_modules/SpectrometerV2"
+  )
+
+  (new ChiselStage).execute(arguments, Seq(ChiselGeneratorAnnotation(() => lazyDut.module)))
 }
