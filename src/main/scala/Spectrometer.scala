@@ -123,19 +123,20 @@ trait AXI4SpectrometerPins extends AXI4Spectrometer[FixedPoint] {
 
 class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
   val params : SpectrometerParameters[FixedPoint] = SpectrometerParameters (
-    winParams = Some(WinParamsAndAddresses(
-      winParams = WindowingParams.fixed(
-        numPoints = fftSize,
-        dataWidth = 16,
-        binPoint  = 10,
-        numMulPipes = 1,
-        dirName = "test_run_dir",
-        memoryFile = "./test_run_dir/blacman.txt",
-        windowFunc = windowing.WindowFunctionTypes.Blackman(dataWidth_tmp = 16)
-      ),
-      winRAMAddress = AddressSet(0x60000000, 0xFFF),
-      winCSRAddress = AddressSet(0x60001000, 0xFF)
-    )),
+    winParams = None,
+    // Some(WinParamsAndAddresses(
+    //   winParams = WindowingParams.fixed(
+    //     numPoints = fftSize,
+    //     dataWidth = 16,
+    //     binPoint  = 10,
+    //     numMulPipes = 1,
+    //     dirName = "test_run_dir",
+    //     memoryFile = "./test_run_dir/blacman.txt",
+    //     windowFunc = windowing.WindowFunctionTypes.Blackman(dataWidth_tmp = 16)
+    //   ),
+    //   winRAMAddress = AddressSet(0x60000000, 0xFFF),
+    //   winCSRAddress = AddressSet(0x60001000, 0xFF)
+    // )),
     fftParams = Some(FFTParamsAndAddresses(
       fftParams = FFTParams.fixed(
         dataWidth = 16,
