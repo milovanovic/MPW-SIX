@@ -1,12 +1,6 @@
-[submodule "generators/windowing"]
-	path = generators/windowing
-	url = https://github.com/milovanovic/windowing.git
 [submodule "generators/sdf-fft"]
 	path = generators/sdf-fft
 	url = https://github.com/milovanovic/sdf-fft.git
-[submodule "generators/accumulator"]
-	path = generators/accumulator
-	url = https://github.com/milovanovic/accumulator.git
 [submodule "generators/logMagMux"]
 	path = generators/logMagMux
 	url = https://github.com/milovanovic/logMagMux.git
