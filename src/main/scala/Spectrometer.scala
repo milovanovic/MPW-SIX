@@ -23,19 +23,11 @@ import cfar._
 
 /* Spectrometer parameters */
 case class SpectrometerParameters[T <: Data: Real: BinaryRepresentation] (
-  winParams  : Option[WinParamsAndAddresses[T]],
   fftParams  : Option[FFTParamsAndAddresses[T]],
   magParams  : Option[MagParamsAndAddresses[T]],
-  accParams  : Option[AccParamsAndAddresses[T]],
   cfarParams : Option[CFARParamsAndAddresses[T]]
 )
 
-/* Windows parameters and addresses */
-case class WinParamsAndAddresses[T <: Data: Real: BinaryRepresentation] (
-  winParams     : WindowingParams[T],
-  winRAMAddress : AddressSet,
-  winCSRAddress : AddressSet
-)
 /* FFT parameters and addresses */
 case class FFTParamsAndAddresses[T <: Data: Real: BinaryRepresentation] (
   fftParams  : FFTParams[T],
@@ -46,12 +38,7 @@ case class MagParamsAndAddresses[T <: Data: Real: BinaryRepresentation] (
   magParams  : MAGParams[T],
   magAddress : AddressSet
 )
-/* Accumulator parameters and addresses */
-case class AccParamsAndAddresses[T <: Data: Real: BinaryRepresentation] (
-  accParams    : AccParams[T],
-  accAddress   : AddressSet,
-  accQueueBase : BigInt
-)
+
 /* CFAR parameters and addresses */
 case class CFARParamsAndAddresses[T <: Data: Real: BinaryRepresentation] (
   cfarParams  : CFARParams[T],
@@ -73,15 +60,13 @@ abstract class Spectrometer [T <: Data : Real: BinaryRepresentation, D, U, E, O,
   type Block = AXI4DspBlock
 
   val one2N = AXI4StreamWidthAdapter.nToOne(beatBytes)
-  val win  : Option[Block] = if (params.winParams  != None) Some(LazyModule(new WindowingBlock(csrAddress = params.winParams.get.winCSRAddress, ramAddress = params.winParams.get.winRAMAddress, params.winParams.get.winParams, beatBytes = beatBytes))) else None
   val fft  : Option[Block] = if (params.fftParams  != None) Some(LazyModule(new AXI4FFTBlock(address = params.fftParams.get.fftAddress, params = params.fftParams.get.fftParams, _beatBytes = beatBytes, configInterface = false))) else None
   val mag  : Option[Block] = if (params.magParams  != None) Some(LazyModule(new AXI4LogMagMuxBlock(params.magParams.get.magParams, params.magParams.get.magAddress, _beatBytes = beatBytes))) else None
-  val acc  : Option[Block] = if (params.accParams  != None) Some(LazyModule(new AXI4AccChainBlock(params.accParams.get.accParams, params.accParams.get.accAddress, params.accParams.get.accQueueBase, beatBytes))) else None
   val cfar : Option[Block] = if (params.cfarParams != None) Some(LazyModule(new AXI4CFARBlock(params.cfarParams.get.cfarParams, params.cfarParams.get.cfarAddress, _beatBytes = beatBytes))) else None
   val n2One = AXI4StreamWidthAdapter.oneToN(3)
 
   /* Blocks */
-  val blocks: Seq[Block]  = Seq(win, fft, mag, acc, cfar).flatten
+  val blocks: Seq[Block]  = Seq(fft, mag, cfar).flatten
   require(blocks.length >= 1, "At least one block should exist")
   
   /* Connect nodes */
@@ -123,20 +108,6 @@ trait AXI4SpectrometerPins extends AXI4Spectrometer[FixedPoint] {
 
 class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
   val params : SpectrometerParameters[FixedPoint] = SpectrometerParameters (
-    winParams = None,
-    // Some(WinParamsAndAddresses(
-    //   winParams = WindowingParams.fixed(
-    //     numPoints = fftSize,
-    //     dataWidth = 16,
-    //     binPoint  = 10,
-    //     numMulPipes = 1,
-    //     dirName = "test_run_dir",
-    //     memoryFile = "./test_run_dir/blacman.txt",
-    //     windowFunc = windowing.WindowFunctionTypes.Blackman(dataWidth_tmp = 16)
-    //   ),
-    //   winRAMAddress = AddressSet(0x60000000, 0xFFF),
-    //   winCSRAddress = AddressSet(0x60001000, 0xFF)
-    // )),
     fftParams = Some(FFTParamsAndAddresses(
       fftParams = FFTParams.fixed(
         dataWidth = 16,
@@ -168,15 +139,6 @@ class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
       ),
       magAddress = AddressSet(0x60001200, 0xFF),
     )),
-    accParams = None,
-    // Some(AccParamsAndAddresses(
-    //   accParams = AccParams(
-    //     proto    = FixedPoint(16.W, 10.BP),
-    //     protoAcc = FixedPoint(32.W, 10.BP),
-    //   ),
-    //   accAddress   = AddressSet(0x60001300, 0xFF),
-    //   accQueueBase = 0x60002000
-    // )),
     cfarParams = Some(CFARParamsAndAddresses(
       cfarParams = CFARParams(
         protoIn = FixedPoint(16.W, 10.BP),
