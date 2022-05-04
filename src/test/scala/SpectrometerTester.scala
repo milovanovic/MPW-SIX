@@ -2,7 +2,6 @@
 
 package spectrometer_v2
 
-
 import chisel3.iotesters.PeekPokeTester
 
 import freechips.rocketchip.amba.axi4stream._
@@ -16,13 +15,12 @@ import breeze.linalg._
 import java.io._
 
 
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-// PIN -> FFT -> MAG -> POUT
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* AXI4Spectrometer */
 class SpectrometerTester
 (
   dut: AXI4Spectrometer with AXI4SpectrometerPins,
   params: SpectrometerParameters,
+  fftSize : Int,
   enablePlot: Boolean = false,
   silentFail: Boolean = false
 ) extends PeekPokeTester(dut.module) with AXI4StreamModel with AXI4MasterModel {
@@ -32,7 +30,6 @@ class SpectrometerTester
   val master = bindMaster(dut.inStream)
   
   val binWithPeak = 2
-  val fftSize = params.fftParams.numPoints
   val inData = SpectrometerTesterUtils.getTone(numSamples = fftSize, binWithPeak.toDouble/fftSize.toDouble)
   
   // split 32 bit data to 4 bytes and send real sinusoid
@@ -47,7 +44,7 @@ class SpectrometerTester
   }
 
   // magAddress
-  memWriteWord(params.magAddress.base, 0x2)            // set jpl magnitude
+  memWriteWord(params.magAddress.base, 0x2) // set jpl magnitude
   poke(dut.outStream.ready, true)
 
   step(1)
