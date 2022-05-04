@@ -23605,7 +23605,7 @@ end // initial
     end
   end
 endmodule
-module AXI4StreamWidthAdapater_1_to_6(
+module AXI4StreamWidthAdapater_1_to_3(
   input         clock,
   input         reset,
   output        auto_in_ready,
@@ -23614,107 +23614,101 @@ module AXI4StreamWidthAdapater_1_to_6(
   input         auto_in_bits_last,
   input         auto_out_ready,
   output        auto_out_valid,
-  output [7:0]  auto_out_bits_data,
+  output [15:0] auto_out_bits_data,
   output        auto_out_bits_last
 );
-  reg [2:0] _T_7; // @[AXI4StreamWidthAdapter.scala 158:22]
+  reg [1:0] _T_4; // @[AXI4StreamWidthAdapter.scala 158:22]
   reg [31:0] _RAND_0;
-  wire  _T_8; // @[AXI4StreamWidthAdapter.scala 159:14]
-  wire  _T_9; // @[AXI4StreamWidthAdapter.scala 159:38]
-  wire [3:0] _T_10; // @[AXI4StreamWidthAdapter.scala 159:60]
-  wire [3:0] _T_11; // @[AXI4StreamWidthAdapter.scala 159:33]
-  wire [3:0] _GEN_0; // @[AXI4StreamWidthAdapter.scala 159:21]
+  wire  _T_5; // @[AXI4StreamWidthAdapter.scala 159:14]
+  wire  _T_6; // @[AXI4StreamWidthAdapter.scala 159:38]
+  wire [2:0] _T_7; // @[AXI4StreamWidthAdapter.scala 159:60]
+  wire [2:0] _T_8; // @[AXI4StreamWidthAdapter.scala 159:33]
+  wire [2:0] _GEN_0; // @[AXI4StreamWidthAdapter.scala 159:21]
   wire  ir0; // @[AXI4StreamWidthAdapter.scala 163:34]
-  reg [2:0] _T_13; // @[AXI4StreamWidthAdapter.scala 167:22]
+  reg [1:0] _T_10; // @[AXI4StreamWidthAdapter.scala 167:22]
   reg [31:0] _RAND_1;
-  wire  _T_15; // @[AXI4StreamWidthAdapter.scala 168:38]
-  wire [3:0] _T_16; // @[AXI4StreamWidthAdapter.scala 168:60]
-  wire [3:0] _T_17; // @[AXI4StreamWidthAdapter.scala 168:33]
-  wire [3:0] _GEN_1; // @[AXI4StreamWidthAdapter.scala 168:21]
+  wire  _T_12; // @[AXI4StreamWidthAdapter.scala 168:38]
+  wire [2:0] _T_13; // @[AXI4StreamWidthAdapter.scala 168:60]
+  wire [2:0] _T_14; // @[AXI4StreamWidthAdapter.scala 168:33]
+  wire [2:0] _GEN_1; // @[AXI4StreamWidthAdapter.scala 168:21]
   wire  ir1; // @[AXI4StreamWidthAdapter.scala 170:60]
-  reg [2:0] _T_22; // @[AXI4StreamWidthAdapter.scala 158:22]
+  reg [1:0] _T_19; // @[AXI4StreamWidthAdapter.scala 158:22]
   reg [31:0] _RAND_2;
-  wire  _T_24; // @[AXI4StreamWidthAdapter.scala 159:38]
-  wire [3:0] _T_25; // @[AXI4StreamWidthAdapter.scala 159:60]
-  wire [3:0] _T_26; // @[AXI4StreamWidthAdapter.scala 159:33]
-  wire [3:0] _GEN_2; // @[AXI4StreamWidthAdapter.scala 159:21]
+  wire  _T_21; // @[AXI4StreamWidthAdapter.scala 159:38]
+  wire [2:0] _T_22; // @[AXI4StreamWidthAdapter.scala 159:60]
+  wire [2:0] _T_23; // @[AXI4StreamWidthAdapter.scala 159:33]
+  wire [2:0] _GEN_2; // @[AXI4StreamWidthAdapter.scala 159:21]
   wire  ir2; // @[AXI4StreamWidthAdapter.scala 163:34]
-  reg [2:0] _T_29; // @[AXI4StreamWidthAdapter.scala 158:22]
+  reg [1:0] _T_26; // @[AXI4StreamWidthAdapter.scala 158:22]
   reg [31:0] _RAND_3;
-  wire  _T_31; // @[AXI4StreamWidthAdapter.scala 159:38]
-  wire [3:0] _T_32; // @[AXI4StreamWidthAdapter.scala 159:60]
-  wire [3:0] _T_33; // @[AXI4StreamWidthAdapter.scala 159:33]
-  wire [3:0] _GEN_3; // @[AXI4StreamWidthAdapter.scala 159:21]
+  wire  _T_28; // @[AXI4StreamWidthAdapter.scala 159:38]
+  wire [2:0] _T_29; // @[AXI4StreamWidthAdapter.scala 159:60]
+  wire [2:0] _T_30; // @[AXI4StreamWidthAdapter.scala 159:33]
+  wire [2:0] _GEN_3; // @[AXI4StreamWidthAdapter.scala 159:21]
   wire  ir3; // @[AXI4StreamWidthAdapter.scala 163:34]
-  reg [2:0] _T_36; // @[AXI4StreamWidthAdapter.scala 158:22]
+  reg [1:0] _T_33; // @[AXI4StreamWidthAdapter.scala 158:22]
   reg [31:0] _RAND_4;
-  wire  _T_38; // @[AXI4StreamWidthAdapter.scala 159:38]
-  wire [3:0] _T_39; // @[AXI4StreamWidthAdapter.scala 159:60]
-  wire [3:0] _T_40; // @[AXI4StreamWidthAdapter.scala 159:33]
-  wire [3:0] _GEN_4; // @[AXI4StreamWidthAdapter.scala 159:21]
+  wire  _T_35; // @[AXI4StreamWidthAdapter.scala 159:38]
+  wire [2:0] _T_36; // @[AXI4StreamWidthAdapter.scala 159:60]
+  wire [2:0] _T_37; // @[AXI4StreamWidthAdapter.scala 159:33]
+  wire [2:0] _GEN_4; // @[AXI4StreamWidthAdapter.scala 159:21]
   wire  ir4; // @[AXI4StreamWidthAdapter.scala 163:34]
-  wire  _T_58; // @[AXI4StreamWidthAdapter.scala 46:16]
-  wire  _T_60; // @[AXI4StreamWidthAdapter.scala 46:11]
-  wire  _T_61; // @[AXI4StreamWidthAdapter.scala 46:11]
-  wire  _T_62; // @[AXI4StreamWidthAdapter.scala 47:16]
-  wire  _T_64; // @[AXI4StreamWidthAdapter.scala 47:11]
-  wire  _T_65; // @[AXI4StreamWidthAdapter.scala 47:11]
-  wire  _T_66; // @[AXI4StreamWidthAdapter.scala 48:16]
-  wire  _T_68; // @[AXI4StreamWidthAdapter.scala 48:11]
-  wire  _T_69; // @[AXI4StreamWidthAdapter.scala 48:11]
-  wire  _T_70; // @[AXI4StreamWidthAdapter.scala 49:16]
-  wire  _T_72; // @[AXI4StreamWidthAdapter.scala 49:11]
-  wire  _T_73; // @[AXI4StreamWidthAdapter.scala 49:11]
-  wire [7:0] _GEN_6; // @[AXI4StreamWidthAdapter.scala 54:19]
-  wire [7:0] _GEN_7; // @[AXI4StreamWidthAdapter.scala 54:19]
-  wire [7:0] _GEN_8; // @[AXI4StreamWidthAdapter.scala 54:19]
-  wire [7:0] _GEN_9; // @[AXI4StreamWidthAdapter.scala 54:19]
-  assign _T_8 = auto_in_valid & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 159:14]
-  assign _T_9 = _T_7 == 3'h5; // @[AXI4StreamWidthAdapter.scala 159:38]
-  assign _T_10 = _T_7 + 3'h1; // @[AXI4StreamWidthAdapter.scala 159:60]
-  assign _T_11 = _T_9 ? 4'h0 : _T_10; // @[AXI4StreamWidthAdapter.scala 159:33]
-  assign _GEN_0 = _T_8 ? _T_11 : {{1'd0}, _T_7}; // @[AXI4StreamWidthAdapter.scala 159:21]
-  assign ir0 = _T_9 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 163:34]
-  assign _T_15 = _T_13 == 3'h5; // @[AXI4StreamWidthAdapter.scala 168:38]
-  assign _T_16 = _T_13 + 3'h1; // @[AXI4StreamWidthAdapter.scala 168:60]
-  assign _T_17 = _T_15 ? 4'h0 : _T_16; // @[AXI4StreamWidthAdapter.scala 168:33]
-  assign _GEN_1 = _T_8 ? _T_17 : {{1'd0}, _T_13}; // @[AXI4StreamWidthAdapter.scala 168:21]
-  assign ir1 = _T_15 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 170:60]
-  assign _T_24 = _T_22 == 3'h5; // @[AXI4StreamWidthAdapter.scala 159:38]
-  assign _T_25 = _T_22 + 3'h1; // @[AXI4StreamWidthAdapter.scala 159:60]
-  assign _T_26 = _T_24 ? 4'h0 : _T_25; // @[AXI4StreamWidthAdapter.scala 159:33]
-  assign _GEN_2 = _T_8 ? _T_26 : {{1'd0}, _T_22}; // @[AXI4StreamWidthAdapter.scala 159:21]
-  assign ir2 = _T_24 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 163:34]
-  assign _T_31 = _T_29 == 3'h5; // @[AXI4StreamWidthAdapter.scala 159:38]
-  assign _T_32 = _T_29 + 3'h1; // @[AXI4StreamWidthAdapter.scala 159:60]
-  assign _T_33 = _T_31 ? 4'h0 : _T_32; // @[AXI4StreamWidthAdapter.scala 159:33]
-  assign _GEN_3 = _T_8 ? _T_33 : {{1'd0}, _T_29}; // @[AXI4StreamWidthAdapter.scala 159:21]
-  assign ir3 = _T_31 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 163:34]
-  assign _T_38 = _T_36 == 3'h5; // @[AXI4StreamWidthAdapter.scala 159:38]
-  assign _T_39 = _T_36 + 3'h1; // @[AXI4StreamWidthAdapter.scala 159:60]
-  assign _T_40 = _T_38 ? 4'h0 : _T_39; // @[AXI4StreamWidthAdapter.scala 159:33]
-  assign _GEN_4 = _T_8 ? _T_40 : {{1'd0}, _T_36}; // @[AXI4StreamWidthAdapter.scala 159:21]
-  assign ir4 = _T_38 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 163:34]
-  assign _T_58 = ir0 == ir1; // @[AXI4StreamWidthAdapter.scala 46:16]
-  assign _T_60 = _T_58 | reset; // @[AXI4StreamWidthAdapter.scala 46:11]
-  assign _T_61 = ~_T_60; // @[AXI4StreamWidthAdapter.scala 46:11]
-  assign _T_62 = ir0 == ir2; // @[AXI4StreamWidthAdapter.scala 47:16]
-  assign _T_64 = _T_62 | reset; // @[AXI4StreamWidthAdapter.scala 47:11]
-  assign _T_65 = ~_T_64; // @[AXI4StreamWidthAdapter.scala 47:11]
-  assign _T_66 = ir0 == ir3; // @[AXI4StreamWidthAdapter.scala 48:16]
-  assign _T_68 = _T_66 | reset; // @[AXI4StreamWidthAdapter.scala 48:11]
-  assign _T_69 = ~_T_68; // @[AXI4StreamWidthAdapter.scala 48:11]
-  assign _T_70 = ir0 == ir4; // @[AXI4StreamWidthAdapter.scala 49:16]
-  assign _T_72 = _T_70 | reset; // @[AXI4StreamWidthAdapter.scala 49:11]
-  assign _T_73 = ~_T_72; // @[AXI4StreamWidthAdapter.scala 49:11]
-  assign _GEN_6 = 3'h1 == _T_7 ? auto_in_bits_data[15:8] : auto_in_bits_data[7:0]; // @[AXI4StreamWidthAdapter.scala 54:19]
-  assign _GEN_7 = 3'h2 == _T_7 ? auto_in_bits_data[23:16] : _GEN_6; // @[AXI4StreamWidthAdapter.scala 54:19]
-  assign _GEN_8 = 3'h3 == _T_7 ? auto_in_bits_data[31:24] : _GEN_7; // @[AXI4StreamWidthAdapter.scala 54:19]
-  assign _GEN_9 = 3'h4 == _T_7 ? auto_in_bits_data[39:32] : _GEN_8; // @[AXI4StreamWidthAdapter.scala 54:19]
-  assign auto_in_ready = _T_9 & auto_out_ready; // @[LazyModule.scala 173:31]
+  wire  _T_55; // @[AXI4StreamWidthAdapter.scala 46:16]
+  wire  _T_57; // @[AXI4StreamWidthAdapter.scala 46:11]
+  wire  _T_58; // @[AXI4StreamWidthAdapter.scala 46:11]
+  wire  _T_59; // @[AXI4StreamWidthAdapter.scala 47:16]
+  wire  _T_61; // @[AXI4StreamWidthAdapter.scala 47:11]
+  wire  _T_62; // @[AXI4StreamWidthAdapter.scala 47:11]
+  wire  _T_63; // @[AXI4StreamWidthAdapter.scala 48:16]
+  wire  _T_65; // @[AXI4StreamWidthAdapter.scala 48:11]
+  wire  _T_66; // @[AXI4StreamWidthAdapter.scala 48:11]
+  wire  _T_67; // @[AXI4StreamWidthAdapter.scala 49:16]
+  wire  _T_69; // @[AXI4StreamWidthAdapter.scala 49:11]
+  wire  _T_70; // @[AXI4StreamWidthAdapter.scala 49:11]
+  wire [15:0] _GEN_6; // @[AXI4StreamWidthAdapter.scala 54:19]
+  assign _T_5 = auto_in_valid & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 159:14]
+  assign _T_6 = _T_4 == 2'h2; // @[AXI4StreamWidthAdapter.scala 159:38]
+  assign _T_7 = _T_4 + 2'h1; // @[AXI4StreamWidthAdapter.scala 159:60]
+  assign _T_8 = _T_6 ? 3'h0 : _T_7; // @[AXI4StreamWidthAdapter.scala 159:33]
+  assign _GEN_0 = _T_5 ? _T_8 : {{1'd0}, _T_4}; // @[AXI4StreamWidthAdapter.scala 159:21]
+  assign ir0 = _T_6 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 163:34]
+  assign _T_12 = _T_10 == 2'h2; // @[AXI4StreamWidthAdapter.scala 168:38]
+  assign _T_13 = _T_10 + 2'h1; // @[AXI4StreamWidthAdapter.scala 168:60]
+  assign _T_14 = _T_12 ? 3'h0 : _T_13; // @[AXI4StreamWidthAdapter.scala 168:33]
+  assign _GEN_1 = _T_5 ? _T_14 : {{1'd0}, _T_10}; // @[AXI4StreamWidthAdapter.scala 168:21]
+  assign ir1 = _T_12 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 170:60]
+  assign _T_21 = _T_19 == 2'h2; // @[AXI4StreamWidthAdapter.scala 159:38]
+  assign _T_22 = _T_19 + 2'h1; // @[AXI4StreamWidthAdapter.scala 159:60]
+  assign _T_23 = _T_21 ? 3'h0 : _T_22; // @[AXI4StreamWidthAdapter.scala 159:33]
+  assign _GEN_2 = _T_5 ? _T_23 : {{1'd0}, _T_19}; // @[AXI4StreamWidthAdapter.scala 159:21]
+  assign ir2 = _T_21 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 163:34]
+  assign _T_28 = _T_26 == 2'h2; // @[AXI4StreamWidthAdapter.scala 159:38]
+  assign _T_29 = _T_26 + 2'h1; // @[AXI4StreamWidthAdapter.scala 159:60]
+  assign _T_30 = _T_28 ? 3'h0 : _T_29; // @[AXI4StreamWidthAdapter.scala 159:33]
+  assign _GEN_3 = _T_5 ? _T_30 : {{1'd0}, _T_26}; // @[AXI4StreamWidthAdapter.scala 159:21]
+  assign ir3 = _T_28 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 163:34]
+  assign _T_35 = _T_33 == 2'h2; // @[AXI4StreamWidthAdapter.scala 159:38]
+  assign _T_36 = _T_33 + 2'h1; // @[AXI4StreamWidthAdapter.scala 159:60]
+  assign _T_37 = _T_35 ? 3'h0 : _T_36; // @[AXI4StreamWidthAdapter.scala 159:33]
+  assign _GEN_4 = _T_5 ? _T_37 : {{1'd0}, _T_33}; // @[AXI4StreamWidthAdapter.scala 159:21]
+  assign ir4 = _T_35 & auto_out_ready; // @[AXI4StreamWidthAdapter.scala 163:34]
+  assign _T_55 = ir0 == ir1; // @[AXI4StreamWidthAdapter.scala 46:16]
+  assign _T_57 = _T_55 | reset; // @[AXI4StreamWidthAdapter.scala 46:11]
+  assign _T_58 = ~_T_57; // @[AXI4StreamWidthAdapter.scala 46:11]
+  assign _T_59 = ir0 == ir2; // @[AXI4StreamWidthAdapter.scala 47:16]
+  assign _T_61 = _T_59 | reset; // @[AXI4StreamWidthAdapter.scala 47:11]
+  assign _T_62 = ~_T_61; // @[AXI4StreamWidthAdapter.scala 47:11]
+  assign _T_63 = ir0 == ir3; // @[AXI4StreamWidthAdapter.scala 48:16]
+  assign _T_65 = _T_63 | reset; // @[AXI4StreamWidthAdapter.scala 48:11]
+  assign _T_66 = ~_T_65; // @[AXI4StreamWidthAdapter.scala 48:11]
+  assign _T_67 = ir0 == ir4; // @[AXI4StreamWidthAdapter.scala 49:16]
+  assign _T_69 = _T_67 | reset; // @[AXI4StreamWidthAdapter.scala 49:11]
+  assign _T_70 = ~_T_69; // @[AXI4StreamWidthAdapter.scala 49:11]
+  assign _GEN_6 = 2'h1 == _T_4 ? auto_in_bits_data[31:16] : auto_in_bits_data[15:0]; // @[AXI4StreamWidthAdapter.scala 54:19]
+  assign auto_in_ready = _T_6 & auto_out_ready; // @[LazyModule.scala 173:31]
   assign auto_out_valid = auto_in_valid; // @[LazyModule.scala 173:49]
-  assign auto_out_bits_data = 3'h5 == _T_7 ? auto_in_bits_data[47:40] : _GEN_9; // @[LazyModule.scala 173:49]
-  assign auto_out_bits_last = auto_in_bits_last & _T_15; // @[LazyModule.scala 173:49]
+  assign auto_out_bits_data = 2'h2 == _T_4 ? auto_in_bits_data[47:32] : _GEN_6; // @[LazyModule.scala 173:49]
+  assign auto_out_bits_last = auto_in_bits_last & _T_12; // @[LazyModule.scala 173:49]
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -23748,58 +23742,58 @@ initial begin
     `endif
   `ifdef RANDOMIZE_REG_INIT
   _RAND_0 = {1{`RANDOM}};
-  _T_7 = _RAND_0[2:0];
+  _T_4 = _RAND_0[1:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_1 = {1{`RANDOM}};
-  _T_13 = _RAND_1[2:0];
+  _T_10 = _RAND_1[1:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_2 = {1{`RANDOM}};
-  _T_22 = _RAND_2[2:0];
+  _T_19 = _RAND_2[1:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_3 = {1{`RANDOM}};
-  _T_29 = _RAND_3[2:0];
+  _T_26 = _RAND_3[1:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_4 = {1{`RANDOM}};
-  _T_36 = _RAND_4[2:0];
+  _T_33 = _RAND_4[1:0];
   `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
 `endif // SYNTHESIS
   always @(posedge clock) begin
     if (reset) begin
-      _T_7 <= 3'h0;
+      _T_4 <= 2'h0;
     end else begin
-      _T_7 <= _GEN_0[2:0];
+      _T_4 <= _GEN_0[1:0];
     end
     if (reset) begin
-      _T_13 <= 3'h0;
+      _T_10 <= 2'h0;
     end else begin
-      _T_13 <= _GEN_1[2:0];
+      _T_10 <= _GEN_1[1:0];
     end
     if (reset) begin
-      _T_22 <= 3'h0;
+      _T_19 <= 2'h0;
     end else begin
-      _T_22 <= _GEN_2[2:0];
+      _T_19 <= _GEN_2[1:0];
     end
     if (reset) begin
-      _T_29 <= 3'h0;
+      _T_26 <= 2'h0;
     end else begin
-      _T_29 <= _GEN_3[2:0];
+      _T_26 <= _GEN_3[1:0];
     end
     if (reset) begin
-      _T_36 <= 3'h0;
+      _T_33 <= 2'h0;
     end else begin
-      _T_36 <= _GEN_4[2:0];
+      _T_33 <= _GEN_4[1:0];
     end
     `ifndef SYNTHESIS
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
-        if (_T_61) begin
+        if (_T_58) begin
           $fwrite(32'h80000002,"Assertion failed\n    at AXI4StreamWidthAdapter.scala:46 assert(ir0 === ir1)\n"); // @[AXI4StreamWidthAdapter.scala 46:11]
         end
     `ifdef PRINTF_COND
@@ -23810,7 +23804,7 @@ end // initial
     `ifdef STOP_COND
       if (`STOP_COND) begin
     `endif
-        if (_T_61) begin
+        if (_T_58) begin
           $fatal; // @[AXI4StreamWidthAdapter.scala 46:11]
         end
     `ifdef STOP_COND
@@ -23821,7 +23815,7 @@ end // initial
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
-        if (_T_65) begin
+        if (_T_62) begin
           $fwrite(32'h80000002,"Assertion failed\n    at AXI4StreamWidthAdapter.scala:47 assert(ir0 === ir2)\n"); // @[AXI4StreamWidthAdapter.scala 47:11]
         end
     `ifdef PRINTF_COND
@@ -23832,7 +23826,7 @@ end // initial
     `ifdef STOP_COND
       if (`STOP_COND) begin
     `endif
-        if (_T_65) begin
+        if (_T_62) begin
           $fatal; // @[AXI4StreamWidthAdapter.scala 47:11]
         end
     `ifdef STOP_COND
@@ -23843,7 +23837,7 @@ end // initial
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
-        if (_T_69) begin
+        if (_T_66) begin
           $fwrite(32'h80000002,"Assertion failed\n    at AXI4StreamWidthAdapter.scala:48 assert(ir0 === ir3)\n"); // @[AXI4StreamWidthAdapter.scala 48:11]
         end
     `ifdef PRINTF_COND
@@ -23854,7 +23848,7 @@ end // initial
     `ifdef STOP_COND
       if (`STOP_COND) begin
     `endif
-        if (_T_69) begin
+        if (_T_66) begin
           $fatal; // @[AXI4StreamWidthAdapter.scala 48:11]
         end
     `ifdef STOP_COND
@@ -23865,7 +23859,7 @@ end // initial
     `ifdef PRINTF_COND
       if (`PRINTF_COND) begin
     `endif
-        if (_T_73) begin
+        if (_T_70) begin
           $fwrite(32'h80000002,"Assertion failed\n    at AXI4StreamWidthAdapter.scala:49 assert(ir0 === ir4)\n"); // @[AXI4StreamWidthAdapter.scala 49:11]
         end
     `ifdef PRINTF_COND
@@ -23876,7 +23870,7 @@ end // initial
     `ifdef STOP_COND
       if (`STOP_COND) begin
     `endif
-        if (_T_73) begin
+        if (_T_70) begin
           $fatal; // @[AXI4StreamWidthAdapter.scala 49:11]
         end
     `ifdef STOP_COND
@@ -25674,6 +25668,21 @@ module BundleBridgeToAXI4(
   assign auto_out_r_ready = auto_in_r_ready; // @[LazyModule.scala 173:49]
 endmodule
 module AXI4StreamToBundleBridge(
+  output        auto_in_ready,
+  input         auto_in_valid,
+  input  [15:0] auto_in_bits_data,
+  input         auto_in_bits_last,
+  input         auto_out_ready,
+  output        auto_out_valid,
+  output [15:0] auto_out_bits_data,
+  output        auto_out_bits_last
+);
+  assign auto_in_ready = auto_out_ready; // @[LazyModule.scala 173:31]
+  assign auto_out_valid = auto_in_valid; // @[LazyModule.scala 173:49]
+  assign auto_out_bits_data = auto_in_bits_data; // @[LazyModule.scala 173:49]
+  assign auto_out_bits_last = auto_in_bits_last; // @[LazyModule.scala 173:49]
+endmodule
+module BundleBridgeToAXI4Stream(
   output       auto_in_ready,
   input        auto_in_valid,
   input  [7:0] auto_in_bits_data,
@@ -25734,7 +25743,7 @@ module AXI4Spectrometer(
   input         in_0_bits_last,
   input         out_0_ready,
   output        out_0_valid,
-  output [7:0]  out_0_bits_data,
+  output [15:0] out_0_bits_data,
   output        out_0_bits_last
 );
   wire  widthAdapter_clock; // @[AXI4StreamWidthAdapter.scala 82:34]
@@ -25845,7 +25854,7 @@ module AXI4Spectrometer(
   wire  widthAdapter_1_auto_in_bits_last; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_1_auto_out_ready; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_1_auto_out_valid; // @[AXI4StreamWidthAdapter.scala 82:34]
-  wire [7:0] widthAdapter_1_auto_out_bits_data; // @[AXI4StreamWidthAdapter.scala 82:34]
+  wire [15:0] widthAdapter_1_auto_out_bits_data; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_1_auto_out_bits_last; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  buffer_clock; // @[Buffer.scala 29:28]
   wire  buffer_reset; // @[Buffer.scala 29:28]
@@ -25997,11 +26006,11 @@ module AXI4Spectrometer(
   wire  converter_auto_out_r_bits_last; // @[Node.scala 65:31]
   wire  converter_1_auto_in_ready; // @[Nodes.scala 165:31]
   wire  converter_1_auto_in_valid; // @[Nodes.scala 165:31]
-  wire [7:0] converter_1_auto_in_bits_data; // @[Nodes.scala 165:31]
+  wire [15:0] converter_1_auto_in_bits_data; // @[Nodes.scala 165:31]
   wire  converter_1_auto_in_bits_last; // @[Nodes.scala 165:31]
   wire  converter_1_auto_out_ready; // @[Nodes.scala 165:31]
   wire  converter_1_auto_out_valid; // @[Nodes.scala 165:31]
-  wire [7:0] converter_1_auto_out_bits_data; // @[Nodes.scala 165:31]
+  wire [15:0] converter_1_auto_out_bits_data; // @[Nodes.scala 165:31]
   wire  converter_1_auto_out_bits_last; // @[Nodes.scala 165:31]
   wire  converter_2_auto_in_ready; // @[Nodes.scala 201:31]
   wire  converter_2_auto_in_valid; // @[Nodes.scala 201:31]
@@ -26119,7 +26128,7 @@ module AXI4Spectrometer(
     .auto_slave_in_bits_data(cfar_auto_slave_in_bits_data),
     .auto_slave_in_bits_last(cfar_auto_slave_in_bits_last)
   );
-  AXI4StreamWidthAdapater_1_to_6 widthAdapter_1 ( // @[AXI4StreamWidthAdapter.scala 82:34]
+  AXI4StreamWidthAdapater_1_to_3 widthAdapter_1 ( // @[AXI4StreamWidthAdapter.scala 82:34]
     .clock(widthAdapter_1_clock),
     .reset(widthAdapter_1_reset),
     .auto_in_ready(widthAdapter_1_auto_in_ready),
@@ -26297,7 +26306,7 @@ module AXI4Spectrometer(
     .auto_out_bits_data(converter_1_auto_out_bits_data),
     .auto_out_bits_last(converter_1_auto_out_bits_last)
   );
-  AXI4StreamToBundleBridge converter_2 ( // @[Nodes.scala 201:31]
+  BundleBridgeToAXI4Stream converter_2 ( // @[Nodes.scala 201:31]
     .auto_in_ready(converter_2_auto_in_ready),
     .auto_in_valid(converter_2_auto_in_valid),
     .auto_in_bits_data(converter_2_auto_in_bits_data),
