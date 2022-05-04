@@ -44,6 +44,12 @@ val commonSettings = Seq(
   )
 )
 
+lazy val crc = (project in file("generators/chisel-crc"))
+  .settings(commonSettings: _*)
+
+lazy val preproc = (project in file("generators/xWRdataPreProc"))
+  .settings(commonSettings: _*)
+
 lazy val fft = (project in file("generators/sdf-fft"))
   .settings(commonSettings: _*)
   
