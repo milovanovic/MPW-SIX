@@ -16,3 +16,6 @@
 [submodule "verilog_modules/wb2axip"]
 	path = verilog_modules/wb2axip
 	url = https://github.com/milovanovic/wb2axip.git
+[submodule "generators/chisel-crc"]
+	path = generators/chisel-crc
+	url = https://github.com/milovanovic/chisel-crc.git
