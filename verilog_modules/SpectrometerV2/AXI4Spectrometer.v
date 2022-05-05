@@ -24265,6 +24265,199 @@ module AXI4StreamBuffer_1(
   assign Queue_io_enq_bits_last = auto_in_bits_last; // @[Decoupled.scala 289:21]
   assign Queue_io_deq_ready = auto_out_ready; // @[Decoupled.scala 311:15]
 endmodule
+module Queue_13(
+  input         clock,
+  input         reset,
+  output        io_enq_ready,
+  input         io_enq_valid,
+  input  [47:0] io_enq_bits_data,
+  input         io_enq_bits_last,
+  input         io_deq_ready,
+  output        io_deq_valid,
+  output [47:0] io_deq_bits_data,
+  output        io_deq_bits_last
+);
+  reg [47:0] _T_data [0:1]; // @[Decoupled.scala 209:24]
+  reg [63:0] _RAND_0;
+  wire [47:0] _T_data__T_18_data; // @[Decoupled.scala 209:24]
+  wire  _T_data__T_18_addr; // @[Decoupled.scala 209:24]
+  wire [47:0] _T_data__T_10_data; // @[Decoupled.scala 209:24]
+  wire  _T_data__T_10_addr; // @[Decoupled.scala 209:24]
+  wire  _T_data__T_10_mask; // @[Decoupled.scala 209:24]
+  wire  _T_data__T_10_en; // @[Decoupled.scala 209:24]
+  reg  _T_last [0:1]; // @[Decoupled.scala 209:24]
+  reg [31:0] _RAND_1;
+  wire  _T_last__T_18_data; // @[Decoupled.scala 209:24]
+  wire  _T_last__T_18_addr; // @[Decoupled.scala 209:24]
+  wire  _T_last__T_10_data; // @[Decoupled.scala 209:24]
+  wire  _T_last__T_10_addr; // @[Decoupled.scala 209:24]
+  wire  _T_last__T_10_mask; // @[Decoupled.scala 209:24]
+  wire  _T_last__T_10_en; // @[Decoupled.scala 209:24]
+  reg  value; // @[Counter.scala 29:33]
+  reg [31:0] _RAND_2;
+  reg  value_1; // @[Counter.scala 29:33]
+  reg [31:0] _RAND_3;
+  reg  _T_1; // @[Decoupled.scala 212:35]
+  reg [31:0] _RAND_4;
+  wire  _T_2; // @[Decoupled.scala 214:41]
+  wire  _T_3; // @[Decoupled.scala 215:36]
+  wire  _T_4; // @[Decoupled.scala 215:33]
+  wire  _T_5; // @[Decoupled.scala 216:32]
+  wire  _T_6; // @[Decoupled.scala 40:37]
+  wire  _T_8; // @[Decoupled.scala 40:37]
+  wire  _T_12; // @[Counter.scala 39:22]
+  wire  _T_14; // @[Counter.scala 39:22]
+  wire  _T_15; // @[Decoupled.scala 227:16]
+  assign _T_data__T_18_addr = value_1;
+  assign _T_data__T_18_data = _T_data[_T_data__T_18_addr]; // @[Decoupled.scala 209:24]
+  assign _T_data__T_10_data = io_enq_bits_data;
+  assign _T_data__T_10_addr = value;
+  assign _T_data__T_10_mask = 1'h1;
+  assign _T_data__T_10_en = io_enq_ready & io_enq_valid;
+  assign _T_last__T_18_addr = value_1;
+  assign _T_last__T_18_data = _T_last[_T_last__T_18_addr]; // @[Decoupled.scala 209:24]
+  assign _T_last__T_10_data = io_enq_bits_last;
+  assign _T_last__T_10_addr = value;
+  assign _T_last__T_10_mask = 1'h1;
+  assign _T_last__T_10_en = io_enq_ready & io_enq_valid;
+  assign _T_2 = value == value_1; // @[Decoupled.scala 214:41]
+  assign _T_3 = ~_T_1; // @[Decoupled.scala 215:36]
+  assign _T_4 = _T_2 & _T_3; // @[Decoupled.scala 215:33]
+  assign _T_5 = _T_2 & _T_1; // @[Decoupled.scala 216:32]
+  assign _T_6 = io_enq_ready & io_enq_valid; // @[Decoupled.scala 40:37]
+  assign _T_8 = io_deq_ready & io_deq_valid; // @[Decoupled.scala 40:37]
+  assign _T_12 = value + 1'h1; // @[Counter.scala 39:22]
+  assign _T_14 = value_1 + 1'h1; // @[Counter.scala 39:22]
+  assign _T_15 = _T_6 != _T_8; // @[Decoupled.scala 227:16]
+  assign io_enq_ready = ~_T_5; // @[Decoupled.scala 232:16]
+  assign io_deq_valid = ~_T_4; // @[Decoupled.scala 231:16]
+  assign io_deq_bits_data = _T_data__T_18_data; // @[Decoupled.scala 233:15]
+  assign io_deq_bits_last = _T_last__T_18_data; // @[Decoupled.scala 233:15]
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+  _RAND_0 = {2{`RANDOM}};
+  `ifdef RANDOMIZE_MEM_INIT
+  for (initvar = 0; initvar < 2; initvar = initvar+1)
+    _T_data[initvar] = _RAND_0[47:0];
+  `endif // RANDOMIZE_MEM_INIT
+  _RAND_1 = {1{`RANDOM}};
+  `ifdef RANDOMIZE_MEM_INIT
+  for (initvar = 0; initvar < 2; initvar = initvar+1)
+    _T_last[initvar] = _RAND_1[0:0];
+  `endif // RANDOMIZE_MEM_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{`RANDOM}};
+  value = _RAND_2[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_3 = {1{`RANDOM}};
+  value_1 = _RAND_3[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_4 = {1{`RANDOM}};
+  _T_1 = _RAND_4[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`endif // SYNTHESIS
+  always @(posedge clock) begin
+    if(_T_data__T_10_en & _T_data__T_10_mask) begin
+      _T_data[_T_data__T_10_addr] <= _T_data__T_10_data; // @[Decoupled.scala 209:24]
+    end
+    if(_T_last__T_10_en & _T_last__T_10_mask) begin
+      _T_last[_T_last__T_10_addr] <= _T_last__T_10_data; // @[Decoupled.scala 209:24]
+    end
+    if (reset) begin
+      value <= 1'h0;
+    end else if (_T_6) begin
+      value <= _T_12;
+    end
+    if (reset) begin
+      value_1 <= 1'h0;
+    end else if (_T_8) begin
+      value_1 <= _T_14;
+    end
+    if (reset) begin
+      _T_1 <= 1'h0;
+    end else if (_T_15) begin
+      _T_1 <= _T_6;
+    end
+  end
+endmodule
+module AXI4StreamBuffer_3(
+  input         clock,
+  input         reset,
+  output        auto_in_ready,
+  input         auto_in_valid,
+  input  [47:0] auto_in_bits_data,
+  input         auto_in_bits_last,
+  input         auto_out_ready,
+  output        auto_out_valid,
+  output [47:0] auto_out_bits_data,
+  output        auto_out_bits_last
+);
+  wire  Queue_clock; // @[Decoupled.scala 287:21]
+  wire  Queue_reset; // @[Decoupled.scala 287:21]
+  wire  Queue_io_enq_ready; // @[Decoupled.scala 287:21]
+  wire  Queue_io_enq_valid; // @[Decoupled.scala 287:21]
+  wire [47:0] Queue_io_enq_bits_data; // @[Decoupled.scala 287:21]
+  wire  Queue_io_enq_bits_last; // @[Decoupled.scala 287:21]
+  wire  Queue_io_deq_ready; // @[Decoupled.scala 287:21]
+  wire  Queue_io_deq_valid; // @[Decoupled.scala 287:21]
+  wire [47:0] Queue_io_deq_bits_data; // @[Decoupled.scala 287:21]
+  wire  Queue_io_deq_bits_last; // @[Decoupled.scala 287:21]
+  Queue_13 Queue ( // @[Decoupled.scala 287:21]
+    .clock(Queue_clock),
+    .reset(Queue_reset),
+    .io_enq_ready(Queue_io_enq_ready),
+    .io_enq_valid(Queue_io_enq_valid),
+    .io_enq_bits_data(Queue_io_enq_bits_data),
+    .io_enq_bits_last(Queue_io_enq_bits_last),
+    .io_deq_ready(Queue_io_deq_ready),
+    .io_deq_valid(Queue_io_deq_valid),
+    .io_deq_bits_data(Queue_io_deq_bits_data),
+    .io_deq_bits_last(Queue_io_deq_bits_last)
+  );
+  assign auto_in_ready = Queue_io_enq_ready; // @[LazyModule.scala 173:31]
+  assign auto_out_valid = Queue_io_deq_valid; // @[LazyModule.scala 173:49]
+  assign auto_out_bits_data = Queue_io_deq_bits_data; // @[LazyModule.scala 173:49]
+  assign auto_out_bits_last = Queue_io_deq_bits_last; // @[LazyModule.scala 173:49]
+  assign Queue_clock = clock;
+  assign Queue_reset = reset;
+  assign Queue_io_enq_valid = auto_in_valid; // @[Decoupled.scala 288:22]
+  assign Queue_io_enq_bits_data = auto_in_bits_data; // @[Decoupled.scala 289:21]
+  assign Queue_io_enq_bits_last = auto_in_bits_last; // @[Decoupled.scala 289:21]
+  assign Queue_io_deq_ready = auto_out_ready; // @[Decoupled.scala 311:15]
+endmodule
 module QueueCompatibility(
   input        clock,
   input        reset,
@@ -25756,96 +25949,96 @@ module AXI4Spectrometer(
   wire  widthAdapter_auto_out_valid; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire [31:0] widthAdapter_auto_out_bits_data; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_auto_out_bits_last; // @[AXI4StreamWidthAdapter.scala 82:34]
-  wire  fft_clock; // @[Spectrometer.scala 77:76]
-  wire  fft_reset; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_aw_ready; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_aw_valid; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 77:76]
-  wire [30:0] fft_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_w_ready; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_w_valid; // @[Spectrometer.scala 77:76]
-  wire [31:0] fft_auto_mem_in_w_bits_data; // @[Spectrometer.scala 77:76]
-  wire [3:0] fft_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_b_ready; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_b_valid; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_b_bits_id; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_ar_ready; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_ar_valid; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 77:76]
-  wire [30:0] fft_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 77:76]
-  wire [2:0] fft_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_r_ready; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_r_valid; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_mem_in_r_bits_id; // @[Spectrometer.scala 77:76]
-  wire [31:0] fft_auto_mem_in_r_bits_data; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_stream_in_ready; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_stream_in_valid; // @[Spectrometer.scala 77:76]
-  wire [31:0] fft_auto_stream_in_bits_data; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_stream_in_bits_last; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_stream_out_ready; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_stream_out_valid; // @[Spectrometer.scala 77:76]
-  wire [31:0] fft_auto_stream_out_bits_data; // @[Spectrometer.scala 77:76]
-  wire  fft_auto_stream_out_bits_last; // @[Spectrometer.scala 77:76]
-  wire  mag_clock; // @[Spectrometer.scala 78:76]
-  wire  mag_reset; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_aw_ready; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_aw_valid; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 78:76]
-  wire [30:0] mag_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_w_ready; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_w_valid; // @[Spectrometer.scala 78:76]
-  wire [31:0] mag_auto_mem_in_w_bits_data; // @[Spectrometer.scala 78:76]
-  wire [3:0] mag_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_b_ready; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_b_valid; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_b_bits_id; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_ar_ready; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_ar_valid; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 78:76]
-  wire [30:0] mag_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 78:76]
-  wire [2:0] mag_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_r_ready; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_r_valid; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_mem_in_r_bits_id; // @[Spectrometer.scala 78:76]
-  wire [31:0] mag_auto_mem_in_r_bits_data; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_master_out_ready; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_master_out_valid; // @[Spectrometer.scala 78:76]
-  wire [15:0] mag_auto_master_out_bits_data; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_master_out_bits_last; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_slave_in_ready; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_slave_in_valid; // @[Spectrometer.scala 78:76]
-  wire [31:0] mag_auto_slave_in_bits_data; // @[Spectrometer.scala 78:76]
-  wire  mag_auto_slave_in_bits_last; // @[Spectrometer.scala 78:76]
-  wire  cfar_clock; // @[Spectrometer.scala 80:76]
-  wire  cfar_reset; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_aw_ready; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_aw_valid; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 80:76]
-  wire [30:0] cfar_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_w_ready; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_w_valid; // @[Spectrometer.scala 80:76]
-  wire [31:0] cfar_auto_mem_in_w_bits_data; // @[Spectrometer.scala 80:76]
-  wire [3:0] cfar_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_b_ready; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_b_valid; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_b_bits_id; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_ar_ready; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_ar_valid; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 80:76]
-  wire [30:0] cfar_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 80:76]
-  wire [2:0] cfar_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_r_ready; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_r_valid; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_mem_in_r_bits_id; // @[Spectrometer.scala 80:76]
-  wire [31:0] cfar_auto_mem_in_r_bits_data; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_master_out_ready; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_master_out_valid; // @[Spectrometer.scala 80:76]
-  wire [47:0] cfar_auto_master_out_bits_data; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_master_out_bits_last; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_slave_in_ready; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_slave_in_valid; // @[Spectrometer.scala 80:76]
-  wire [15:0] cfar_auto_slave_in_bits_data; // @[Spectrometer.scala 80:76]
-  wire  cfar_auto_slave_in_bits_last; // @[Spectrometer.scala 80:76]
+  wire  fft_clock; // @[Spectrometer.scala 61:76]
+  wire  fft_reset; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_aw_ready; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_aw_valid; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 61:76]
+  wire [30:0] fft_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_w_ready; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_w_valid; // @[Spectrometer.scala 61:76]
+  wire [31:0] fft_auto_mem_in_w_bits_data; // @[Spectrometer.scala 61:76]
+  wire [3:0] fft_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_b_ready; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_b_valid; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_b_bits_id; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_ar_ready; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_ar_valid; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 61:76]
+  wire [30:0] fft_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 61:76]
+  wire [2:0] fft_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_r_ready; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_r_valid; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_mem_in_r_bits_id; // @[Spectrometer.scala 61:76]
+  wire [31:0] fft_auto_mem_in_r_bits_data; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_stream_in_ready; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_stream_in_valid; // @[Spectrometer.scala 61:76]
+  wire [31:0] fft_auto_stream_in_bits_data; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_stream_in_bits_last; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_stream_out_ready; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_stream_out_valid; // @[Spectrometer.scala 61:76]
+  wire [31:0] fft_auto_stream_out_bits_data; // @[Spectrometer.scala 61:76]
+  wire  fft_auto_stream_out_bits_last; // @[Spectrometer.scala 61:76]
+  wire  mag_clock; // @[Spectrometer.scala 62:76]
+  wire  mag_reset; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_aw_ready; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_aw_valid; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 62:76]
+  wire [30:0] mag_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_w_ready; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_w_valid; // @[Spectrometer.scala 62:76]
+  wire [31:0] mag_auto_mem_in_w_bits_data; // @[Spectrometer.scala 62:76]
+  wire [3:0] mag_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_b_ready; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_b_valid; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_b_bits_id; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_ar_ready; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_ar_valid; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 62:76]
+  wire [30:0] mag_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 62:76]
+  wire [2:0] mag_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_r_ready; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_r_valid; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_mem_in_r_bits_id; // @[Spectrometer.scala 62:76]
+  wire [31:0] mag_auto_mem_in_r_bits_data; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_master_out_ready; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_master_out_valid; // @[Spectrometer.scala 62:76]
+  wire [15:0] mag_auto_master_out_bits_data; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_master_out_bits_last; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_slave_in_ready; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_slave_in_valid; // @[Spectrometer.scala 62:76]
+  wire [31:0] mag_auto_slave_in_bits_data; // @[Spectrometer.scala 62:76]
+  wire  mag_auto_slave_in_bits_last; // @[Spectrometer.scala 62:76]
+  wire  cfar_clock; // @[Spectrometer.scala 63:76]
+  wire  cfar_reset; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_aw_ready; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_aw_valid; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 63:76]
+  wire [30:0] cfar_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_w_ready; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_w_valid; // @[Spectrometer.scala 63:76]
+  wire [31:0] cfar_auto_mem_in_w_bits_data; // @[Spectrometer.scala 63:76]
+  wire [3:0] cfar_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_b_ready; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_b_valid; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_b_bits_id; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_ar_ready; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_ar_valid; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 63:76]
+  wire [30:0] cfar_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 63:76]
+  wire [2:0] cfar_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_r_ready; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_r_valid; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_mem_in_r_bits_id; // @[Spectrometer.scala 63:76]
+  wire [31:0] cfar_auto_mem_in_r_bits_data; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_master_out_ready; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_master_out_valid; // @[Spectrometer.scala 63:76]
+  wire [47:0] cfar_auto_master_out_bits_data; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_master_out_bits_last; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_slave_in_ready; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_slave_in_valid; // @[Spectrometer.scala 63:76]
+  wire [15:0] cfar_auto_slave_in_bits_data; // @[Spectrometer.scala 63:76]
+  wire  cfar_auto_slave_in_bits_last; // @[Spectrometer.scala 63:76]
   wire  widthAdapter_1_clock; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_1_reset; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_1_auto_in_ready; // @[AXI4StreamWidthAdapter.scala 82:34]
@@ -25876,90 +26069,110 @@ module AXI4Spectrometer(
   wire  buffer_1_auto_out_valid; // @[Buffer.scala 29:28]
   wire [15:0] buffer_1_auto_out_bits_data; // @[Buffer.scala 29:28]
   wire  buffer_1_auto_out_bits_last; // @[Buffer.scala 29:28]
-  wire  bus_clock; // @[Spectrometer.scala 63:58]
-  wire  bus_reset; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_aw_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_aw_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_aw_bits_id; // @[Spectrometer.scala 63:58]
-  wire [30:0] bus_auto_in_aw_bits_addr; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_w_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_w_valid; // @[Spectrometer.scala 63:58]
-  wire [31:0] bus_auto_in_w_bits_data; // @[Spectrometer.scala 63:58]
-  wire [3:0] bus_auto_in_w_bits_strb; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_w_bits_last; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_b_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_b_valid; // @[Spectrometer.scala 63:58]
-  wire [1:0] bus_auto_in_b_bits_resp; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_ar_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_ar_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_ar_bits_id; // @[Spectrometer.scala 63:58]
-  wire [30:0] bus_auto_in_ar_bits_addr; // @[Spectrometer.scala 63:58]
-  wire [2:0] bus_auto_in_ar_bits_size; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_r_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_r_valid; // @[Spectrometer.scala 63:58]
-  wire [31:0] bus_auto_in_r_bits_data; // @[Spectrometer.scala 63:58]
-  wire [1:0] bus_auto_in_r_bits_resp; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_in_r_bits_last; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_aw_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_aw_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_aw_bits_id; // @[Spectrometer.scala 63:58]
-  wire [30:0] bus_auto_out_2_aw_bits_addr; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_w_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_w_valid; // @[Spectrometer.scala 63:58]
-  wire [31:0] bus_auto_out_2_w_bits_data; // @[Spectrometer.scala 63:58]
-  wire [3:0] bus_auto_out_2_w_bits_strb; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_b_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_b_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_b_bits_id; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_ar_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_ar_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_ar_bits_id; // @[Spectrometer.scala 63:58]
-  wire [30:0] bus_auto_out_2_ar_bits_addr; // @[Spectrometer.scala 63:58]
-  wire [2:0] bus_auto_out_2_ar_bits_size; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_r_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_r_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_2_r_bits_id; // @[Spectrometer.scala 63:58]
-  wire [31:0] bus_auto_out_2_r_bits_data; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_aw_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_aw_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_aw_bits_id; // @[Spectrometer.scala 63:58]
-  wire [30:0] bus_auto_out_1_aw_bits_addr; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_w_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_w_valid; // @[Spectrometer.scala 63:58]
-  wire [31:0] bus_auto_out_1_w_bits_data; // @[Spectrometer.scala 63:58]
-  wire [3:0] bus_auto_out_1_w_bits_strb; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_b_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_b_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_b_bits_id; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_ar_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_ar_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_ar_bits_id; // @[Spectrometer.scala 63:58]
-  wire [30:0] bus_auto_out_1_ar_bits_addr; // @[Spectrometer.scala 63:58]
-  wire [2:0] bus_auto_out_1_ar_bits_size; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_r_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_r_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_1_r_bits_id; // @[Spectrometer.scala 63:58]
-  wire [31:0] bus_auto_out_1_r_bits_data; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_aw_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_aw_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_aw_bits_id; // @[Spectrometer.scala 63:58]
-  wire [30:0] bus_auto_out_0_aw_bits_addr; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_w_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_w_valid; // @[Spectrometer.scala 63:58]
-  wire [31:0] bus_auto_out_0_w_bits_data; // @[Spectrometer.scala 63:58]
-  wire [3:0] bus_auto_out_0_w_bits_strb; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_b_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_b_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_b_bits_id; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_ar_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_ar_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_ar_bits_id; // @[Spectrometer.scala 63:58]
-  wire [30:0] bus_auto_out_0_ar_bits_addr; // @[Spectrometer.scala 63:58]
-  wire [2:0] bus_auto_out_0_ar_bits_size; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_r_ready; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_r_valid; // @[Spectrometer.scala 63:58]
-  wire  bus_auto_out_0_r_bits_id; // @[Spectrometer.scala 63:58]
-  wire [31:0] bus_auto_out_0_r_bits_data; // @[Spectrometer.scala 63:58]
+  wire  buffer_2_clock; // @[Buffer.scala 29:28]
+  wire  buffer_2_reset; // @[Buffer.scala 29:28]
+  wire  buffer_2_auto_in_ready; // @[Buffer.scala 29:28]
+  wire  buffer_2_auto_in_valid; // @[Buffer.scala 29:28]
+  wire [31:0] buffer_2_auto_in_bits_data; // @[Buffer.scala 29:28]
+  wire  buffer_2_auto_in_bits_last; // @[Buffer.scala 29:28]
+  wire  buffer_2_auto_out_ready; // @[Buffer.scala 29:28]
+  wire  buffer_2_auto_out_valid; // @[Buffer.scala 29:28]
+  wire [31:0] buffer_2_auto_out_bits_data; // @[Buffer.scala 29:28]
+  wire  buffer_2_auto_out_bits_last; // @[Buffer.scala 29:28]
+  wire  buffer_3_clock; // @[Buffer.scala 29:28]
+  wire  buffer_3_reset; // @[Buffer.scala 29:28]
+  wire  buffer_3_auto_in_ready; // @[Buffer.scala 29:28]
+  wire  buffer_3_auto_in_valid; // @[Buffer.scala 29:28]
+  wire [47:0] buffer_3_auto_in_bits_data; // @[Buffer.scala 29:28]
+  wire  buffer_3_auto_in_bits_last; // @[Buffer.scala 29:28]
+  wire  buffer_3_auto_out_ready; // @[Buffer.scala 29:28]
+  wire  buffer_3_auto_out_valid; // @[Buffer.scala 29:28]
+  wire [47:0] buffer_3_auto_out_bits_data; // @[Buffer.scala 29:28]
+  wire  buffer_3_auto_out_bits_last; // @[Buffer.scala 29:28]
+  wire  bus_clock; // @[Spectrometer.scala 48:58]
+  wire  bus_reset; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_aw_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_aw_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_aw_bits_id; // @[Spectrometer.scala 48:58]
+  wire [30:0] bus_auto_in_aw_bits_addr; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_w_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_w_valid; // @[Spectrometer.scala 48:58]
+  wire [31:0] bus_auto_in_w_bits_data; // @[Spectrometer.scala 48:58]
+  wire [3:0] bus_auto_in_w_bits_strb; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_w_bits_last; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_b_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_b_valid; // @[Spectrometer.scala 48:58]
+  wire [1:0] bus_auto_in_b_bits_resp; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_ar_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_ar_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_ar_bits_id; // @[Spectrometer.scala 48:58]
+  wire [30:0] bus_auto_in_ar_bits_addr; // @[Spectrometer.scala 48:58]
+  wire [2:0] bus_auto_in_ar_bits_size; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_r_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_r_valid; // @[Spectrometer.scala 48:58]
+  wire [31:0] bus_auto_in_r_bits_data; // @[Spectrometer.scala 48:58]
+  wire [1:0] bus_auto_in_r_bits_resp; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_in_r_bits_last; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_aw_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_aw_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_aw_bits_id; // @[Spectrometer.scala 48:58]
+  wire [30:0] bus_auto_out_2_aw_bits_addr; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_w_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_w_valid; // @[Spectrometer.scala 48:58]
+  wire [31:0] bus_auto_out_2_w_bits_data; // @[Spectrometer.scala 48:58]
+  wire [3:0] bus_auto_out_2_w_bits_strb; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_b_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_b_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_b_bits_id; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_ar_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_ar_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_ar_bits_id; // @[Spectrometer.scala 48:58]
+  wire [30:0] bus_auto_out_2_ar_bits_addr; // @[Spectrometer.scala 48:58]
+  wire [2:0] bus_auto_out_2_ar_bits_size; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_r_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_r_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_2_r_bits_id; // @[Spectrometer.scala 48:58]
+  wire [31:0] bus_auto_out_2_r_bits_data; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_aw_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_aw_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_aw_bits_id; // @[Spectrometer.scala 48:58]
+  wire [30:0] bus_auto_out_1_aw_bits_addr; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_w_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_w_valid; // @[Spectrometer.scala 48:58]
+  wire [31:0] bus_auto_out_1_w_bits_data; // @[Spectrometer.scala 48:58]
+  wire [3:0] bus_auto_out_1_w_bits_strb; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_b_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_b_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_b_bits_id; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_ar_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_ar_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_ar_bits_id; // @[Spectrometer.scala 48:58]
+  wire [30:0] bus_auto_out_1_ar_bits_addr; // @[Spectrometer.scala 48:58]
+  wire [2:0] bus_auto_out_1_ar_bits_size; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_r_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_r_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_1_r_bits_id; // @[Spectrometer.scala 48:58]
+  wire [31:0] bus_auto_out_1_r_bits_data; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_aw_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_aw_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_aw_bits_id; // @[Spectrometer.scala 48:58]
+  wire [30:0] bus_auto_out_0_aw_bits_addr; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_w_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_w_valid; // @[Spectrometer.scala 48:58]
+  wire [31:0] bus_auto_out_0_w_bits_data; // @[Spectrometer.scala 48:58]
+  wire [3:0] bus_auto_out_0_w_bits_strb; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_b_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_b_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_b_bits_id; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_ar_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_ar_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_ar_bits_id; // @[Spectrometer.scala 48:58]
+  wire [30:0] bus_auto_out_0_ar_bits_addr; // @[Spectrometer.scala 48:58]
+  wire [2:0] bus_auto_out_0_ar_bits_size; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_r_ready; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_r_valid; // @[Spectrometer.scala 48:58]
+  wire  bus_auto_out_0_r_bits_id; // @[Spectrometer.scala 48:58]
+  wire [31:0] bus_auto_out_0_r_bits_data; // @[Spectrometer.scala 48:58]
   wire  converter_auto_in_aw_ready; // @[Node.scala 65:31]
   wire  converter_auto_in_aw_valid; // @[Node.scala 65:31]
   wire  converter_auto_in_aw_bits_id; // @[Node.scala 65:31]
@@ -26032,7 +26245,7 @@ module AXI4Spectrometer(
     .auto_out_bits_data(widthAdapter_auto_out_bits_data),
     .auto_out_bits_last(widthAdapter_auto_out_bits_last)
   );
-  AXI4FFTBlock fft ( // @[Spectrometer.scala 77:76]
+  AXI4FFTBlock fft ( // @[Spectrometer.scala 61:76]
     .clock(fft_clock),
     .reset(fft_reset),
     .auto_mem_in_aw_ready(fft_auto_mem_in_aw_ready),
@@ -26064,7 +26277,7 @@ module AXI4Spectrometer(
     .auto_stream_out_bits_data(fft_auto_stream_out_bits_data),
     .auto_stream_out_bits_last(fft_auto_stream_out_bits_last)
   );
-  AXI4LogMagMuxBlock mag ( // @[Spectrometer.scala 78:76]
+  AXI4LogMagMuxBlock mag ( // @[Spectrometer.scala 62:76]
     .clock(mag_clock),
     .reset(mag_reset),
     .auto_mem_in_aw_ready(mag_auto_mem_in_aw_ready),
@@ -26096,7 +26309,7 @@ module AXI4Spectrometer(
     .auto_slave_in_bits_data(mag_auto_slave_in_bits_data),
     .auto_slave_in_bits_last(mag_auto_slave_in_bits_last)
   );
-  AXI4CFARBlock cfar ( // @[Spectrometer.scala 80:76]
+  AXI4CFARBlock cfar ( // @[Spectrometer.scala 63:76]
     .clock(cfar_clock),
     .reset(cfar_reset),
     .auto_mem_in_aw_ready(cfar_auto_mem_in_aw_ready),
@@ -26164,7 +26377,31 @@ module AXI4Spectrometer(
     .auto_out_bits_data(buffer_1_auto_out_bits_data),
     .auto_out_bits_last(buffer_1_auto_out_bits_last)
   );
-  AXI4Xbar bus ( // @[Spectrometer.scala 63:58]
+  AXI4StreamBuffer buffer_2 ( // @[Buffer.scala 29:28]
+    .clock(buffer_2_clock),
+    .reset(buffer_2_reset),
+    .auto_in_ready(buffer_2_auto_in_ready),
+    .auto_in_valid(buffer_2_auto_in_valid),
+    .auto_in_bits_data(buffer_2_auto_in_bits_data),
+    .auto_in_bits_last(buffer_2_auto_in_bits_last),
+    .auto_out_ready(buffer_2_auto_out_ready),
+    .auto_out_valid(buffer_2_auto_out_valid),
+    .auto_out_bits_data(buffer_2_auto_out_bits_data),
+    .auto_out_bits_last(buffer_2_auto_out_bits_last)
+  );
+  AXI4StreamBuffer_3 buffer_3 ( // @[Buffer.scala 29:28]
+    .clock(buffer_3_clock),
+    .reset(buffer_3_reset),
+    .auto_in_ready(buffer_3_auto_in_ready),
+    .auto_in_valid(buffer_3_auto_in_valid),
+    .auto_in_bits_data(buffer_3_auto_in_bits_data),
+    .auto_in_bits_last(buffer_3_auto_in_bits_last),
+    .auto_out_ready(buffer_3_auto_out_ready),
+    .auto_out_valid(buffer_3_auto_out_valid),
+    .auto_out_bits_data(buffer_3_auto_out_bits_data),
+    .auto_out_bits_last(buffer_3_auto_out_bits_last)
+  );
+  AXI4Xbar bus ( // @[Spectrometer.scala 48:58]
     .clock(bus_clock),
     .reset(bus_reset),
     .auto_in_aw_ready(bus_auto_in_aw_ready),
@@ -26336,7 +26573,7 @@ module AXI4Spectrometer(
   assign widthAdapter_auto_in_valid = converter_2_auto_out_valid; // @[LazyModule.scala 167:31]
   assign widthAdapter_auto_in_bits_data = converter_2_auto_out_bits_data; // @[LazyModule.scala 167:31]
   assign widthAdapter_auto_in_bits_last = converter_2_auto_out_bits_last; // @[LazyModule.scala 167:31]
-  assign widthAdapter_auto_out_ready = fft_auto_stream_in_ready; // @[LazyModule.scala 167:57]
+  assign widthAdapter_auto_out_ready = buffer_2_auto_in_ready; // @[LazyModule.scala 167:57]
   assign fft_clock = clock;
   assign fft_reset = reset;
   assign fft_auto_mem_in_aw_valid = bus_auto_out_0_aw_valid; // @[LazyModule.scala 167:31]
@@ -26351,9 +26588,9 @@ module AXI4Spectrometer(
   assign fft_auto_mem_in_ar_bits_addr = bus_auto_out_0_ar_bits_addr; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_ar_bits_size = bus_auto_out_0_ar_bits_size; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_r_ready = bus_auto_out_0_r_ready; // @[LazyModule.scala 167:31]
-  assign fft_auto_stream_in_valid = widthAdapter_auto_out_valid; // @[LazyModule.scala 167:57]
-  assign fft_auto_stream_in_bits_data = widthAdapter_auto_out_bits_data; // @[LazyModule.scala 167:57]
-  assign fft_auto_stream_in_bits_last = widthAdapter_auto_out_bits_last; // @[LazyModule.scala 167:57]
+  assign fft_auto_stream_in_valid = buffer_2_auto_out_valid; // @[LazyModule.scala 167:31]
+  assign fft_auto_stream_in_bits_data = buffer_2_auto_out_bits_data; // @[LazyModule.scala 167:31]
+  assign fft_auto_stream_in_bits_last = buffer_2_auto_out_bits_last; // @[LazyModule.scala 167:31]
   assign fft_auto_stream_out_ready = buffer_auto_in_ready; // @[LazyModule.scala 167:57]
   assign mag_clock = clock;
   assign mag_reset = reset;
@@ -26387,15 +26624,15 @@ module AXI4Spectrometer(
   assign cfar_auto_mem_in_ar_bits_addr = bus_auto_out_2_ar_bits_addr; // @[LazyModule.scala 167:31]
   assign cfar_auto_mem_in_ar_bits_size = bus_auto_out_2_ar_bits_size; // @[LazyModule.scala 167:31]
   assign cfar_auto_mem_in_r_ready = bus_auto_out_2_r_ready; // @[LazyModule.scala 167:31]
-  assign cfar_auto_master_out_ready = widthAdapter_1_auto_in_ready; // @[LazyModule.scala 167:57]
+  assign cfar_auto_master_out_ready = buffer_3_auto_in_ready; // @[LazyModule.scala 167:57]
   assign cfar_auto_slave_in_valid = buffer_1_auto_out_valid; // @[LazyModule.scala 167:31]
   assign cfar_auto_slave_in_bits_data = buffer_1_auto_out_bits_data; // @[LazyModule.scala 167:31]
   assign cfar_auto_slave_in_bits_last = buffer_1_auto_out_bits_last; // @[LazyModule.scala 167:31]
   assign widthAdapter_1_clock = clock;
   assign widthAdapter_1_reset = reset;
-  assign widthAdapter_1_auto_in_valid = cfar_auto_master_out_valid; // @[LazyModule.scala 167:57]
-  assign widthAdapter_1_auto_in_bits_data = cfar_auto_master_out_bits_data; // @[LazyModule.scala 167:57]
-  assign widthAdapter_1_auto_in_bits_last = cfar_auto_master_out_bits_last; // @[LazyModule.scala 167:57]
+  assign widthAdapter_1_auto_in_valid = buffer_3_auto_out_valid; // @[LazyModule.scala 167:31]
+  assign widthAdapter_1_auto_in_bits_data = buffer_3_auto_out_bits_data; // @[LazyModule.scala 167:31]
+  assign widthAdapter_1_auto_in_bits_last = buffer_3_auto_out_bits_last; // @[LazyModule.scala 167:31]
   assign widthAdapter_1_auto_out_ready = converter_1_auto_in_ready; // @[LazyModule.scala 167:57]
   assign buffer_clock = clock;
   assign buffer_reset = reset;
@@ -26409,6 +26646,18 @@ module AXI4Spectrometer(
   assign buffer_1_auto_in_bits_data = mag_auto_master_out_bits_data; // @[LazyModule.scala 167:57]
   assign buffer_1_auto_in_bits_last = mag_auto_master_out_bits_last; // @[LazyModule.scala 167:57]
   assign buffer_1_auto_out_ready = cfar_auto_slave_in_ready; // @[LazyModule.scala 167:31]
+  assign buffer_2_clock = clock;
+  assign buffer_2_reset = reset;
+  assign buffer_2_auto_in_valid = widthAdapter_auto_out_valid; // @[LazyModule.scala 167:57]
+  assign buffer_2_auto_in_bits_data = widthAdapter_auto_out_bits_data; // @[LazyModule.scala 167:57]
+  assign buffer_2_auto_in_bits_last = widthAdapter_auto_out_bits_last; // @[LazyModule.scala 167:57]
+  assign buffer_2_auto_out_ready = fft_auto_stream_in_ready; // @[LazyModule.scala 167:31]
+  assign buffer_3_clock = clock;
+  assign buffer_3_reset = reset;
+  assign buffer_3_auto_in_valid = cfar_auto_master_out_valid; // @[LazyModule.scala 167:57]
+  assign buffer_3_auto_in_bits_data = cfar_auto_master_out_bits_data; // @[LazyModule.scala 167:57]
+  assign buffer_3_auto_in_bits_last = cfar_auto_master_out_bits_last; // @[LazyModule.scala 167:57]
+  assign buffer_3_auto_out_ready = widthAdapter_1_auto_in_ready; // @[LazyModule.scala 167:31]
   assign bus_clock = clock;
   assign bus_reset = reset;
   assign bus_auto_in_aw_valid = converter_auto_out_aw_valid; // @[LazyModule.scala 167:31]
