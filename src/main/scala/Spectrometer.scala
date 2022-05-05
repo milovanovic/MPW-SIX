@@ -73,8 +73,8 @@ abstract class Spectrometer [T <: Data : Real: BinaryRepresentation, D, U, E, O,
     lhs.streamNode := AXI4StreamBuffer() := rhs.streamNode
   }
 
-  blocks.head.streamNode := one2N
-  n2One := blocks.last.streamNode
+  blocks.head.streamNode := AXI4StreamBuffer() := one2N
+  n2One := AXI4StreamBuffer() := blocks.last.streamNode
   /* Optional streamNode */
   val streamNode = NodeHandle(one2N, n2One)
 
