@@ -22,6 +22,9 @@ class SpectrometerTestSpec extends FlatSpec with Matchers {
   val fftSize = sys.props.getOrElse("fftSize", "512")
   val minSRAMDepth = sys.props.getOrElse("minSRAMDepth", "512")
   val enablePlot = sys.props.getOrElse("enablePlot", "false")
+
+  val simulator = "verilator" //"treadle" //"verilator"
+
   val params = (new SpectrometerParams(fftSize.toInt, minSRAMDepth.toInt)).params
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -29,7 +32,8 @@ class SpectrometerTestSpec extends FlatSpec with Matchers {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   it should "test AXI4Spectrometer" in {
     val lazyDut = LazyModule(new AXI4Spectrometer(params, 4) with AXI4SpectrometerPins)
-    chisel3.iotesters.Driver.execute(Array("--backend-name", "verilator", "--target-dir", "test_run_dir/AXI4Spectrometer", "--top-name", "AXI4Spectrometer"), () => lazyDut.module) {
+    chisel3.iotesters.Driver.execute(Array("--backend-name", simulator, "--target-dir", "test_run_dir/AXI4Spectrometer", "--top-name", "AXI4Spectrometer"), () => lazyDut.module) {
       c => new SpectrometerTester(lazyDut, params, fftSize.toInt, enablePlot.toBoolean, true)
     } should be (true)
   }
+}

@@ -16,9 +16,7 @@ import freechips.rocketchip.config.{Parameters}
 import freechips.rocketchip.diplomacy._
 
 import fft._
-import windowing._
 import magnitude._
-import accumulator._
 import cfar._
 
 /* Spectrometer parameters */
