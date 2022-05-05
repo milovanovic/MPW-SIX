@@ -34,6 +34,10 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   
   val binWithPeak = 2
   val inData = SpectrometerTesterUtils.getTone(numSamples = fftSize, binWithPeak.toDouble/fftSize.toDouble)
+
+  // Scala fft
+  val fftScala = fourierTr(DenseVector(inData.toArray)).toScalaVector.map(c => Complex(c.real/fftSize, c.imag/fftSize))
+  val fftMagScala = fftScala.map(c => c.abs)
   
   // split 32 bit data to 4 bytes and send real sinusoid
   var dataByte = Seq[Int]()
@@ -67,10 +71,143 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
     memWriteWord(params.cfarParams.get.cfarAddress.base + 0x1*beatBytes, thresholdScalerReg)
     memWriteWord(params.cfarParams.get.cfarAddress.base + 0x2*beatBytes, peakGrouping)
     memWriteWord(params.cfarParams.get.cfarAddress.base + 0x3*beatBytes, cfarMode)
-    memWriteWord(params.cfarParams.get.cfarAddress.base + 0x4*beatBytes, refWindowSize)
-    memWriteWord(params.cfarParams.get.cfarAddress.base + 0x5*beatBytes, guardWindowSize)
-    memWriteWord(params.cfarParams.get.cfarAddress.base + 0x6*beatBytes, divSum)
-    memWriteWord(params.cfarParams.get.cfarAddress.base + 0x7*beatBytes, subWindowSize)
+
+    var lWinSizes: Seq[Int] = Seq()
+    if (runTime)
+      lWinSizes = CFARUtils.pow2Divisors(params.cfarParams.get.cfarParams.leadLaggWindowSize).filter(_ > 2).toSeq
+    else
+      lWinSizes = Seq(params.cfarParams.get.cfarParams.leadLaggWindowSize)
+    val startGwin: Int = if (runTime) 2 else params.cfarParams.get.cfarParams.guardWindowSize
+    var subWindowSize: Int = params.cfarParams.get.cfarParams.minSubWindowSize.getOrElse(params.cfarParams.get.cfarParams.leadLaggWindowSize)
+    var refCells: Int = params.cfarParams.get.cfarParams.leadLaggWindowSize
+    
+    for (lWinSize <- lWinSizes) {
+      for (guardSize <- startGwin to params.cfarParams.get.cfarParams.guardWindowSize) {
+        // form here output data
+        if (params.cfarParams.get.cfarParams.includeCASH) {
+          if (params.cfarParams.get.cfarParams.minSubWindowSize.get > lWinSize) {
+            refCells =  params.cfarParams.get.cfarParams.minSubWindowSize.get
+          }
+          else if (cfarMode != "CASH") {
+            subWindowSize = lWinSize
+            refCells = lWinSize
+          }
+          else {
+            subWindowSize = params.cfarParams.get.cfarParams.minSubWindowSize.get
+            refCells = lWinSize
+          }
+          memWriteWord(params.cfarParams.get.cfarAddress.base + 0x7*beatBytes, lsubWindowSize) // subCells
+        }
+        else {
+           refCells = lWinSize
+        }
+        println(s"Testing CFAR core with lWinSize = $lWinSize and guardSize = $guardSize and subWindowSize = $subWindowSize")
+
+        val considerEdges = if (params.cfarParams.get.cfarParams.includeCASH == true) false else true
+        val (expThr, expPeaks) = if (params.cfarParams.get.cfarParams.includeCASH && cfarMode == "CASH")
+                                    CFARUtils.cfarCASH(fftMagScala, referenceCells = refCells, subCells = subWindowSize, scalingFactor = thresholdScaler, plotEn = thrPlot)
+                                 else
+                                    CFARUtils.cfarCA(fftMagScala, cfarMode = cfarMode, referenceCells = lWinSize, guardCells = guardSize, considerEdges = considerEdges, scalingFactor = thresholdScaler, plotEn = thrPlot)
+
+        if (cfarMode == 3) {
+          memWriteWord(params.cfarParams.get.cfarAddress.base + 0x5*beatBytes, 0) // guardCells
+        }
+        else {
+          memWriteWord(params.cfarParams.get.cfarAddress.base + 0x5*beatBytes, guardSize) // guardCells
+        }
+        memWriteWord(params.cfarParams.get.cfarAddress.base + 0x4*beatBytes, refCells) // windowCells
+
+        if (params.cfarParams.get.cfarParams.CFARAlgorithm != GOSCFARType) {
+          memWriteWord(params.cfarParams.get.cfarAddress.base + 0x6*beatBytes, log2Ceil(lWinSize)) // divSum
+        }
+
+        step(2) // be sure that control registers are first initilized and then set ready and valid signals
+        poke(dut.out.ready, 1)
+
+        for (i <- 0 until fftMagScala.size) {
+          poke(dut.in.valid, 0)
+          val delay = 3//Random.nextInt(5)
+          //step(delay)
+          for (i <- 0 until delay) {
+            if (peek(dut.out.valid) == true) {
+              params.cfarParams.get.cfarParams.protoIn match {
+                case dspR: DspReal => {
+                  realTolDecPts.withValue(tol) { expect(dut.out.bits.cut.get,  fftMagScala(cntValidOut).toDouble) }
+                  realTolDecPts.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
+                }
+                case _ =>  {
+                  fixTolLSBs.withValue(tol) { expect(dut.out.bits.cut.get, fftMagScala(cntValidOut)) }
+                  fixTolLSBs.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
+                }
+              }
+              //fftBin
+              if (expPeaks.contains(peek(dut.fftBin))) {
+                expect(dut.out.bits.peak, 1)
+              }
+              cntValidOut += 1
+              threshold += peek(dut.out.bits.threshold)
+            }
+            step(1)
+          }
+          poke(dut.in.valid, 1)
+          poke(dut.in.bits.data, fftMagScala(i))
+          if (i == (fftMagScala.size - 1))
+            poke(dut.in.bits.last, 1)
+            if (peek(dut.out.valid) == true) {
+              params.cfarParams.get.cfarParams.protoIn match {
+                case dspR: DspReal => {
+                  realTolDecPts.withValue(tol) { expect(dut.out.bits.cut.get,  fftMagScala(cntValidOut).toDouble) }
+                  realTolDecPts.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
+                }
+                case _ =>  {
+                  fixTolLSBs.withValue(tol) { expect(dut.out.bits.cut.get, fftMagScala(cntValidOut)) }
+                  fixTolLSBs.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
+                }
+              }
+              //fftBin
+              if (expPeaks.contains(peek(dut.fftBin))) {
+                expect(dut.out.bits.peak, 1)
+              }
+              cntValidOut += 1
+              threshold += peek(dut.out.bits.threshold)
+            }
+          step(1)
+        }
+        poke(dut.in.bits.last, 0)
+        poke(dut.in.valid, 0)
+        poke(dut.out.ready, 0)
+        step(10)
+        poke(dut.out.ready, 1)
+       // println("Value of the counter is:")
+       // println(cntValidOut.toString)
+        while (cntValidOut < in.size) {
+          if (peek(dut.out.valid) && peek(dut.out.ready)) {
+            params.cfarParams.get.cfarParams.protoIn match {
+              case dspR: DspReal => {
+                realTolDecPts.withValue(tol) { expect(dut.out.bits.cut.get, fftMagScala(cntValidOut)) }
+                realTolDecPts.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
+              }
+              case _ =>  {
+                fixTolLSBs.withValue(tol) { expect(dut.out.bits.cut.get, fftMagScala(cntValidOut)) }
+                fixTolLSBs.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
+              }
+            }
+            if (expPeaks.contains(peek(dut.fftBin))) {
+              expect(dut.out.bits.peak, 1)
+            }
+            threshold += peek(dut.out.bits.threshold)
+
+            if (cntValidOut == fftMagScala.size - 1)
+              expect(dut.lastOut, 1)
+            cntValidOut += 1
+          }
+          step(1)
+      }
+
+      cntValidOut = 0
+      step(params.cfarParams.get.cfarParams.leadLaggWindowSize * 2)
+      }
+    }
   }
 
   poke(dut.out.ready, true)
@@ -83,18 +220,20 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   master.addTransactions((0 until dataByte.size).map(i => AXI4StreamTransaction(data = dataByte(i))))
 
 
-  // var outSeq = Seq[Int]()
-  // var peekedVal: BigInt = 0
+  var outSeq = Seq[BigInt]()
+  var peekedVal: BigInt = 0
   
-  // // check only one fft window 
-  // while (outSeq.length < fftSize * 6) {
-  //   if (peek(dut.outStream.valid) == 1 && peek(dut.outStream.ready) == 1) {
-  //     peekedVal = peek(dut.outStream.bits.data)
-  //     outSeq = outSeq :+ peekedVal.toInt
-  //   }
-  //   step(1)
-  // }
+  // check only one fft window 
+  while (outSeq.length < fftSize * 3) {
+    if (peek(dut.out.valid) == 1 && peek(dut.out.ready) == 1) {
+      peekedVal = peek(dut.out.bits.data)
+      outSeq = outSeq :+ peekedVal
+    }
+    step(1)
+  }
 
+
+    
   // var realSeq = Seq[Int]()
   // var imagSeq = Seq[Int]()
   // var tmpReal: Short = 0
@@ -127,6 +266,5 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   //   SpectrometerTesterUtils.plot_data(inputData = inData, plotName = "Input data", fileName = "SpectrometerTest/pin_fft_mag_pout/plot_in.pdf")
   //   SpectrometerTesterUtils.plot_data(inputData = imagSeq.map(c => c.toInt), plotName = "PIN -> FFT -> MAG -> POUT", fileName = "SpectrometerTest/pin_fft_mag_pout/plot_mag.pdf")
   // }
-  step(20000)
   stepToCompletion(silentFail = silentFail)
 }
