@@ -33,7 +33,7 @@ class SpectrometerTestSpec extends FlatSpec with Matchers {
   it should "test AXI4Spectrometer" in {
     val lazyDut = LazyModule(new AXI4Spectrometer(params, 4) with AXI4SpectrometerPins)
     chisel3.iotesters.Driver.execute(Array("--backend-name", simulator, "--target-dir", "test_run_dir/AXI4Spectrometer", "--top-name", "AXI4Spectrometer"), () => lazyDut.module) {
-      c => new SpectrometerTester(lazyDut, params, fftSize.toInt, enablePlot.toBoolean, true)
+      c => new SpectrometerTester(lazyDut, params, fftSize.toInt, false, enablePlot.toBoolean, true)
     } should be (true)
   }
 }
