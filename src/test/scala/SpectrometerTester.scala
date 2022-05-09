@@ -72,21 +72,18 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   if(params.cfarParams != None) {
     val beatBytes = 4
     val cfarModeString = "CASH"
-    val refWindowSize = 16
-    val guardWindowSize = 4
     val thresholdScaler = 2.8
     val binPointThresholdScaler = 10
     val thresholdScalerReg = (thresholdScaler * scala.math.pow(2,binPointThresholdScaler)).toInt
-    val divSum = (scala.math.log10(refWindowSize)/scala.math.log10(2.0)).toInt
     val peakGrouping = 0
 
     val cfarMode = cfarModeString match {
-                        case "Cell Averaging" => 0
-                        case "Greatest Of" => 1
-                        case "Smallest Of" => 2
-                        case "CASH" => 3
-                        case _ => 0
-                      }
+      case "Cell Averaging" => 0
+      case "Greatest Of" => 1
+      case "Smallest Of" => 2
+      case "CASH" => 3
+      case _ => 0
+    }
 
     memWriteWord(params.cfarParams.get.cfarAddress.base + 0x0*beatBytes, fftSize)
     memWriteWord(params.cfarParams.get.cfarAddress.base + 0x1*beatBytes, thresholdScalerReg)
@@ -147,6 +144,11 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
 
       }
     }
+
+
+
+
+    
   }
 
 
@@ -162,101 +164,7 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
 
         
 
-  //       for (i <- 0 until testSignal.size) {
-  //         val delay = 3//Random.nextInt(5)
-  //         //step(delay)
-  //         for (i <- 0 until delay) {
-  //           if (peek(dut.out.valid) == true) {
-  //             params.cfarParams.get.cfarParams.protoIn match {
-  //               case dspR: DspReal => {
-  //                 realTolDecPts.withValue(tol) { expect(dut.out.bits.cut.get,  testSignal(cntValidOut).toDouble) }
-  //                 realTolDecPts.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
-  //               }
-  //               case _ =>  {
-  //                 fixTolLSBs.withValue(tol) { expect(dut.out.bits.cut.get, testSignal(cntValidOut)) }
-  //                 fixTolLSBs.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
-  //               }
-  //             }
-  //             //fftBin
-  //             if (expPeaks.contains(peek(dut.fftBin))) {
-  //               expect(dut.out.bits.peak, 1)
-  //             }
-  //             cntValidOut += 1
-  //             threshold += peek(dut.out.bits.threshold)
-  //           }
-  //           step(1)
-  //         }
-  //         poke(dut.in.bits.data, dataByte(i))
-  //         if (i == (dataByte.size - 1))
-  //           poke(dut.in.bits.last, 1)
-  //           if (peek(dut.out.valid) == true) {
-  //             params.cfarParams.get.cfarParams.protoIn match {
-  //               case dspR: DspReal => {
-  //                 realTolDecPts.withValue(tol) { expect(dut.out.bits.cut.get,  testSignal(cntValidOut).toDouble) }
-  //                 realTolDecPts.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
-  //               }
-  //               case _ =>  {
-  //                 fixTolLSBs.withValue(tol) { expect(dut.out.bits.cut.get, testSignal(cntValidOut)) }
-  //                 fixTolLSBs.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
-  //               }
-  //             }
-  //             //fftBin
-  //             if (expPeaks.contains(peek(dut.fftBin))) {
-  //               expect(dut.out.bits.peak, 1)
-  //             }
-  //             cntValidOut += 1
-  //             threshold += peek(dut.out.bits.threshold)
-  //           }
-  //         step(1)
-  //       }
-  //       poke(dut.in.bits.last, 0)
-  //       poke(dut.in.valid, 0)
-  //       poke(dut.out.ready, 0)
-  //       step(10)
-  //       poke(dut.out.ready, 1)
-  //      // println("Value of the counter is:")
-  //      // println(cntValidOut.toString)
-  //       while (cntValidOut < in.size) {
-  //         if (peek(dut.out.valid) && peek(dut.out.ready)) {
-  //           params.cfarParams.get.cfarParams.protoIn match {
-  //             case dspR: DspReal => {
-  //               realTolDecPts.withValue(tol) { expect(dut.out.bits.cut.get, testSignal(cntValidOut)) }
-  //               realTolDecPts.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
-  //             }
-  //             case _ =>  {
-  //               fixTolLSBs.withValue(tol) { expect(dut.out.bits.cut.get, testSignal(cntValidOut)) }
-  //               fixTolLSBs.withValue(tol) { expect(dut.out.bits.threshold, expThr(cntValidOut)) }
-  //             }
-  //           }
-  //           if (expPeaks.contains(peek(dut.fftBin))) {
-  //             expect(dut.out.bits.peak, 1)
-  //           }
-  //           threshold += peek(dut.out.bits.threshold)
-
-  //           if (cntValidOut == testSignal.size - 1)
-  //             expect(dut.lastOut, 1)
-  //           cntValidOut += 1
-  //         }
-  //         step(1)
-  //     }
-
-  //     cntValidOut = 0
-  //     step(params.cfarParams.get.cfarParams.leadLaggWindowSize * 2)
-  //     }
-  //   }
-  // }
-
-  // var outSeq = Seq[BigInt]()
-  // var peekedVal: BigInt = 0
   
-  // // check only one fft window 
-  // while (outSeq.length < fftSize * 3) {
-  //   if (peek(dut.out.valid) == 1 && peek(dut.out.ready) == 1) {
-  //     peekedVal = peek(dut.out.bits.data)
-  //     outSeq = outSeq :+ peekedVal
-  //   }
-  //   step(1)
-  // }
 
 
     
