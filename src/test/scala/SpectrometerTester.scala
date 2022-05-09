@@ -191,6 +191,10 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
     }
     w1.close
     
+    if (enablePlot) {
+      SpectrometerTesterUtils.plot_data(inputData = outCUT, plotName = "MAgnitude", fileName = "./AXI4Spectrometer/plot_mag.pdf")
+    }
+
     // check tolerance
     if (params.fftParams.get.fftParams.useBitReverse) {
       SpectrometerTesterUtils.checkDataError(outCUT, fftMagScala, 3)
