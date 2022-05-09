@@ -45,6 +45,8 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   // can be simplified
   var sum   = noise.zip(s1).map { case (a, b) => a + b}.zip(s2).map{ case (c, d) => c + d }.zip(s3).map{ case (e, f)  => e + f }
   val fft = fourierTr(DenseVector(sum.toArray)).toScalaVector
+  val fftScala = fourierTr(DenseVector(sum.toArray)).toScalaVector.map(c => Complex(c.real/fftSize, c.imag/fftSize))
+  val fftMagScala = fftScala.map(c => c.abs.toInt)
   var testSignal: Seq[Double] = fft.map(c => math.sqrt(pow(c.real,2) + pow(c.imag,2)))
   
   // split 32 bit data to 4 bytes and send real sinusoid
@@ -145,10 +147,61 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
       }
     }
 
+    var outSeq = Seq[Int]()
+    var peekedVal: BigInt = 0
+    var tempCounter = 0
+    
+    while (outSeq.length < fftSize * 3 && tempCounter < 10000) {
+      if (peek(dut.out.valid) == 1 && peek(dut.out.ready) == 1) {
+        peekedVal = peek(dut.out.bits.data)
+        outSeq = outSeq :+ peekedVal.toInt
+      }
+      step(1)
+      tempCounter = tempCounter + 1
+    }
 
+    var outCUT  = Seq[Int]()
+    var outBIN  = Seq[Int]()
+    var outPEAK = Seq[Int]()
+    var outTreshold = Seq[Int]()
+    var tempString: String = ""
+    
+    for (i <- 0 until outSeq.length by 3) {
+      tempString = SpectrometerTesterUtils.asNdigitBinary(outSeq(i + 2), 16) ++ SpectrometerTesterUtils.asNdigitBinary(outSeq(i + 1), 16) ++ SpectrometerTesterUtils.asNdigitBinary(outSeq(i), 16)
+      outTreshold = outTreshold :+ (java.lang.Integer.parseInt(tempString.substring(6,22) ,2).toShort).toInt
+      outCUT      = outCUT      :+ (java.lang.Integer.parseInt(tempString.substring(22,38) ,2).toShort).toInt
+      outBIN      = outBIN      :+ (java.lang.Integer.parseInt(tempString.substring(38,47) ,2).toShort).toInt
+      outPEAK     = outPEAK     :+ (java.lang.Integer.parseInt(tempString.substring(47,48) ,2).toShort).toInt
+    }
 
+    println(s"Output sequence length : ${outTreshold.length}")
+
+    // Write output data to text file
+    val file = new File("./test_run_dir/AXI4Spectrometer/outCUT.txt")
+    val w = new BufferedWriter(new FileWriter(file))
+    for (i <- 0 until outCUT.length ) {
+      w.write(f"${outCUT(i)}%04x" + "\n")
+    }
+    w.close
+
+    val file1 = new File("./test_run_dir/AXI4Spectrometer/fftMagScala.txt")
+    val w1 = new BufferedWriter(new FileWriter(file1))
+    for (i <- 0 until fftMagScala.length ) {
+      w1.write(f"${fftMagScala(i)}%04x" + "\n")
+    }
+    w1.close
+    
+    // check tolerance
+    if (params.fftParams.get.fftParams.useBitReverse) {
+      SpectrometerTesterUtils.checkDataError(outCUT, fftMagScala, 3)
+    }
+    else {
+      val bRImag = SpectrometerTesterUtils.bitrevorder_data(outCUT)
+      SpectrometerTesterUtils.checkDataError(bRImag, fftMagScala, 3)
+    }
 
     
+
   }
 
 
