@@ -35,7 +35,7 @@ object SpectrometerTesterUtils {
     import scala.util.Random
     
     (0 until numSamples).map(i => Complex(
-    (math.sin(2 * math.Pi * f1r * i) + math.sin(2 * math.Pi * f2r * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0),
+    (math.cos(2 * math.Pi * f1r * i) + math.sin(2 * math.Pi * f2r * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0),
     (math.sin(2 * math.Pi * f1i * i) + math.sin(2 * math.Pi * f2i * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0)))
   }
   
