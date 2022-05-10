@@ -27,14 +27,16 @@ object SpectrometerTesterUtils {
       lstring.takeRight(digits)
   }
   
-  
   /**
-  * Generate real sinusoid. Assumption is that dataWidth of the fft input is always equal to 16
-  * Scale parameter is useful when square magnitude is calculated to prevent overflow
-  */
-
-  def getTone(numSamples: Int, f1r: Double, scale: Int = 1): Seq[Int] = {
-    (0 until numSamples).map(i => (math.sin(2 * math.Pi * f1r * i) * scala.math.pow(2, 14)/scale).toInt)
+   * Generates complex or real sinusoids with optional noise
+   */
+  def getTone(numSamples: Int, f1r: Double, f2r: Double = 0, f1i: Double = 0, f2i: Double = 0, addNoise: Double = 0, scalingFactor: Int = 1): Seq[Complex] = {
+    require(f1r != 0, "Digital frequency should not be zero!")
+    import scala.util.Random
+    
+    (0 until numSamples).map(i => Complex(
+    (math.sin(2 * math.Pi * f1r * i) + math.sin(2 * math.Pi * f2r * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0),
+    (math.sin(2 * math.Pi * f1i * i) + math.sin(2 * math.Pi * f2i * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0)))
   }
   
   /**
@@ -51,7 +53,6 @@ object SpectrometerTesterUtils {
   * Scale parameter is useful when square magnitude is calculated to prevent overflow
   */
   def genRandSignal(numSamples: Int, scale: Int = 1, binPoint: Int = 14): Seq[Int] = {
-    import scala.math.sqrt
     import scala.util.Random
     
     Random.setSeed(11110L)
@@ -63,7 +64,6 @@ object SpectrometerTesterUtils {
   * Scale parameter is useful when square magnitude is calculated to prevent overflow
   */
   def genComplexRandSignal(numSamples: Int, scale: Int = 1, binPoint: Int = 13): Seq[Complex] = {
-    import scala.math.sqrt
     import scala.util.Random
     
     Random.setSeed(11110L)
@@ -89,10 +89,9 @@ object SpectrometerTesterUtils {
   }
   
   
-  /*****************************************************
-  * Does bit reversal of the input data
-  */
- 
+  /**
+   * Returns bit reversed index
+   */
   def bit_reverse(in: Int, width: Int): Int = {
     import scala.math.pow
     var test = in
@@ -106,7 +105,10 @@ object SpectrometerTesterUtils {
     out
   }
   
-  def bitrevorder_data(testSignal: Seq[Int]): Seq[Int] = {
+  /**
+   * Reordering data
+   */
+  def bitrevorder_data(testSignal: Seq[Complex]): Seq[Complex] = {
     val seqLength = testSignal.size
     val new_indices = (0 until seqLength).map(x => bit_reverse(x, log2Up(seqLength)))
     new_indices.map(x => testSignal(x))

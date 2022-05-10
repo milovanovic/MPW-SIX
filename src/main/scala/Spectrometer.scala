@@ -7,6 +7,7 @@ import chisel3.stage.{ChiselGeneratorAnnotation, ChiselStage}
 import chisel3.util._
 import chisel3.experimental.FixedPoint
 
+import dsptools._
 import dsptools.numbers._
 import dspblocks._
 
@@ -108,29 +109,40 @@ class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
   val params : SpectrometerParameters[FixedPoint] = SpectrometerParameters (
     fftParams = Some(FFTParamsAndAddresses(
       fftParams = FFTParams.fixed(
-        dataWidth = 16,
-        twiddleWidth = 16,
-        numPoints = fftSize,
-        useBitReverse  = true,
-        runTime = true,
-        numAddPipes = 1,
-        numMulPipes = 1,
-        use4Muls = true,
-        //sdfRadix = "2",
-        expandLogic = Array.fill(log2Up(fftSize))(0),//(1).zipWithIndex.map { case (e,ind) => if (ind < 4) 1 else 0 }, // expand first four stages, other do not grow
-        keepMSBorLSB = Array.fill(log2Up(fftSize))(true),
-        minSRAMdepth = minSRAMdepth, // memories larger than 64 should be mapped on block ram
-        binPoint = 10
+        dataWidth       = 16,
+        binPoint        = 14,
+        dataWidthOut    = 16,
+        binPointOut     = 14,
+        trimEnable      = false,
+        twiddleWidth    = 16,
+        numPoints       = fftSize,
+        keepMSBorLSBReg = false,
+        keepMSBorLSB    = Array.fill(log2Up(fftSize))(true),
+        overflowReg     = false,
+        fftType         = "sdf",
+        decimType       = DIFDecimType,
+        sdfRadix        = "2^2",
+        runTimeR22      = Some(false),
+        expandLogic     = Array.fill(log2Up(fftSize))(0),
+        runTime         = false,
+        trimType        = RoundHalfUp,
+        numAddPipes     = 0,
+        numMulPipes     = 0,
+        fftDir          = true,
+        fftDirReg       = false,
+        use4Muls        = false,
+        useBitReverse   = false,
+        minSRAMdepth    = minSRAMdepth,
       ),
       fftAddress = AddressSet(0x60001100, 0xFF)
     )),
     magParams = Some(MagParamsAndAddresses(
       magParams = MAGParams(
-        protoIn  = FixedPoint(16.W, 10.BP),
-        protoOut = FixedPoint(16.W, 10.BP),
-        protoLog = Some(FixedPoint(16.W, 10.BP)),
+        protoIn  = FixedPoint(16.W, 14.BP),
+        protoOut = FixedPoint(16.W, 14.BP),
+        protoLog = Some(FixedPoint(16.W, 14.BP)),
         magType  = MagJPLandSqrMag,
-        log2LookUpWidth = 10,
+        log2LookUpWidth = 14,
         useLast = true,
         numAddPipes = 1,
         numMulPipes = 1
@@ -139,9 +151,9 @@ class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
     )),
     cfarParams = Some(CFARParamsAndAddresses(
       cfarParams = CFARParams(
-        protoIn = FixedPoint(16.W, 10.BP),
-        protoThreshold = FixedPoint(16.W, 10.BP),
-        protoScaler = FixedPoint(16.W, 10.BP),
+        protoIn = FixedPoint(16.W, 14.BP),
+        protoThreshold = FixedPoint(16.W, 14.BP),
+        protoScaler = FixedPoint(16.W, 14.BP),
         leadLaggWindowSize = 64,
         guardWindowSize = 8,
         logOrLinReg = false,

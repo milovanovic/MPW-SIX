@@ -2,16 +2,10 @@
 
 package spectrometer_v2
 
-import chisel3._
-import chisel3.util._
-import chisel3.iotesters.{Driver, PeekPokeTester}
-
 import freechips.rocketchip.config.Parameters
 import freechips.rocketchip.diplomacy._
 
 import org.scalatest.{FlatSpec, Matchers}
-
-import java.io._
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SPEC

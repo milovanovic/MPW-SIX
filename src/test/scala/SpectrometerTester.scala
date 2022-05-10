@@ -3,7 +3,7 @@
 package spectrometer_v2
 
 import chisel3._
-import chisel3.util.log2Ceil
+import chisel3.util.{log2Ceil, log2Up}
 import chisel3.iotesters.PeekPokeTester
 
 import dsptools.numbers._
@@ -21,6 +21,7 @@ import scala.util.Random
 import java.io._
 
 import cfar._
+import fft._
 
 /* AXI4Spectrometer */
 class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
@@ -37,26 +38,39 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   def memAXI: AXI4Bundle = dut.ioMem.get
   val master = bindMaster(dut.in)
 
-  val noise = (0 until fftSize).map(i => Complex(math.sqrt(Random.nextDouble + Random.nextDouble) * math.pow(2, 10),math.sqrt(Random.nextDouble + Random.nextDouble) * math.pow(2, 10)))
-  val s1    = (0 until fftSize).map(i => Complex(0.4 * math.cos(2 * math.Pi * 1/8 * i) * math.pow(2, 13), 0.4 * math.sin(2 * math.Pi * 1/8 * i) * math.pow(2, 13)))
-  val s2    = (0 until fftSize).map(i => Complex(0.2 * math.cos(2 * math.Pi * 1/4 * i) * math.pow(2, 13), 0.2 * math.sin(2 * math.Pi * 1/4 * i) * math.pow(2, 13)))
-  val s3    = (0 until fftSize).map(i => Complex(0.1 * math.cos(2 * math.Pi * 1/2 * i) * math.pow(2, 13), 0.1 * math.sin(2 * math.Pi * 1/2 * i) * math.pow(2, 13)))
+  // val noise = (0 until fftSize).map(i => Complex(math.sqrt(Random.nextDouble + Random.nextDouble) * math.pow(2, 10),math.sqrt(Random.nextDouble + Random.nextDouble) * math.pow(2, 10)))
+  // val s1    = (0 until fftSize).map(i => Complex(0.4 * math.cos(2 * math.Pi * 1/8 * i) * math.pow(2, 13), 0.4 * math.sin(2 * math.Pi * 1/8 * i) * math.pow(2, 13)))
+  // val s2    = (0 until fftSize).map(i => Complex(0.2 * math.cos(2 * math.Pi * 1/4 * i) * math.pow(2, 13), 0.2 * math.sin(2 * math.Pi * 1/4 * i) * math.pow(2, 13)))
+  // val s3    = (0 until fftSize).map(i => Complex(0.1 * math.cos(2 * math.Pi * 1/2 * i) * math.pow(2, 13), 0.1 * math.sin(2 * math.Pi * 1/2 * i) * math.pow(2, 13)))
 
-  // can be simplified
-  var sum   = noise.zip(s1).map { case (a, b) => a + b}.zip(s2).map{ case (c, d) => c + d }.zip(s3).map{ case (e, f)  => e + f }
-  val fft = fourierTr(DenseVector(sum.toArray)).toScalaVector
-  val fftScala = fourierTr(DenseVector(sum.toArray)).toScalaVector.map(c => Complex(c.real/fftSize, c.imag/fftSize))
-  val fftMagScala = fftScala.map(c => c.abs.toInt)
-  var testSignal: Seq[Double] = fft.map(c => math.sqrt(pow(c.real,2) + pow(c.imag,2)))
+  // // can be simplified
+  // var sum   = noise.zip(s1).map { case (a, b) => a + b}.zip(s2).map{ case (c, d) => c + d }.zip(s3).map{ case (e, f)  => e + f }
+  // val fft = fourierTr(DenseVector(sum.toArray)).toScalaVector
+  // val fftScala = fourierTr(DenseVector(sum.toArray)).toScalaVector.map(c => Complex(c.real/fftSize, c.imag/fftSize))
+  // val fftMagScala = fftScala.map(c => c.abs.toInt)
+  // var testSignal: Seq[Double] = fft.map(c => math.sqrt(pow(c.real,2) + pow(c.imag,2)))
+
+  val numStages = log2Up(fftSize)
+  val testTone = SpectrometerTesterUtils.getTone(fftSize, 1.0/128.0)
+  val inp = if (params.fftParams.get.fftParams.decimType == DITDecimType) SpectrometerTesterUtils.bitrevorder_data(testTone) else testTone
+  val input = inp.map(m => m * math.pow(2,14))
+  val out = if (params.fftParams.get.fftParams.decimType == DITDecimType) fourierTr(DenseVector(testTone.toArray)).toScalaVector else SpectrometerTesterUtils.bitrevorder_data(fourierTr(DenseVector(inp.toArray)).toScalaVector)
+  var scalingFactor = if (params.fftParams.get.fftParams.expandLogic.sum != 0) {
+    if (params.fftParams.get.fftParams.decimType == DIFDecimType) math.pow(2, params.fftParams.get.fftParams.expandLogic.drop(numStages - log2Up(fftSize)).filter(_ != 1).size).toInt
+    else math.pow(2, params.fftParams.get.fftParams.expandLogic.take(log2Up(fftSize)).filter(_ != 1).size).toInt
+  } else fftSize
+  val fftScala = out.map(m => m/scalingFactor)
+  val fftMagScala = fftScala.map(m => math.sqrt(math.pow(m.real * math.pow(2, 14), 2) + math.pow(m.imag * math.pow(2, 14), 2)).toInt)
+  var testSignal: Seq[Double] = fftScala.map(c => c.abs.toDouble)
   
   // split 32 bit data to 4 bytes and send real sinusoid
   var dataByte = Seq[Int]()
-  for (i <- sum) {
+  for (i <- input) {
     // imag part
-    dataByte = dataByte :+ ((i.imag.toInt)       & 0xFF)
+    dataByte = dataByte :+ (i.imag.toInt         & 0xFF)
     dataByte = dataByte :+ ((i.imag.toInt >>> 8) & 0xFF)
     // real part
-    dataByte = dataByte :+ ((i.real.toInt)       & 0xFF)
+    dataByte = dataByte :+ (i.real.toInt         & 0xFF)
     dataByte = dataByte :+ ((i.real.toInt >>> 8) & 0xFF)
   }
 
@@ -190,22 +204,25 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
       w1.write(f"${fftMagScala(i)}%04x" + "\n")
     }
     w1.close
+
+    val file2 = new File("./test_run_dir/AXI4Spectrometer/input.txt")
+    val w2 = new BufferedWriter(new FileWriter(file2))
+    for (i <- 0 until dataByte.length ) {
+      w2.write(f"${dataByte(i)}%04x" + "\n")
+    }
+    w2.close
     
     if (enablePlot) {
       SpectrometerTesterUtils.plot_data(inputData = outCUT, plotName = "MAgnitude", fileName = "./AXI4Spectrometer/plot_mag.pdf")
+      SpectrometerTesterUtils.plot_data(inputData = fftMagScala, plotName = "MAgnitude", fileName = "./AXI4Spectrometer/plot_mag_scala.pdf")
     }
 
+    if (enablePlot) {
+      SpectrometerTesterUtils.plot_data(inputData = input.map(c => c.real.toInt), plotName = "Input real data", fileName = "AXI4Spectrometer/in_real.pdf")
+      SpectrometerTesterUtils.plot_data(inputData = input.map(c => c.imag.toInt), plotName = "Input imag data", fileName = "AXI4Spectrometer/in_imag.pdf")
+    }
     // check tolerance
-    if (params.fftParams.get.fftParams.useBitReverse) {
-      SpectrometerTesterUtils.checkDataError(outCUT, fftMagScala, 3)
-    }
-    else {
-      val bRImag = SpectrometerTesterUtils.bitrevorder_data(outCUT)
-      SpectrometerTesterUtils.checkDataError(bRImag, fftMagScala, 3)
-    }
-
-    
-
+    SpectrometerTesterUtils.checkDataError(outCUT, fftMagScala, 3)
   }
 
 
@@ -252,11 +269,7 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   //   val bRImag = SpectrometerTesterUtils.bitrevorder_data(imagSeq)
   //   SpectrometerTesterUtils.checkDataError(bRImag, fftMagScala, 3)
   // }
-  
-  if (enablePlot) {
-    SpectrometerTesterUtils.plot_data(inputData = sum.map(c => c.real.toInt), plotName = "Input real data", fileName = "AXI4Spectrometer/in_real.pdf")
-    SpectrometerTesterUtils.plot_data(inputData = sum.map(c => c.imag.toInt), plotName = "Input imag data", fileName = "AXI4Spectrometer/in_imag.pdf")
-  }
+
 
   
   step(20000)
