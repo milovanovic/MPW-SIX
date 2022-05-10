@@ -51,7 +51,7 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   // var testSignal: Seq[Double] = fft.map(c => math.sqrt(pow(c.real,2) + pow(c.imag,2)))
 
   val numStages = log2Up(fftSize)
-  val testTone = SpectrometerTesterUtils.getTone(fftSize, 1.0/128.0)
+  val testTone = SpectrometerTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/128.0, 0, f1i = 1.0/128.0)
   val inp = if (params.fftParams.get.fftParams.decimType == DITDecimType) SpectrometerTesterUtils.bitrevorder_data(testTone) else testTone
   val input = inp.map(m => m * math.pow(2,14))
   val out = if (params.fftParams.get.fftParams.decimType == DITDecimType) fourierTr(DenseVector(testTone.toArray)).toScalaVector else SpectrometerTesterUtils.bitrevorder_data(fourierTr(DenseVector(inp.toArray)).toScalaVector)
@@ -60,7 +60,7 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
     else math.pow(2, params.fftParams.get.fftParams.expandLogic.take(log2Up(fftSize)).filter(_ != 1).size).toInt
   } else fftSize
   val fftScala = out.map(m => m/scalingFactor)
-  val fftMagScala = fftScala.map(m => math.sqrt(math.pow(m.real * math.pow(2, 14), 2) + math.pow(m.imag * math.pow(2, 14), 2)).toInt)
+  val fftMagScala = fftScala.map(m => ((math.pow(m.real * math.pow(2, 14), 2) + math.pow(m.imag * math.pow(2, 14), 2))/math.pow(2, 14)).toInt)
   var testSignal: Seq[Double] = fftScala.map(c => c.abs.toDouble)
   
   // split 32 bit data to 4 bytes and send real sinusoid
