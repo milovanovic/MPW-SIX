@@ -30,13 +30,13 @@ object SpectrometerTesterUtils {
   /**
    * Generates complex or real sinusoids with optional noise
    */
-  def getTone(numSamples: Int, f1r: Double, f2r: Double = 0, f1i: Double = 0, f2i: Double = 0, addNoise: Double = 0, scalingFactor: Int = 1): Seq[Complex] = {
+  def getTone(numSamples: Int, f1r: Double, f1i: Double = 0, addNoise: Double = 0, scalingFactor: Int = 1, scalingFactor2: Int = 1): Seq[Complex] = {
     require(f1r != 0, "Digital frequency should not be zero!")
     import scala.util.Random
     
     (0 until numSamples).map(i => Complex(
-    (math.cos(2 * math.Pi * f1r * i) + math.sin(2 * math.Pi * f2r * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0),
-    (math.sin(2 * math.Pi * f1i * i) + math.sin(2 * math.Pi * f2i * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0)))
+    (math.cos(2 * math.Pi * f1r * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0)/scalingFactor2,
+    (math.sin(2 * math.Pi * f1i * i))/scalingFactor + addNoise*((Random.nextDouble()*2.0)-1.0)/scalingFactor2))
   }
   
   /**
