@@ -120,7 +120,7 @@ class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
         keepMSBorLSB    = Array.fill(log2Up(fftSize))(true),
         overflowReg     = false,
         fftType         = "sdf",
-        decimType       = DIFDecimType,
+        decimType       = DITDecimType,
         sdfRadix        = "2^2",
         runTimeR22      = Some(false),
         expandLogic     = Array.fill(log2Up(fftSize))(0),
