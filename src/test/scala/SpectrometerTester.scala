@@ -38,20 +38,12 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   def memAXI: AXI4Bundle = dut.ioMem.get
   val master = bindMaster(dut.in)
 
-  // val noise = (0 until fftSize).map(i => Complex(math.sqrt(Random.nextDouble + Random.nextDouble) * math.pow(2, 10),math.sqrt(Random.nextDouble + Random.nextDouble) * math.pow(2, 10)))
-  // val s1    = (0 until fftSize).map(i => Complex(0.4 * math.cos(2 * math.Pi * 1/8 * i) * math.pow(2, 13), 0.4 * math.sin(2 * math.Pi * 1/8 * i) * math.pow(2, 13)))
-  // val s2    = (0 until fftSize).map(i => Complex(0.2 * math.cos(2 * math.Pi * 1/4 * i) * math.pow(2, 13), 0.2 * math.sin(2 * math.Pi * 1/4 * i) * math.pow(2, 13)))
-  // val s3    = (0 until fftSize).map(i => Complex(0.1 * math.cos(2 * math.Pi * 1/2 * i) * math.pow(2, 13), 0.1 * math.sin(2 * math.Pi * 1/2 * i) * math.pow(2, 13)))
-
-  // // can be simplified
-  // var sum   = noise.zip(s1).map { case (a, b) => a + b}.zip(s2).map{ case (c, d) => c + d }.zip(s3).map{ case (e, f)  => e + f }
-  // val fft = fourierTr(DenseVector(sum.toArray)).toScalaVector
-  // val fftScala = fourierTr(DenseVector(sum.toArray)).toScalaVector.map(c => Complex(c.real/fftSize, c.imag/fftSize))
-  // val fftMagScala = fftScala.map(c => c.abs.toInt)
-  // var testSignal: Seq[Double] = fft.map(c => math.sqrt(pow(c.real,2) + pow(c.imag,2)))
-
+  // Define signals
   val numStages = log2Up(fftSize)
-  val testTone = SpectrometerTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/128.0, 0, f1i = 1.0/128.0)
+  val s1 = SpectrometerTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/4.0,   f1i = 1.0/4.0,   addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
+  val s2 = SpectrometerTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/32.0,  f1i = 1.0/32.0,  addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
+  val s3 = SpectrometerTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/128.0, f1i = 1.0/128.0, addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
+  val testTone = s1.zip(s2).map{ case (c, d) => c + d }.zip(s3).map{ case (e, f)  => e + f }
   val inp = if (params.fftParams.get.fftParams.decimType == DITDecimType) SpectrometerTesterUtils.bitrevorder_data(testTone) else testTone
   val input = inp.map(m => m * math.pow(2,14))
   val out = if (params.fftParams.get.fftParams.decimType == DITDecimType) fourierTr(DenseVector(testTone.toArray)).toScalaVector else SpectrometerTesterUtils.bitrevorder_data(fourierTr(DenseVector(inp.toArray)).toScalaVector)
@@ -82,8 +74,6 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
   step(1)
   // add master transactions
   master.addTransactions((0 until dataByte.size).map(i => AXI4StreamTransaction(data = dataByte(i), last = (i == dataByte.size-1))))
-  // master.addTransactions((0 until dataByte.size).map(i => AXI4StreamTransaction(data = dataByte(i), last = (i == dataByte.size-1))))
-  // master.addTransactions((0 until dataByte.size).map(i => AXI4StreamTransaction(data = dataByte(i), last = (i == dataByte.size-1))))
 
   if(params.cfarParams != None) {
     val beatBytes = 4
@@ -190,37 +180,34 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
 
     println(s"Output sequence length : ${outTreshold.length}")
 
-    // Write output data to text file
-    val file = new File("./test_run_dir/AXI4Spectrometer/outCUT.txt")
-    val w = new BufferedWriter(new FileWriter(file))
-    for (i <- 0 until outCUT.length ) {
-      w.write(f"${outCUT(i)}%04x" + "\n")
-    }
-    w.close
-
-    val file1 = new File("./test_run_dir/AXI4Spectrometer/fftMagScala.txt")
-    val w1 = new BufferedWriter(new FileWriter(file1))
-    for (i <- 0 until fftMagScala.length ) {
-      w1.write(f"${fftMagScala(i)}%04x" + "\n")
-    }
-    w1.close
-
-    val file2 = new File("./test_run_dir/AXI4Spectrometer/input.txt")
-    val w2 = new BufferedWriter(new FileWriter(file2))
-    for (i <- 0 until dataByte.length ) {
-      w2.write(f"${dataByte(i)}%04x" + "\n")
-    }
-    w2.close
-    
+    // Plot data
     if (enablePlot) {
       SpectrometerTesterUtils.plot_data(inputData = outCUT, plotName = "MAgnitude", fileName = "./AXI4Spectrometer/plot_mag.pdf")
       SpectrometerTesterUtils.plot_data(inputData = fftMagScala, plotName = "MAgnitude", fileName = "./AXI4Spectrometer/plot_mag_scala.pdf")
     }
 
     if (enablePlot) {
-      SpectrometerTesterUtils.plot_data(inputData = input.map(c => c.real.toInt), plotName = "Input real data", fileName = "AXI4Spectrometer/in_real.pdf")
-      SpectrometerTesterUtils.plot_data(inputData = input.map(c => c.imag.toInt), plotName = "Input imag data", fileName = "AXI4Spectrometer/in_imag.pdf")
+      SpectrometerTesterUtils.plot_data(inputData = testTone.map(m => m * math.pow(2,14)).map(c => c.real.toInt), plotName = "Input real data without reordering", fileName = "AXI4Spectrometer/in_real.pdf")
+      SpectrometerTesterUtils.plot_data(inputData = testTone.map(m => m * math.pow(2,14)).map(c => c.imag.toInt), plotName = "Input imag data without reordering", fileName = "AXI4Spectrometer/in_imag.pdf")
+      SpectrometerTesterUtils.plot_data(inputData = input.map(c => c.real.toInt), plotName = "Input real data with reordering", fileName = "AXI4Spectrometer/in_real_reordered.pdf")
+      SpectrometerTesterUtils.plot_data(inputData = input.map(c => c.imag.toInt), plotName = "Input imag data with reordering", fileName = "AXI4Spectrometer/in_imag_reordered.pdf")
     }
+
+    // Write data to text files
+    val f_output = new File("./test_run_dir/AXI4Spectrometer/output_data.txt")
+    val w_output = new BufferedWriter(new FileWriter(f_output))
+    for (i <- 0 until outSeq.length ) {
+      w_output.write(f"${outSeq(i)}%04x" + "\n")
+    }
+    w_output.close
+
+    val f_input = new File("./test_run_dir/AXI4Spectrometer/input_data.txt")
+    val w_input = new BufferedWriter(new FileWriter(f_input))
+    for (i <- 0 until dataByte.length ) {
+      w_input.write(f"${dataByte(i)}%02x" + "\n")
+    }
+    w_input.close
+
     // check tolerance
     SpectrometerTesterUtils.checkDataError(outCUT, fftMagScala, 3)
   }
