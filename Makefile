@@ -20,10 +20,10 @@ test_spectrometer:
 
 lint:
 	verilator --lint-only -Wno-STMTDLY  -DSIM -DMPRJ_IO_PADS=38 \
-	-I./verilog_modules/SpectrometerV2 \
-	-I./verilog_modules/wb2axip/rtl \
-	-I./verilog_modules/SRAM \
-	./verilog_modules/Top/user_project_wrapper.v
+	-I./verilog/rtl/SpectrometerV2 \
+	-I./verilog/rtl/wb2axip/rtl \
+	-I./verilog/rtl/SRAM \
+	./verilog/rtl/Top/user_project_wrapper.v
 
 check-env:
 ifndef PDK_ROOT
