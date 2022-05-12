@@ -18,6 +18,14 @@ verilog_spectrometer:
 test_spectrometer:
 	cd $(SPECTROMETER_PATH); SBT_OPTS="-DfftSize=$(FFT_SIZE) -DminSRAMDepth=$(FFT_SIZE) -DenablePlot=$(ENABLE_PLOT)" sbt "testOnly spectrometer_v2.SpectrometerTestSpec"; cd -;
 
+lint:
+	verilator --lint-only -Wno-STMTDLY  -DSIM \
+	-I./verilog_modules/SpectrometerV2 \
+	-I./verilog_modules/wb2axip \
+	-I./verilog_modules/SRAM \
+	./verilog_modules/SpectrometerV2/AXI4Spectrometer.v \
+
+
 check-env:
 ifndef PDK_ROOT
 	$(error PDK_ROOT is undefined, please export it before running make)
