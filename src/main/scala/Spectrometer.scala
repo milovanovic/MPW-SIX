@@ -194,9 +194,9 @@ object SpectrometerApp extends App
 
   val arguments = Array(
     "-X", "verilog",
-    "--repl-seq-mem","-c:AXI4Spectrometer:-o:./verilog_modules/SpectrometerV2/mem.conf",
+    "--repl-seq-mem","-c:AXI4Spectrometer:-o:./verilog/rtl/SpectrometerV2/mem.conf",
     "--log-level", "info",
-    "--target-dir", "verilog_modules/SpectrometerV2"
+    "--target-dir", "verilog/rtl/SpectrometerV2"
   )
 
   (new ChiselStage).execute(arguments, Seq(ChiselGeneratorAnnotation(() => lazyDut.module)))
