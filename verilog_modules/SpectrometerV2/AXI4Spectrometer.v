@@ -354,7 +354,6 @@ end // initial
 endmodule
 module SDFStageRadix22(
   input         clock,
-  input         reset,
   input  [15:0] io_in_real,
   input  [15:0] io_in_imag,
   output [15:0] io_out_real,
@@ -362,96 +361,54 @@ module SDFStageRadix22(
   input  [8:0]  io_cntr,
   input         io_en
 );
-  wire [7:0] SRAM_depth_256_width_32_mem_R0_addr; // @[ShiftRegisterMem.scala 48:28]
-  wire  SRAM_depth_256_width_32_mem_R0_en; // @[ShiftRegisterMem.scala 48:28]
-  wire  SRAM_depth_256_width_32_mem_R0_clk; // @[ShiftRegisterMem.scala 48:28]
-  wire [15:0] SRAM_depth_256_width_32_mem_R0_data_real; // @[ShiftRegisterMem.scala 48:28]
-  wire [15:0] SRAM_depth_256_width_32_mem_R0_data_imag; // @[ShiftRegisterMem.scala 48:28]
-  wire [7:0] SRAM_depth_256_width_32_mem_W0_addr; // @[ShiftRegisterMem.scala 48:28]
-  wire  SRAM_depth_256_width_32_mem_W0_en; // @[ShiftRegisterMem.scala 48:28]
-  wire  SRAM_depth_256_width_32_mem_W0_clk; // @[ShiftRegisterMem.scala 48:28]
-  wire [15:0] SRAM_depth_256_width_32_mem_W0_data_real; // @[ShiftRegisterMem.scala 48:28]
-  wire [15:0] SRAM_depth_256_width_32_mem_W0_data_imag; // @[ShiftRegisterMem.scala 48:28]
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  wire [15:0] shift_out_real; // @[SDFChainRadix22.scala 470:23 SDFChainRadix22.scala 474:17]
-  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_57; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_59; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_62; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  wire [15:0] shift_out_imag; // @[SDFChainRadix22.scala 470:23 SDFChainRadix22.scala 474:17]
-  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_64; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_66; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_69; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
-  reg [7:0] value; // @[Counter.scala 29:33]
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  reg [15:0] feedback_real; // @[Reg.scala 15:16]
   reg [31:0] _RAND_0;
-  wire [7:0] _T_22; // @[Counter.scala 39:22]
-  reg [7:0] _T_26; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_1;
-  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
-  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
-  wire [17:0] _T_40; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_42; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_45; // @[FixedPointTypeClass.scala 20:58]
+  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
   wire [17:0] _T_47; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   wire [16:0] _T_49; // @[FixedPointTypeClass.scala 133:23]
   wire [16:0] _T_52; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_2;
+  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
   reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_3;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_4;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_5;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_6;
-  SRAM_depth_256_width_32_mem SRAM_depth_256_width_32_mem ( // @[ShiftRegisterMem.scala 48:28]
-    .R0_addr(SRAM_depth_256_width_32_mem_R0_addr),
-    .R0_en(SRAM_depth_256_width_32_mem_R0_en),
-    .R0_clk(SRAM_depth_256_width_32_mem_R0_clk),
-    .R0_data_real(SRAM_depth_256_width_32_mem_R0_data_real),
-    .R0_data_imag(SRAM_depth_256_width_32_mem_R0_data_imag),
-    .W0_addr(SRAM_depth_256_width_32_mem_W0_addr),
-    .W0_en(SRAM_depth_256_width_32_mem_W0_en),
-    .W0_clk(SRAM_depth_256_width_32_mem_W0_clk),
-    .W0_data_real(SRAM_depth_256_width_32_mem_W0_data_real),
-    .W0_data_imag(SRAM_depth_256_width_32_mem_W0_data_imag)
-  );
-  assign load_input = io_cntr < 9'h100; // @[SDFChainRadix22.scala 467:66]
-  assign shift_out_real = SRAM_depth_256_width_32_mem_R0_data_real; // @[SDFChainRadix22.scala 470:23 SDFChainRadix22.scala 474:17]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_57 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_59 = _T_57[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_62 = $signed(_T_59) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_real = _T_62[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign shift_out_imag = SRAM_depth_256_width_32_mem_R0_data_imag; // @[SDFChainRadix22.scala 470:23 SDFChainRadix22.scala 474:17]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_64 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_66 = _T_64[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_69 = $signed(_T_66) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_imag = _T_69[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_22 = value + 8'h1; // @[Counter.scala 39:22]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
-  assign _T_40 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_42 = _T_40[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_45 = $signed(_T_42) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_47 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  reg [31:0] _RAND_1;
+  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_54; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_56; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_59; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
+  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
+  wire [17:0] _T_30; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_32; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_35; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
+  wire [17:0] _T_37; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_39; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_42; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  assign load_input = io_cntr < 9'h1; // @[UIntTypeClass.scala 52:47]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_47 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   assign _T_49 = _T_47[17:1]; // @[FixedPointTypeClass.scala 133:23]
   assign _T_52 = $signed(_T_49) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
-  assign SRAM_depth_256_width_32_mem_R0_addr = value; // @[ShiftRegisterMem.scala 53:25]
-  assign SRAM_depth_256_width_32_mem_R0_en = io_en; // @[ShiftRegisterMem.scala 48:28 Counter.scala 39:13]
-  assign SRAM_depth_256_width_32_mem_R0_clk = clock; // @[ShiftRegisterMem.scala 53:25]
-  assign SRAM_depth_256_width_32_mem_W0_addr = _T_26;
-  assign SRAM_depth_256_width_32_mem_W0_en = io_en; // @[ShiftRegisterMem.scala 48:28]
-  assign SRAM_depth_256_width_32_mem_W0_clk = clock;
-  assign SRAM_depth_256_width_32_mem_W0_data_real = load_input ? $signed(io_in_real) : $signed(butterfly_outputs_1_real);
-  assign SRAM_depth_256_width_32_mem_W0_data_imag = load_input ? $signed(io_in_imag) : $signed(butterfly_outputs_1_imag);
+  assign butterfly_outputs_1_real = _T_52[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_54 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_56 = _T_54[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_59 = $signed(_T_56) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_imag = _T_59[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_30 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_32 = _T_30[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_35 = $signed(_T_32) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_35[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_37 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_39 = _T_37[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_42 = $signed(_T_39) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_imag = _T_42[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -485,60 +442,34 @@ initial begin
     `endif
   `ifdef RANDOMIZE_REG_INIT
   _RAND_0 = {1{`RANDOM}};
-  value = _RAND_0[7:0];
+  feedback_real = _RAND_0[15:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_1 = {1{`RANDOM}};
-  _T_26 = _RAND_1[7:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  feedback_real = _RAND_2[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  feedback_imag = _RAND_3[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_4[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_5[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  load_output = _RAND_6[0:0];
+  feedback_imag = _RAND_1[15:0];
   `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
 `endif // SYNTHESIS
   always @(posedge clock) begin
-    if (reset) begin
-      value <= 8'h0;
-    end else if (io_en) begin
-      value <= _T_22;
+    if (io_en) begin
+      if (load_input) begin
+        feedback_real <= io_in_real;
+      end else begin
+        feedback_real <= butterfly_outputs_1_real;
+      end
     end
-    if (reset) begin
-      _T_26 <= 8'hff;
-    end else if (io_en) begin
-      _T_26 <= value;
-    end
-    feedback_real <= SRAM_depth_256_width_32_mem_R0_data_real;
-    feedback_imag <= SRAM_depth_256_width_32_mem_R0_data_imag;
-    butt_out_0_real <= _T_45[16:1];
-    butt_out_0_imag <= _T_52[16:1];
-    if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
+    if (io_en) begin
+      if (load_input) begin
+        feedback_imag <= io_in_imag;
+      end else begin
+        feedback_imag <= butterfly_outputs_1_imag;
+      end
     end
   end
 endmodule
 module SDFStageRadix22_1(
   input         clock,
-  input         reset,
   input  [15:0] io_in_real,
   input  [15:0] io_in_imag,
   output [15:0] io_out_real,
@@ -546,15 +477,2871 @@ module SDFStageRadix22_1(
   input  [8:0]  io_cntr,
   input         io_en
 );
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  reg [15:0] shift_out_real; // @[Reg.scala 15:16]
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  reg [15:0] feedback_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_0;
+  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_50; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_52; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_55; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_1;
+  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_57; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_59; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_62; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_2;
+  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_3;
+  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
+  wire [17:0] _T_33; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_35; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_38; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
+  wire [17:0] _T_40; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_42; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_45; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  assign load_input = io_cntr < 9'h2; // @[UIntTypeClass.scala 52:47]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_50 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_52 = _T_50[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_55 = $signed(_T_52) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_real = _T_55[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_57 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_59 = _T_57[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_62 = $signed(_T_59) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_imag = _T_62[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_33 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_35 = _T_33[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_38 = $signed(_T_35) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_38[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_40 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_42 = _T_40[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_45 = $signed(_T_42) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_imag = _T_45[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  feedback_real = _RAND_0[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{`RANDOM}};
+  feedback_imag = _RAND_1[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{`RANDOM}};
+  _T_21_real = _RAND_2[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_3 = {1{`RANDOM}};
+  _T_21_imag = _RAND_3[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`endif // SYNTHESIS
+  always @(posedge clock) begin
+    if (io_en) begin
+      feedback_real <= _T_21_real;
+    end
+    if (io_en) begin
+      feedback_imag <= _T_21_imag;
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_real <= io_in_real;
+      end else begin
+        _T_21_real <= butterfly_outputs_1_real;
+      end
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_imag <= io_in_imag;
+      end else begin
+        _T_21_imag <= butterfly_outputs_1_imag;
+      end
+    end
+  end
+endmodule
+module SDFStageRadix22_2(
+  input         clock,
+  input  [15:0] io_in_real,
+  input  [15:0] io_in_imag,
+  output [15:0] io_out_real,
+  output [15:0] io_out_imag,
+  input  [8:0]  io_cntr,
+  input         io_en
+);
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  reg [15:0] feedback_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_0;
+  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_56; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_58; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_61; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_1;
+  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_63; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_65; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_68; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_2;
+  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_3;
+  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_4;
+  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_5;
+  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_6;
+  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_7;
+  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
+  wire [17:0] _T_39; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_41; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_44; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
+  wire [17:0] _T_46; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_48; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_51; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  assign load_input = io_cntr < 9'h4; // @[UIntTypeClass.scala 52:47]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_56 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_58 = _T_56[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_61 = $signed(_T_58) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_real = _T_61[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_63 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_65 = _T_63[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_68 = $signed(_T_65) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_imag = _T_68[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_39 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_41 = _T_39[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_44 = $signed(_T_41) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_44[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_46 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_48 = _T_46[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_51 = $signed(_T_48) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_imag = _T_51[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  feedback_real = _RAND_0[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{`RANDOM}};
+  feedback_imag = _RAND_1[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{`RANDOM}};
+  _T_21_real = _RAND_2[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_3 = {1{`RANDOM}};
+  _T_21_imag = _RAND_3[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_4 = {1{`RANDOM}};
+  _T_24_real = _RAND_4[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_5 = {1{`RANDOM}};
+  _T_24_imag = _RAND_5[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_6 = {1{`RANDOM}};
+  _T_27_real = _RAND_6[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_7 = {1{`RANDOM}};
+  _T_27_imag = _RAND_7[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`endif // SYNTHESIS
+  always @(posedge clock) begin
+    if (io_en) begin
+      feedback_real <= _T_27_real;
+    end
+    if (io_en) begin
+      feedback_imag <= _T_27_imag;
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_real <= io_in_real;
+      end else begin
+        _T_21_real <= butterfly_outputs_1_real;
+      end
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_imag <= io_in_imag;
+      end else begin
+        _T_21_imag <= butterfly_outputs_1_imag;
+      end
+    end
+    if (io_en) begin
+      _T_24_real <= _T_21_real;
+    end
+    if (io_en) begin
+      _T_24_imag <= _T_21_imag;
+    end
+    if (io_en) begin
+      _T_27_real <= _T_24_real;
+    end
+    if (io_en) begin
+      _T_27_imag <= _T_24_imag;
+    end
+  end
+endmodule
+module SDFStageRadix22_3(
+  input         clock,
+  input  [15:0] io_in_real,
+  input  [15:0] io_in_imag,
+  output [15:0] io_out_real,
+  output [15:0] io_out_imag,
+  input  [8:0]  io_cntr,
+  input         io_en
+);
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  reg [15:0] feedback_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_0;
+  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_68; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_70; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_73; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_1;
+  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_75; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_77; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_80; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_2;
+  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_3;
+  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_4;
+  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_5;
+  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_6;
+  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_7;
+  reg [15:0] _T_30_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_8;
+  reg [15:0] _T_30_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_9;
+  reg [15:0] _T_33_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_10;
+  reg [15:0] _T_33_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_11;
+  reg [15:0] _T_36_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_12;
+  reg [15:0] _T_36_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_13;
+  reg [15:0] _T_39_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_14;
+  reg [15:0] _T_39_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_15;
+  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
+  wire [17:0] _T_51; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_53; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_56; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
+  wire [17:0] _T_58; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_60; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_63; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  assign load_input = io_cntr < 9'h8; // @[UIntTypeClass.scala 52:47]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_68 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_70 = _T_68[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_73 = $signed(_T_70) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_real = _T_73[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_75 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_77 = _T_75[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_80 = $signed(_T_77) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_imag = _T_80[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_51 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_53 = _T_51[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_56 = $signed(_T_53) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_56[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_58 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_60 = _T_58[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_63 = $signed(_T_60) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_imag = _T_63[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  feedback_real = _RAND_0[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{`RANDOM}};
+  feedback_imag = _RAND_1[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{`RANDOM}};
+  _T_21_real = _RAND_2[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_3 = {1{`RANDOM}};
+  _T_21_imag = _RAND_3[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_4 = {1{`RANDOM}};
+  _T_24_real = _RAND_4[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_5 = {1{`RANDOM}};
+  _T_24_imag = _RAND_5[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_6 = {1{`RANDOM}};
+  _T_27_real = _RAND_6[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_7 = {1{`RANDOM}};
+  _T_27_imag = _RAND_7[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_8 = {1{`RANDOM}};
+  _T_30_real = _RAND_8[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_9 = {1{`RANDOM}};
+  _T_30_imag = _RAND_9[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_10 = {1{`RANDOM}};
+  _T_33_real = _RAND_10[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_11 = {1{`RANDOM}};
+  _T_33_imag = _RAND_11[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_12 = {1{`RANDOM}};
+  _T_36_real = _RAND_12[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_13 = {1{`RANDOM}};
+  _T_36_imag = _RAND_13[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_14 = {1{`RANDOM}};
+  _T_39_real = _RAND_14[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_15 = {1{`RANDOM}};
+  _T_39_imag = _RAND_15[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`endif // SYNTHESIS
+  always @(posedge clock) begin
+    if (io_en) begin
+      feedback_real <= _T_39_real;
+    end
+    if (io_en) begin
+      feedback_imag <= _T_39_imag;
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_real <= io_in_real;
+      end else begin
+        _T_21_real <= butterfly_outputs_1_real;
+      end
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_imag <= io_in_imag;
+      end else begin
+        _T_21_imag <= butterfly_outputs_1_imag;
+      end
+    end
+    if (io_en) begin
+      _T_24_real <= _T_21_real;
+    end
+    if (io_en) begin
+      _T_24_imag <= _T_21_imag;
+    end
+    if (io_en) begin
+      _T_27_real <= _T_24_real;
+    end
+    if (io_en) begin
+      _T_27_imag <= _T_24_imag;
+    end
+    if (io_en) begin
+      _T_30_real <= _T_27_real;
+    end
+    if (io_en) begin
+      _T_30_imag <= _T_27_imag;
+    end
+    if (io_en) begin
+      _T_33_real <= _T_30_real;
+    end
+    if (io_en) begin
+      _T_33_imag <= _T_30_imag;
+    end
+    if (io_en) begin
+      _T_36_real <= _T_33_real;
+    end
+    if (io_en) begin
+      _T_36_imag <= _T_33_imag;
+    end
+    if (io_en) begin
+      _T_39_real <= _T_36_real;
+    end
+    if (io_en) begin
+      _T_39_imag <= _T_36_imag;
+    end
+  end
+endmodule
+module SDFStageRadix22_4(
+  input         clock,
+  input  [15:0] io_in_real,
+  input  [15:0] io_in_imag,
+  output [15:0] io_out_real,
+  output [15:0] io_out_imag,
+  input  [8:0]  io_cntr,
+  input         io_en
+);
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  reg [15:0] feedback_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_0;
+  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_92; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_94; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_97; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_1;
+  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_99; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_101; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_104; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_2;
+  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_3;
+  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_4;
+  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_5;
+  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_6;
+  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_7;
+  reg [15:0] _T_30_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_8;
+  reg [15:0] _T_30_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_9;
+  reg [15:0] _T_33_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_10;
+  reg [15:0] _T_33_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_11;
+  reg [15:0] _T_36_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_12;
+  reg [15:0] _T_36_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_13;
+  reg [15:0] _T_39_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_14;
+  reg [15:0] _T_39_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_15;
+  reg [15:0] _T_42_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_16;
+  reg [15:0] _T_42_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_17;
+  reg [15:0] _T_45_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_18;
+  reg [15:0] _T_45_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_19;
+  reg [15:0] _T_48_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_20;
+  reg [15:0] _T_48_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_21;
+  reg [15:0] _T_51_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_22;
+  reg [15:0] _T_51_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_23;
+  reg [15:0] _T_54_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_24;
+  reg [15:0] _T_54_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_25;
+  reg [15:0] _T_57_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_26;
+  reg [15:0] _T_57_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_27;
+  reg [15:0] _T_60_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_28;
+  reg [15:0] _T_60_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_29;
+  reg [15:0] _T_63_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_30;
+  reg [15:0] _T_63_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_31;
+  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
+  wire [17:0] _T_75; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_77; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_80; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
+  wire [17:0] _T_82; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_84; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_87; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  assign load_input = io_cntr < 9'h10; // @[UIntTypeClass.scala 52:47]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_92 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_94 = _T_92[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_97 = $signed(_T_94) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_real = _T_97[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_99 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_101 = _T_99[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_104 = $signed(_T_101) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_imag = _T_104[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_75 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_77 = _T_75[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_80 = $signed(_T_77) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_80[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_82 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_84 = _T_82[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_87 = $signed(_T_84) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_imag = _T_87[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  feedback_real = _RAND_0[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{`RANDOM}};
+  feedback_imag = _RAND_1[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{`RANDOM}};
+  _T_21_real = _RAND_2[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_3 = {1{`RANDOM}};
+  _T_21_imag = _RAND_3[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_4 = {1{`RANDOM}};
+  _T_24_real = _RAND_4[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_5 = {1{`RANDOM}};
+  _T_24_imag = _RAND_5[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_6 = {1{`RANDOM}};
+  _T_27_real = _RAND_6[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_7 = {1{`RANDOM}};
+  _T_27_imag = _RAND_7[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_8 = {1{`RANDOM}};
+  _T_30_real = _RAND_8[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_9 = {1{`RANDOM}};
+  _T_30_imag = _RAND_9[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_10 = {1{`RANDOM}};
+  _T_33_real = _RAND_10[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_11 = {1{`RANDOM}};
+  _T_33_imag = _RAND_11[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_12 = {1{`RANDOM}};
+  _T_36_real = _RAND_12[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_13 = {1{`RANDOM}};
+  _T_36_imag = _RAND_13[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_14 = {1{`RANDOM}};
+  _T_39_real = _RAND_14[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_15 = {1{`RANDOM}};
+  _T_39_imag = _RAND_15[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_16 = {1{`RANDOM}};
+  _T_42_real = _RAND_16[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_17 = {1{`RANDOM}};
+  _T_42_imag = _RAND_17[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_18 = {1{`RANDOM}};
+  _T_45_real = _RAND_18[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_19 = {1{`RANDOM}};
+  _T_45_imag = _RAND_19[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_20 = {1{`RANDOM}};
+  _T_48_real = _RAND_20[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_21 = {1{`RANDOM}};
+  _T_48_imag = _RAND_21[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_22 = {1{`RANDOM}};
+  _T_51_real = _RAND_22[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_23 = {1{`RANDOM}};
+  _T_51_imag = _RAND_23[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_24 = {1{`RANDOM}};
+  _T_54_real = _RAND_24[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_25 = {1{`RANDOM}};
+  _T_54_imag = _RAND_25[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_26 = {1{`RANDOM}};
+  _T_57_real = _RAND_26[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_27 = {1{`RANDOM}};
+  _T_57_imag = _RAND_27[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_28 = {1{`RANDOM}};
+  _T_60_real = _RAND_28[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_29 = {1{`RANDOM}};
+  _T_60_imag = _RAND_29[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_30 = {1{`RANDOM}};
+  _T_63_real = _RAND_30[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_31 = {1{`RANDOM}};
+  _T_63_imag = _RAND_31[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`endif // SYNTHESIS
+  always @(posedge clock) begin
+    if (io_en) begin
+      feedback_real <= _T_63_real;
+    end
+    if (io_en) begin
+      feedback_imag <= _T_63_imag;
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_real <= io_in_real;
+      end else begin
+        _T_21_real <= butterfly_outputs_1_real;
+      end
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_imag <= io_in_imag;
+      end else begin
+        _T_21_imag <= butterfly_outputs_1_imag;
+      end
+    end
+    if (io_en) begin
+      _T_24_real <= _T_21_real;
+    end
+    if (io_en) begin
+      _T_24_imag <= _T_21_imag;
+    end
+    if (io_en) begin
+      _T_27_real <= _T_24_real;
+    end
+    if (io_en) begin
+      _T_27_imag <= _T_24_imag;
+    end
+    if (io_en) begin
+      _T_30_real <= _T_27_real;
+    end
+    if (io_en) begin
+      _T_30_imag <= _T_27_imag;
+    end
+    if (io_en) begin
+      _T_33_real <= _T_30_real;
+    end
+    if (io_en) begin
+      _T_33_imag <= _T_30_imag;
+    end
+    if (io_en) begin
+      _T_36_real <= _T_33_real;
+    end
+    if (io_en) begin
+      _T_36_imag <= _T_33_imag;
+    end
+    if (io_en) begin
+      _T_39_real <= _T_36_real;
+    end
+    if (io_en) begin
+      _T_39_imag <= _T_36_imag;
+    end
+    if (io_en) begin
+      _T_42_real <= _T_39_real;
+    end
+    if (io_en) begin
+      _T_42_imag <= _T_39_imag;
+    end
+    if (io_en) begin
+      _T_45_real <= _T_42_real;
+    end
+    if (io_en) begin
+      _T_45_imag <= _T_42_imag;
+    end
+    if (io_en) begin
+      _T_48_real <= _T_45_real;
+    end
+    if (io_en) begin
+      _T_48_imag <= _T_45_imag;
+    end
+    if (io_en) begin
+      _T_51_real <= _T_48_real;
+    end
+    if (io_en) begin
+      _T_51_imag <= _T_48_imag;
+    end
+    if (io_en) begin
+      _T_54_real <= _T_51_real;
+    end
+    if (io_en) begin
+      _T_54_imag <= _T_51_imag;
+    end
+    if (io_en) begin
+      _T_57_real <= _T_54_real;
+    end
+    if (io_en) begin
+      _T_57_imag <= _T_54_imag;
+    end
+    if (io_en) begin
+      _T_60_real <= _T_57_real;
+    end
+    if (io_en) begin
+      _T_60_imag <= _T_57_imag;
+    end
+    if (io_en) begin
+      _T_63_real <= _T_60_real;
+    end
+    if (io_en) begin
+      _T_63_imag <= _T_60_imag;
+    end
+  end
+endmodule
+module SDFStageRadix22_5(
+  input         clock,
+  input  [15:0] io_in_real,
+  input  [15:0] io_in_imag,
+  output [15:0] io_out_real,
+  output [15:0] io_out_imag,
+  input  [8:0]  io_cntr,
+  input         io_en
+);
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  reg [15:0] feedback_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_0;
+  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_140; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_142; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_145; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_1;
+  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_147; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_149; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_152; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_2;
+  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_3;
+  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_4;
+  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_5;
+  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_6;
+  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_7;
+  reg [15:0] _T_30_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_8;
+  reg [15:0] _T_30_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_9;
+  reg [15:0] _T_33_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_10;
+  reg [15:0] _T_33_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_11;
+  reg [15:0] _T_36_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_12;
+  reg [15:0] _T_36_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_13;
+  reg [15:0] _T_39_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_14;
+  reg [15:0] _T_39_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_15;
+  reg [15:0] _T_42_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_16;
+  reg [15:0] _T_42_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_17;
+  reg [15:0] _T_45_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_18;
+  reg [15:0] _T_45_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_19;
+  reg [15:0] _T_48_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_20;
+  reg [15:0] _T_48_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_21;
+  reg [15:0] _T_51_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_22;
+  reg [15:0] _T_51_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_23;
+  reg [15:0] _T_54_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_24;
+  reg [15:0] _T_54_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_25;
+  reg [15:0] _T_57_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_26;
+  reg [15:0] _T_57_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_27;
+  reg [15:0] _T_60_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_28;
+  reg [15:0] _T_60_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_29;
+  reg [15:0] _T_63_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_30;
+  reg [15:0] _T_63_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_31;
+  reg [15:0] _T_66_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_32;
+  reg [15:0] _T_66_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_33;
+  reg [15:0] _T_69_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_34;
+  reg [15:0] _T_69_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_35;
+  reg [15:0] _T_72_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_36;
+  reg [15:0] _T_72_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_37;
+  reg [15:0] _T_75_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_38;
+  reg [15:0] _T_75_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_39;
+  reg [15:0] _T_78_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_40;
+  reg [15:0] _T_78_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_41;
+  reg [15:0] _T_81_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_42;
+  reg [15:0] _T_81_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_43;
+  reg [15:0] _T_84_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_44;
+  reg [15:0] _T_84_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_45;
+  reg [15:0] _T_87_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_46;
+  reg [15:0] _T_87_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_47;
+  reg [15:0] _T_90_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_48;
+  reg [15:0] _T_90_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_49;
+  reg [15:0] _T_93_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_50;
+  reg [15:0] _T_93_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_51;
+  reg [15:0] _T_96_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_52;
+  reg [15:0] _T_96_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_53;
+  reg [15:0] _T_99_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_54;
+  reg [15:0] _T_99_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_55;
+  reg [15:0] _T_102_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_56;
+  reg [15:0] _T_102_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_57;
+  reg [15:0] _T_105_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_58;
+  reg [15:0] _T_105_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_59;
+  reg [15:0] _T_108_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_60;
+  reg [15:0] _T_108_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_61;
+  reg [15:0] _T_111_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_62;
+  reg [15:0] _T_111_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_63;
+  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
+  wire [17:0] _T_123; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_125; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_128; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
+  wire [17:0] _T_130; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_132; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_135; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  assign load_input = io_cntr < 9'h20; // @[UIntTypeClass.scala 52:47]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_140 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_142 = _T_140[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_145 = $signed(_T_142) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_real = _T_145[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_147 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_149 = _T_147[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_152 = $signed(_T_149) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_imag = _T_152[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_123 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_125 = _T_123[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_128 = $signed(_T_125) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_128[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_130 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_132 = _T_130[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_135 = $signed(_T_132) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_imag = _T_135[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  feedback_real = _RAND_0[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{`RANDOM}};
+  feedback_imag = _RAND_1[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{`RANDOM}};
+  _T_21_real = _RAND_2[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_3 = {1{`RANDOM}};
+  _T_21_imag = _RAND_3[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_4 = {1{`RANDOM}};
+  _T_24_real = _RAND_4[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_5 = {1{`RANDOM}};
+  _T_24_imag = _RAND_5[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_6 = {1{`RANDOM}};
+  _T_27_real = _RAND_6[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_7 = {1{`RANDOM}};
+  _T_27_imag = _RAND_7[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_8 = {1{`RANDOM}};
+  _T_30_real = _RAND_8[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_9 = {1{`RANDOM}};
+  _T_30_imag = _RAND_9[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_10 = {1{`RANDOM}};
+  _T_33_real = _RAND_10[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_11 = {1{`RANDOM}};
+  _T_33_imag = _RAND_11[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_12 = {1{`RANDOM}};
+  _T_36_real = _RAND_12[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_13 = {1{`RANDOM}};
+  _T_36_imag = _RAND_13[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_14 = {1{`RANDOM}};
+  _T_39_real = _RAND_14[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_15 = {1{`RANDOM}};
+  _T_39_imag = _RAND_15[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_16 = {1{`RANDOM}};
+  _T_42_real = _RAND_16[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_17 = {1{`RANDOM}};
+  _T_42_imag = _RAND_17[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_18 = {1{`RANDOM}};
+  _T_45_real = _RAND_18[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_19 = {1{`RANDOM}};
+  _T_45_imag = _RAND_19[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_20 = {1{`RANDOM}};
+  _T_48_real = _RAND_20[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_21 = {1{`RANDOM}};
+  _T_48_imag = _RAND_21[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_22 = {1{`RANDOM}};
+  _T_51_real = _RAND_22[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_23 = {1{`RANDOM}};
+  _T_51_imag = _RAND_23[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_24 = {1{`RANDOM}};
+  _T_54_real = _RAND_24[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_25 = {1{`RANDOM}};
+  _T_54_imag = _RAND_25[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_26 = {1{`RANDOM}};
+  _T_57_real = _RAND_26[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_27 = {1{`RANDOM}};
+  _T_57_imag = _RAND_27[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_28 = {1{`RANDOM}};
+  _T_60_real = _RAND_28[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_29 = {1{`RANDOM}};
+  _T_60_imag = _RAND_29[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_30 = {1{`RANDOM}};
+  _T_63_real = _RAND_30[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_31 = {1{`RANDOM}};
+  _T_63_imag = _RAND_31[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_32 = {1{`RANDOM}};
+  _T_66_real = _RAND_32[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_33 = {1{`RANDOM}};
+  _T_66_imag = _RAND_33[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_34 = {1{`RANDOM}};
+  _T_69_real = _RAND_34[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_35 = {1{`RANDOM}};
+  _T_69_imag = _RAND_35[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_36 = {1{`RANDOM}};
+  _T_72_real = _RAND_36[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_37 = {1{`RANDOM}};
+  _T_72_imag = _RAND_37[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_38 = {1{`RANDOM}};
+  _T_75_real = _RAND_38[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_39 = {1{`RANDOM}};
+  _T_75_imag = _RAND_39[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_40 = {1{`RANDOM}};
+  _T_78_real = _RAND_40[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_41 = {1{`RANDOM}};
+  _T_78_imag = _RAND_41[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_42 = {1{`RANDOM}};
+  _T_81_real = _RAND_42[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_43 = {1{`RANDOM}};
+  _T_81_imag = _RAND_43[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_44 = {1{`RANDOM}};
+  _T_84_real = _RAND_44[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_45 = {1{`RANDOM}};
+  _T_84_imag = _RAND_45[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_46 = {1{`RANDOM}};
+  _T_87_real = _RAND_46[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_47 = {1{`RANDOM}};
+  _T_87_imag = _RAND_47[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_48 = {1{`RANDOM}};
+  _T_90_real = _RAND_48[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_49 = {1{`RANDOM}};
+  _T_90_imag = _RAND_49[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_50 = {1{`RANDOM}};
+  _T_93_real = _RAND_50[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_51 = {1{`RANDOM}};
+  _T_93_imag = _RAND_51[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_52 = {1{`RANDOM}};
+  _T_96_real = _RAND_52[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_53 = {1{`RANDOM}};
+  _T_96_imag = _RAND_53[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_54 = {1{`RANDOM}};
+  _T_99_real = _RAND_54[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_55 = {1{`RANDOM}};
+  _T_99_imag = _RAND_55[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_56 = {1{`RANDOM}};
+  _T_102_real = _RAND_56[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_57 = {1{`RANDOM}};
+  _T_102_imag = _RAND_57[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_58 = {1{`RANDOM}};
+  _T_105_real = _RAND_58[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_59 = {1{`RANDOM}};
+  _T_105_imag = _RAND_59[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_60 = {1{`RANDOM}};
+  _T_108_real = _RAND_60[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_61 = {1{`RANDOM}};
+  _T_108_imag = _RAND_61[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_62 = {1{`RANDOM}};
+  _T_111_real = _RAND_62[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_63 = {1{`RANDOM}};
+  _T_111_imag = _RAND_63[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`endif // SYNTHESIS
+  always @(posedge clock) begin
+    if (io_en) begin
+      feedback_real <= _T_111_real;
+    end
+    if (io_en) begin
+      feedback_imag <= _T_111_imag;
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_real <= io_in_real;
+      end else begin
+        _T_21_real <= butterfly_outputs_1_real;
+      end
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_imag <= io_in_imag;
+      end else begin
+        _T_21_imag <= butterfly_outputs_1_imag;
+      end
+    end
+    if (io_en) begin
+      _T_24_real <= _T_21_real;
+    end
+    if (io_en) begin
+      _T_24_imag <= _T_21_imag;
+    end
+    if (io_en) begin
+      _T_27_real <= _T_24_real;
+    end
+    if (io_en) begin
+      _T_27_imag <= _T_24_imag;
+    end
+    if (io_en) begin
+      _T_30_real <= _T_27_real;
+    end
+    if (io_en) begin
+      _T_30_imag <= _T_27_imag;
+    end
+    if (io_en) begin
+      _T_33_real <= _T_30_real;
+    end
+    if (io_en) begin
+      _T_33_imag <= _T_30_imag;
+    end
+    if (io_en) begin
+      _T_36_real <= _T_33_real;
+    end
+    if (io_en) begin
+      _T_36_imag <= _T_33_imag;
+    end
+    if (io_en) begin
+      _T_39_real <= _T_36_real;
+    end
+    if (io_en) begin
+      _T_39_imag <= _T_36_imag;
+    end
+    if (io_en) begin
+      _T_42_real <= _T_39_real;
+    end
+    if (io_en) begin
+      _T_42_imag <= _T_39_imag;
+    end
+    if (io_en) begin
+      _T_45_real <= _T_42_real;
+    end
+    if (io_en) begin
+      _T_45_imag <= _T_42_imag;
+    end
+    if (io_en) begin
+      _T_48_real <= _T_45_real;
+    end
+    if (io_en) begin
+      _T_48_imag <= _T_45_imag;
+    end
+    if (io_en) begin
+      _T_51_real <= _T_48_real;
+    end
+    if (io_en) begin
+      _T_51_imag <= _T_48_imag;
+    end
+    if (io_en) begin
+      _T_54_real <= _T_51_real;
+    end
+    if (io_en) begin
+      _T_54_imag <= _T_51_imag;
+    end
+    if (io_en) begin
+      _T_57_real <= _T_54_real;
+    end
+    if (io_en) begin
+      _T_57_imag <= _T_54_imag;
+    end
+    if (io_en) begin
+      _T_60_real <= _T_57_real;
+    end
+    if (io_en) begin
+      _T_60_imag <= _T_57_imag;
+    end
+    if (io_en) begin
+      _T_63_real <= _T_60_real;
+    end
+    if (io_en) begin
+      _T_63_imag <= _T_60_imag;
+    end
+    if (io_en) begin
+      _T_66_real <= _T_63_real;
+    end
+    if (io_en) begin
+      _T_66_imag <= _T_63_imag;
+    end
+    if (io_en) begin
+      _T_69_real <= _T_66_real;
+    end
+    if (io_en) begin
+      _T_69_imag <= _T_66_imag;
+    end
+    if (io_en) begin
+      _T_72_real <= _T_69_real;
+    end
+    if (io_en) begin
+      _T_72_imag <= _T_69_imag;
+    end
+    if (io_en) begin
+      _T_75_real <= _T_72_real;
+    end
+    if (io_en) begin
+      _T_75_imag <= _T_72_imag;
+    end
+    if (io_en) begin
+      _T_78_real <= _T_75_real;
+    end
+    if (io_en) begin
+      _T_78_imag <= _T_75_imag;
+    end
+    if (io_en) begin
+      _T_81_real <= _T_78_real;
+    end
+    if (io_en) begin
+      _T_81_imag <= _T_78_imag;
+    end
+    if (io_en) begin
+      _T_84_real <= _T_81_real;
+    end
+    if (io_en) begin
+      _T_84_imag <= _T_81_imag;
+    end
+    if (io_en) begin
+      _T_87_real <= _T_84_real;
+    end
+    if (io_en) begin
+      _T_87_imag <= _T_84_imag;
+    end
+    if (io_en) begin
+      _T_90_real <= _T_87_real;
+    end
+    if (io_en) begin
+      _T_90_imag <= _T_87_imag;
+    end
+    if (io_en) begin
+      _T_93_real <= _T_90_real;
+    end
+    if (io_en) begin
+      _T_93_imag <= _T_90_imag;
+    end
+    if (io_en) begin
+      _T_96_real <= _T_93_real;
+    end
+    if (io_en) begin
+      _T_96_imag <= _T_93_imag;
+    end
+    if (io_en) begin
+      _T_99_real <= _T_96_real;
+    end
+    if (io_en) begin
+      _T_99_imag <= _T_96_imag;
+    end
+    if (io_en) begin
+      _T_102_real <= _T_99_real;
+    end
+    if (io_en) begin
+      _T_102_imag <= _T_99_imag;
+    end
+    if (io_en) begin
+      _T_105_real <= _T_102_real;
+    end
+    if (io_en) begin
+      _T_105_imag <= _T_102_imag;
+    end
+    if (io_en) begin
+      _T_108_real <= _T_105_real;
+    end
+    if (io_en) begin
+      _T_108_imag <= _T_105_imag;
+    end
+    if (io_en) begin
+      _T_111_real <= _T_108_real;
+    end
+    if (io_en) begin
+      _T_111_imag <= _T_108_imag;
+    end
+  end
+endmodule
+module SDFStageRadix22_6(
+  input         clock,
+  input  [15:0] io_in_real,
+  input  [15:0] io_in_imag,
+  output [15:0] io_out_real,
+  output [15:0] io_out_imag,
+  input  [8:0]  io_cntr,
+  input         io_en
+);
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  reg [15:0] feedback_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_0;
+  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_236; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_238; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_241; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_1;
+  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_243; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_245; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_248; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
+  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_2;
+  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_3;
+  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_4;
+  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_5;
+  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_6;
+  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_7;
+  reg [15:0] _T_30_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_8;
+  reg [15:0] _T_30_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_9;
+  reg [15:0] _T_33_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_10;
+  reg [15:0] _T_33_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_11;
+  reg [15:0] _T_36_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_12;
+  reg [15:0] _T_36_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_13;
+  reg [15:0] _T_39_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_14;
+  reg [15:0] _T_39_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_15;
+  reg [15:0] _T_42_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_16;
+  reg [15:0] _T_42_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_17;
+  reg [15:0] _T_45_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_18;
+  reg [15:0] _T_45_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_19;
+  reg [15:0] _T_48_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_20;
+  reg [15:0] _T_48_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_21;
+  reg [15:0] _T_51_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_22;
+  reg [15:0] _T_51_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_23;
+  reg [15:0] _T_54_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_24;
+  reg [15:0] _T_54_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_25;
+  reg [15:0] _T_57_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_26;
+  reg [15:0] _T_57_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_27;
+  reg [15:0] _T_60_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_28;
+  reg [15:0] _T_60_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_29;
+  reg [15:0] _T_63_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_30;
+  reg [15:0] _T_63_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_31;
+  reg [15:0] _T_66_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_32;
+  reg [15:0] _T_66_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_33;
+  reg [15:0] _T_69_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_34;
+  reg [15:0] _T_69_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_35;
+  reg [15:0] _T_72_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_36;
+  reg [15:0] _T_72_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_37;
+  reg [15:0] _T_75_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_38;
+  reg [15:0] _T_75_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_39;
+  reg [15:0] _T_78_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_40;
+  reg [15:0] _T_78_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_41;
+  reg [15:0] _T_81_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_42;
+  reg [15:0] _T_81_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_43;
+  reg [15:0] _T_84_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_44;
+  reg [15:0] _T_84_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_45;
+  reg [15:0] _T_87_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_46;
+  reg [15:0] _T_87_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_47;
+  reg [15:0] _T_90_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_48;
+  reg [15:0] _T_90_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_49;
+  reg [15:0] _T_93_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_50;
+  reg [15:0] _T_93_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_51;
+  reg [15:0] _T_96_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_52;
+  reg [15:0] _T_96_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_53;
+  reg [15:0] _T_99_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_54;
+  reg [15:0] _T_99_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_55;
+  reg [15:0] _T_102_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_56;
+  reg [15:0] _T_102_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_57;
+  reg [15:0] _T_105_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_58;
+  reg [15:0] _T_105_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_59;
+  reg [15:0] _T_108_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_60;
+  reg [15:0] _T_108_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_61;
+  reg [15:0] _T_111_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_62;
+  reg [15:0] _T_111_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_63;
+  reg [15:0] _T_114_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_64;
+  reg [15:0] _T_114_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_65;
+  reg [15:0] _T_117_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_66;
+  reg [15:0] _T_117_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_67;
+  reg [15:0] _T_120_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_68;
+  reg [15:0] _T_120_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_69;
+  reg [15:0] _T_123_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_70;
+  reg [15:0] _T_123_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_71;
+  reg [15:0] _T_126_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_72;
+  reg [15:0] _T_126_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_73;
+  reg [15:0] _T_129_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_74;
+  reg [15:0] _T_129_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_75;
+  reg [15:0] _T_132_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_76;
+  reg [15:0] _T_132_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_77;
+  reg [15:0] _T_135_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_78;
+  reg [15:0] _T_135_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_79;
+  reg [15:0] _T_138_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_80;
+  reg [15:0] _T_138_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_81;
+  reg [15:0] _T_141_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_82;
+  reg [15:0] _T_141_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_83;
+  reg [15:0] _T_144_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_84;
+  reg [15:0] _T_144_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_85;
+  reg [15:0] _T_147_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_86;
+  reg [15:0] _T_147_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_87;
+  reg [15:0] _T_150_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_88;
+  reg [15:0] _T_150_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_89;
+  reg [15:0] _T_153_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_90;
+  reg [15:0] _T_153_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_91;
+  reg [15:0] _T_156_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_92;
+  reg [15:0] _T_156_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_93;
+  reg [15:0] _T_159_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_94;
+  reg [15:0] _T_159_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_95;
+  reg [15:0] _T_162_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_96;
+  reg [15:0] _T_162_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_97;
+  reg [15:0] _T_165_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_98;
+  reg [15:0] _T_165_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_99;
+  reg [15:0] _T_168_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_100;
+  reg [15:0] _T_168_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_101;
+  reg [15:0] _T_171_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_102;
+  reg [15:0] _T_171_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_103;
+  reg [15:0] _T_174_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_104;
+  reg [15:0] _T_174_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_105;
+  reg [15:0] _T_177_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_106;
+  reg [15:0] _T_177_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_107;
+  reg [15:0] _T_180_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_108;
+  reg [15:0] _T_180_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_109;
+  reg [15:0] _T_183_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_110;
+  reg [15:0] _T_183_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_111;
+  reg [15:0] _T_186_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_112;
+  reg [15:0] _T_186_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_113;
+  reg [15:0] _T_189_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_114;
+  reg [15:0] _T_189_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_115;
+  reg [15:0] _T_192_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_116;
+  reg [15:0] _T_192_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_117;
+  reg [15:0] _T_195_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_118;
+  reg [15:0] _T_195_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_119;
+  reg [15:0] _T_198_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_120;
+  reg [15:0] _T_198_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_121;
+  reg [15:0] _T_201_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_122;
+  reg [15:0] _T_201_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_123;
+  reg [15:0] _T_204_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_124;
+  reg [15:0] _T_204_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_125;
+  reg [15:0] _T_207_real; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_126;
+  reg [15:0] _T_207_imag; // @[Reg.scala 15:16]
+  reg [31:0] _RAND_127;
+  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
+  wire [17:0] _T_219; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_221; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_224; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
+  wire [17:0] _T_226; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_228; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_231; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  assign load_input = io_cntr < 9'h40; // @[UIntTypeClass.scala 52:47]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_236 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_238 = _T_236[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_241 = $signed(_T_238) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_real = _T_241[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_243 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_245 = _T_243[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_248 = $signed(_T_245) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_imag = _T_248[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_219 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_221 = _T_219[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_224 = $signed(_T_221) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_224[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_226 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_228 = _T_226[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_231 = $signed(_T_228) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_imag = _T_231[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  feedback_real = _RAND_0[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{`RANDOM}};
+  feedback_imag = _RAND_1[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_2 = {1{`RANDOM}};
+  _T_21_real = _RAND_2[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_3 = {1{`RANDOM}};
+  _T_21_imag = _RAND_3[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_4 = {1{`RANDOM}};
+  _T_24_real = _RAND_4[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_5 = {1{`RANDOM}};
+  _T_24_imag = _RAND_5[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_6 = {1{`RANDOM}};
+  _T_27_real = _RAND_6[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_7 = {1{`RANDOM}};
+  _T_27_imag = _RAND_7[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_8 = {1{`RANDOM}};
+  _T_30_real = _RAND_8[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_9 = {1{`RANDOM}};
+  _T_30_imag = _RAND_9[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_10 = {1{`RANDOM}};
+  _T_33_real = _RAND_10[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_11 = {1{`RANDOM}};
+  _T_33_imag = _RAND_11[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_12 = {1{`RANDOM}};
+  _T_36_real = _RAND_12[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_13 = {1{`RANDOM}};
+  _T_36_imag = _RAND_13[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_14 = {1{`RANDOM}};
+  _T_39_real = _RAND_14[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_15 = {1{`RANDOM}};
+  _T_39_imag = _RAND_15[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_16 = {1{`RANDOM}};
+  _T_42_real = _RAND_16[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_17 = {1{`RANDOM}};
+  _T_42_imag = _RAND_17[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_18 = {1{`RANDOM}};
+  _T_45_real = _RAND_18[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_19 = {1{`RANDOM}};
+  _T_45_imag = _RAND_19[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_20 = {1{`RANDOM}};
+  _T_48_real = _RAND_20[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_21 = {1{`RANDOM}};
+  _T_48_imag = _RAND_21[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_22 = {1{`RANDOM}};
+  _T_51_real = _RAND_22[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_23 = {1{`RANDOM}};
+  _T_51_imag = _RAND_23[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_24 = {1{`RANDOM}};
+  _T_54_real = _RAND_24[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_25 = {1{`RANDOM}};
+  _T_54_imag = _RAND_25[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_26 = {1{`RANDOM}};
+  _T_57_real = _RAND_26[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_27 = {1{`RANDOM}};
+  _T_57_imag = _RAND_27[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_28 = {1{`RANDOM}};
+  _T_60_real = _RAND_28[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_29 = {1{`RANDOM}};
+  _T_60_imag = _RAND_29[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_30 = {1{`RANDOM}};
+  _T_63_real = _RAND_30[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_31 = {1{`RANDOM}};
+  _T_63_imag = _RAND_31[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_32 = {1{`RANDOM}};
+  _T_66_real = _RAND_32[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_33 = {1{`RANDOM}};
+  _T_66_imag = _RAND_33[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_34 = {1{`RANDOM}};
+  _T_69_real = _RAND_34[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_35 = {1{`RANDOM}};
+  _T_69_imag = _RAND_35[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_36 = {1{`RANDOM}};
+  _T_72_real = _RAND_36[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_37 = {1{`RANDOM}};
+  _T_72_imag = _RAND_37[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_38 = {1{`RANDOM}};
+  _T_75_real = _RAND_38[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_39 = {1{`RANDOM}};
+  _T_75_imag = _RAND_39[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_40 = {1{`RANDOM}};
+  _T_78_real = _RAND_40[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_41 = {1{`RANDOM}};
+  _T_78_imag = _RAND_41[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_42 = {1{`RANDOM}};
+  _T_81_real = _RAND_42[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_43 = {1{`RANDOM}};
+  _T_81_imag = _RAND_43[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_44 = {1{`RANDOM}};
+  _T_84_real = _RAND_44[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_45 = {1{`RANDOM}};
+  _T_84_imag = _RAND_45[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_46 = {1{`RANDOM}};
+  _T_87_real = _RAND_46[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_47 = {1{`RANDOM}};
+  _T_87_imag = _RAND_47[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_48 = {1{`RANDOM}};
+  _T_90_real = _RAND_48[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_49 = {1{`RANDOM}};
+  _T_90_imag = _RAND_49[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_50 = {1{`RANDOM}};
+  _T_93_real = _RAND_50[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_51 = {1{`RANDOM}};
+  _T_93_imag = _RAND_51[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_52 = {1{`RANDOM}};
+  _T_96_real = _RAND_52[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_53 = {1{`RANDOM}};
+  _T_96_imag = _RAND_53[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_54 = {1{`RANDOM}};
+  _T_99_real = _RAND_54[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_55 = {1{`RANDOM}};
+  _T_99_imag = _RAND_55[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_56 = {1{`RANDOM}};
+  _T_102_real = _RAND_56[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_57 = {1{`RANDOM}};
+  _T_102_imag = _RAND_57[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_58 = {1{`RANDOM}};
+  _T_105_real = _RAND_58[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_59 = {1{`RANDOM}};
+  _T_105_imag = _RAND_59[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_60 = {1{`RANDOM}};
+  _T_108_real = _RAND_60[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_61 = {1{`RANDOM}};
+  _T_108_imag = _RAND_61[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_62 = {1{`RANDOM}};
+  _T_111_real = _RAND_62[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_63 = {1{`RANDOM}};
+  _T_111_imag = _RAND_63[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_64 = {1{`RANDOM}};
+  _T_114_real = _RAND_64[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_65 = {1{`RANDOM}};
+  _T_114_imag = _RAND_65[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_66 = {1{`RANDOM}};
+  _T_117_real = _RAND_66[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_67 = {1{`RANDOM}};
+  _T_117_imag = _RAND_67[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_68 = {1{`RANDOM}};
+  _T_120_real = _RAND_68[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_69 = {1{`RANDOM}};
+  _T_120_imag = _RAND_69[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_70 = {1{`RANDOM}};
+  _T_123_real = _RAND_70[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_71 = {1{`RANDOM}};
+  _T_123_imag = _RAND_71[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_72 = {1{`RANDOM}};
+  _T_126_real = _RAND_72[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_73 = {1{`RANDOM}};
+  _T_126_imag = _RAND_73[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_74 = {1{`RANDOM}};
+  _T_129_real = _RAND_74[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_75 = {1{`RANDOM}};
+  _T_129_imag = _RAND_75[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_76 = {1{`RANDOM}};
+  _T_132_real = _RAND_76[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_77 = {1{`RANDOM}};
+  _T_132_imag = _RAND_77[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_78 = {1{`RANDOM}};
+  _T_135_real = _RAND_78[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_79 = {1{`RANDOM}};
+  _T_135_imag = _RAND_79[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_80 = {1{`RANDOM}};
+  _T_138_real = _RAND_80[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_81 = {1{`RANDOM}};
+  _T_138_imag = _RAND_81[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_82 = {1{`RANDOM}};
+  _T_141_real = _RAND_82[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_83 = {1{`RANDOM}};
+  _T_141_imag = _RAND_83[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_84 = {1{`RANDOM}};
+  _T_144_real = _RAND_84[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_85 = {1{`RANDOM}};
+  _T_144_imag = _RAND_85[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_86 = {1{`RANDOM}};
+  _T_147_real = _RAND_86[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_87 = {1{`RANDOM}};
+  _T_147_imag = _RAND_87[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_88 = {1{`RANDOM}};
+  _T_150_real = _RAND_88[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_89 = {1{`RANDOM}};
+  _T_150_imag = _RAND_89[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_90 = {1{`RANDOM}};
+  _T_153_real = _RAND_90[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_91 = {1{`RANDOM}};
+  _T_153_imag = _RAND_91[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_92 = {1{`RANDOM}};
+  _T_156_real = _RAND_92[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_93 = {1{`RANDOM}};
+  _T_156_imag = _RAND_93[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_94 = {1{`RANDOM}};
+  _T_159_real = _RAND_94[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_95 = {1{`RANDOM}};
+  _T_159_imag = _RAND_95[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_96 = {1{`RANDOM}};
+  _T_162_real = _RAND_96[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_97 = {1{`RANDOM}};
+  _T_162_imag = _RAND_97[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_98 = {1{`RANDOM}};
+  _T_165_real = _RAND_98[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_99 = {1{`RANDOM}};
+  _T_165_imag = _RAND_99[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_100 = {1{`RANDOM}};
+  _T_168_real = _RAND_100[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_101 = {1{`RANDOM}};
+  _T_168_imag = _RAND_101[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_102 = {1{`RANDOM}};
+  _T_171_real = _RAND_102[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_103 = {1{`RANDOM}};
+  _T_171_imag = _RAND_103[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_104 = {1{`RANDOM}};
+  _T_174_real = _RAND_104[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_105 = {1{`RANDOM}};
+  _T_174_imag = _RAND_105[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_106 = {1{`RANDOM}};
+  _T_177_real = _RAND_106[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_107 = {1{`RANDOM}};
+  _T_177_imag = _RAND_107[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_108 = {1{`RANDOM}};
+  _T_180_real = _RAND_108[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_109 = {1{`RANDOM}};
+  _T_180_imag = _RAND_109[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_110 = {1{`RANDOM}};
+  _T_183_real = _RAND_110[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_111 = {1{`RANDOM}};
+  _T_183_imag = _RAND_111[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_112 = {1{`RANDOM}};
+  _T_186_real = _RAND_112[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_113 = {1{`RANDOM}};
+  _T_186_imag = _RAND_113[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_114 = {1{`RANDOM}};
+  _T_189_real = _RAND_114[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_115 = {1{`RANDOM}};
+  _T_189_imag = _RAND_115[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_116 = {1{`RANDOM}};
+  _T_192_real = _RAND_116[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_117 = {1{`RANDOM}};
+  _T_192_imag = _RAND_117[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_118 = {1{`RANDOM}};
+  _T_195_real = _RAND_118[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_119 = {1{`RANDOM}};
+  _T_195_imag = _RAND_119[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_120 = {1{`RANDOM}};
+  _T_198_real = _RAND_120[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_121 = {1{`RANDOM}};
+  _T_198_imag = _RAND_121[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_122 = {1{`RANDOM}};
+  _T_201_real = _RAND_122[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_123 = {1{`RANDOM}};
+  _T_201_imag = _RAND_123[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_124 = {1{`RANDOM}};
+  _T_204_real = _RAND_124[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_125 = {1{`RANDOM}};
+  _T_204_imag = _RAND_125[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_126 = {1{`RANDOM}};
+  _T_207_real = _RAND_126[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_127 = {1{`RANDOM}};
+  _T_207_imag = _RAND_127[15:0];
+  `endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`endif // SYNTHESIS
+  always @(posedge clock) begin
+    if (io_en) begin
+      feedback_real <= _T_207_real;
+    end
+    if (io_en) begin
+      feedback_imag <= _T_207_imag;
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_real <= io_in_real;
+      end else begin
+        _T_21_real <= butterfly_outputs_1_real;
+      end
+    end
+    if (io_en) begin
+      if (load_input) begin
+        _T_21_imag <= io_in_imag;
+      end else begin
+        _T_21_imag <= butterfly_outputs_1_imag;
+      end
+    end
+    if (io_en) begin
+      _T_24_real <= _T_21_real;
+    end
+    if (io_en) begin
+      _T_24_imag <= _T_21_imag;
+    end
+    if (io_en) begin
+      _T_27_real <= _T_24_real;
+    end
+    if (io_en) begin
+      _T_27_imag <= _T_24_imag;
+    end
+    if (io_en) begin
+      _T_30_real <= _T_27_real;
+    end
+    if (io_en) begin
+      _T_30_imag <= _T_27_imag;
+    end
+    if (io_en) begin
+      _T_33_real <= _T_30_real;
+    end
+    if (io_en) begin
+      _T_33_imag <= _T_30_imag;
+    end
+    if (io_en) begin
+      _T_36_real <= _T_33_real;
+    end
+    if (io_en) begin
+      _T_36_imag <= _T_33_imag;
+    end
+    if (io_en) begin
+      _T_39_real <= _T_36_real;
+    end
+    if (io_en) begin
+      _T_39_imag <= _T_36_imag;
+    end
+    if (io_en) begin
+      _T_42_real <= _T_39_real;
+    end
+    if (io_en) begin
+      _T_42_imag <= _T_39_imag;
+    end
+    if (io_en) begin
+      _T_45_real <= _T_42_real;
+    end
+    if (io_en) begin
+      _T_45_imag <= _T_42_imag;
+    end
+    if (io_en) begin
+      _T_48_real <= _T_45_real;
+    end
+    if (io_en) begin
+      _T_48_imag <= _T_45_imag;
+    end
+    if (io_en) begin
+      _T_51_real <= _T_48_real;
+    end
+    if (io_en) begin
+      _T_51_imag <= _T_48_imag;
+    end
+    if (io_en) begin
+      _T_54_real <= _T_51_real;
+    end
+    if (io_en) begin
+      _T_54_imag <= _T_51_imag;
+    end
+    if (io_en) begin
+      _T_57_real <= _T_54_real;
+    end
+    if (io_en) begin
+      _T_57_imag <= _T_54_imag;
+    end
+    if (io_en) begin
+      _T_60_real <= _T_57_real;
+    end
+    if (io_en) begin
+      _T_60_imag <= _T_57_imag;
+    end
+    if (io_en) begin
+      _T_63_real <= _T_60_real;
+    end
+    if (io_en) begin
+      _T_63_imag <= _T_60_imag;
+    end
+    if (io_en) begin
+      _T_66_real <= _T_63_real;
+    end
+    if (io_en) begin
+      _T_66_imag <= _T_63_imag;
+    end
+    if (io_en) begin
+      _T_69_real <= _T_66_real;
+    end
+    if (io_en) begin
+      _T_69_imag <= _T_66_imag;
+    end
+    if (io_en) begin
+      _T_72_real <= _T_69_real;
+    end
+    if (io_en) begin
+      _T_72_imag <= _T_69_imag;
+    end
+    if (io_en) begin
+      _T_75_real <= _T_72_real;
+    end
+    if (io_en) begin
+      _T_75_imag <= _T_72_imag;
+    end
+    if (io_en) begin
+      _T_78_real <= _T_75_real;
+    end
+    if (io_en) begin
+      _T_78_imag <= _T_75_imag;
+    end
+    if (io_en) begin
+      _T_81_real <= _T_78_real;
+    end
+    if (io_en) begin
+      _T_81_imag <= _T_78_imag;
+    end
+    if (io_en) begin
+      _T_84_real <= _T_81_real;
+    end
+    if (io_en) begin
+      _T_84_imag <= _T_81_imag;
+    end
+    if (io_en) begin
+      _T_87_real <= _T_84_real;
+    end
+    if (io_en) begin
+      _T_87_imag <= _T_84_imag;
+    end
+    if (io_en) begin
+      _T_90_real <= _T_87_real;
+    end
+    if (io_en) begin
+      _T_90_imag <= _T_87_imag;
+    end
+    if (io_en) begin
+      _T_93_real <= _T_90_real;
+    end
+    if (io_en) begin
+      _T_93_imag <= _T_90_imag;
+    end
+    if (io_en) begin
+      _T_96_real <= _T_93_real;
+    end
+    if (io_en) begin
+      _T_96_imag <= _T_93_imag;
+    end
+    if (io_en) begin
+      _T_99_real <= _T_96_real;
+    end
+    if (io_en) begin
+      _T_99_imag <= _T_96_imag;
+    end
+    if (io_en) begin
+      _T_102_real <= _T_99_real;
+    end
+    if (io_en) begin
+      _T_102_imag <= _T_99_imag;
+    end
+    if (io_en) begin
+      _T_105_real <= _T_102_real;
+    end
+    if (io_en) begin
+      _T_105_imag <= _T_102_imag;
+    end
+    if (io_en) begin
+      _T_108_real <= _T_105_real;
+    end
+    if (io_en) begin
+      _T_108_imag <= _T_105_imag;
+    end
+    if (io_en) begin
+      _T_111_real <= _T_108_real;
+    end
+    if (io_en) begin
+      _T_111_imag <= _T_108_imag;
+    end
+    if (io_en) begin
+      _T_114_real <= _T_111_real;
+    end
+    if (io_en) begin
+      _T_114_imag <= _T_111_imag;
+    end
+    if (io_en) begin
+      _T_117_real <= _T_114_real;
+    end
+    if (io_en) begin
+      _T_117_imag <= _T_114_imag;
+    end
+    if (io_en) begin
+      _T_120_real <= _T_117_real;
+    end
+    if (io_en) begin
+      _T_120_imag <= _T_117_imag;
+    end
+    if (io_en) begin
+      _T_123_real <= _T_120_real;
+    end
+    if (io_en) begin
+      _T_123_imag <= _T_120_imag;
+    end
+    if (io_en) begin
+      _T_126_real <= _T_123_real;
+    end
+    if (io_en) begin
+      _T_126_imag <= _T_123_imag;
+    end
+    if (io_en) begin
+      _T_129_real <= _T_126_real;
+    end
+    if (io_en) begin
+      _T_129_imag <= _T_126_imag;
+    end
+    if (io_en) begin
+      _T_132_real <= _T_129_real;
+    end
+    if (io_en) begin
+      _T_132_imag <= _T_129_imag;
+    end
+    if (io_en) begin
+      _T_135_real <= _T_132_real;
+    end
+    if (io_en) begin
+      _T_135_imag <= _T_132_imag;
+    end
+    if (io_en) begin
+      _T_138_real <= _T_135_real;
+    end
+    if (io_en) begin
+      _T_138_imag <= _T_135_imag;
+    end
+    if (io_en) begin
+      _T_141_real <= _T_138_real;
+    end
+    if (io_en) begin
+      _T_141_imag <= _T_138_imag;
+    end
+    if (io_en) begin
+      _T_144_real <= _T_141_real;
+    end
+    if (io_en) begin
+      _T_144_imag <= _T_141_imag;
+    end
+    if (io_en) begin
+      _T_147_real <= _T_144_real;
+    end
+    if (io_en) begin
+      _T_147_imag <= _T_144_imag;
+    end
+    if (io_en) begin
+      _T_150_real <= _T_147_real;
+    end
+    if (io_en) begin
+      _T_150_imag <= _T_147_imag;
+    end
+    if (io_en) begin
+      _T_153_real <= _T_150_real;
+    end
+    if (io_en) begin
+      _T_153_imag <= _T_150_imag;
+    end
+    if (io_en) begin
+      _T_156_real <= _T_153_real;
+    end
+    if (io_en) begin
+      _T_156_imag <= _T_153_imag;
+    end
+    if (io_en) begin
+      _T_159_real <= _T_156_real;
+    end
+    if (io_en) begin
+      _T_159_imag <= _T_156_imag;
+    end
+    if (io_en) begin
+      _T_162_real <= _T_159_real;
+    end
+    if (io_en) begin
+      _T_162_imag <= _T_159_imag;
+    end
+    if (io_en) begin
+      _T_165_real <= _T_162_real;
+    end
+    if (io_en) begin
+      _T_165_imag <= _T_162_imag;
+    end
+    if (io_en) begin
+      _T_168_real <= _T_165_real;
+    end
+    if (io_en) begin
+      _T_168_imag <= _T_165_imag;
+    end
+    if (io_en) begin
+      _T_171_real <= _T_168_real;
+    end
+    if (io_en) begin
+      _T_171_imag <= _T_168_imag;
+    end
+    if (io_en) begin
+      _T_174_real <= _T_171_real;
+    end
+    if (io_en) begin
+      _T_174_imag <= _T_171_imag;
+    end
+    if (io_en) begin
+      _T_177_real <= _T_174_real;
+    end
+    if (io_en) begin
+      _T_177_imag <= _T_174_imag;
+    end
+    if (io_en) begin
+      _T_180_real <= _T_177_real;
+    end
+    if (io_en) begin
+      _T_180_imag <= _T_177_imag;
+    end
+    if (io_en) begin
+      _T_183_real <= _T_180_real;
+    end
+    if (io_en) begin
+      _T_183_imag <= _T_180_imag;
+    end
+    if (io_en) begin
+      _T_186_real <= _T_183_real;
+    end
+    if (io_en) begin
+      _T_186_imag <= _T_183_imag;
+    end
+    if (io_en) begin
+      _T_189_real <= _T_186_real;
+    end
+    if (io_en) begin
+      _T_189_imag <= _T_186_imag;
+    end
+    if (io_en) begin
+      _T_192_real <= _T_189_real;
+    end
+    if (io_en) begin
+      _T_192_imag <= _T_189_imag;
+    end
+    if (io_en) begin
+      _T_195_real <= _T_192_real;
+    end
+    if (io_en) begin
+      _T_195_imag <= _T_192_imag;
+    end
+    if (io_en) begin
+      _T_198_real <= _T_195_real;
+    end
+    if (io_en) begin
+      _T_198_imag <= _T_195_imag;
+    end
+    if (io_en) begin
+      _T_201_real <= _T_198_real;
+    end
+    if (io_en) begin
+      _T_201_imag <= _T_198_imag;
+    end
+    if (io_en) begin
+      _T_204_real <= _T_201_real;
+    end
+    if (io_en) begin
+      _T_204_imag <= _T_201_imag;
+    end
+    if (io_en) begin
+      _T_207_real <= _T_204_real;
+    end
+    if (io_en) begin
+      _T_207_imag <= _T_204_imag;
+    end
+  end
+endmodule
+module SDFStageRadix22_7(
+  input         clock,
+  input  [15:0] io_in_real,
+  input  [15:0] io_in_imag,
+  output [15:0] io_out_real,
+  output [15:0] io_out_imag,
+  input  [8:0]  io_cntr,
+  input         io_en
+);
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  reg [15:0] feedback_real; // @[Reg.scala 15:16]
   reg [31:0] _RAND_0;
   wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
   wire [17:0] _T_428; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   wire [16:0] _T_430; // @[FixedPointTypeClass.scala 133:23]
   wire [16:0] _T_433; // @[FixedPointTypeClass.scala 20:58]
   wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] shift_out_imag; // @[Reg.scala 15:16]
+  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
   reg [31:0] _RAND_1;
   wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
   wire [17:0] _T_435; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
@@ -1074,40 +3861,34 @@ module SDFStageRadix22_1(
   wire [17:0] _T_411; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   wire [16:0] _T_413; // @[FixedPointTypeClass.scala 133:23]
   wire [16:0] _T_416; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
   wire [17:0] _T_418; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   wire [16:0] _T_420; // @[FixedPointTypeClass.scala 133:23]
   wire [16:0] _T_423; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_256;
-  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_257;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_258;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_259;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_260;
-  assign load_input = io_cntr < 9'h80; // @[SDFChainRadix22.scala 467:66]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  assign load_input = io_cntr < 9'h80; // @[UIntTypeClass.scala 52:47]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
   assign _T_428 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   assign _T_430 = _T_428[17:1]; // @[FixedPointTypeClass.scala 133:23]
   assign _T_433 = $signed(_T_430) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
   assign butterfly_outputs_1_real = _T_433[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
   assign _T_435 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   assign _T_437 = _T_435[17:1]; // @[FixedPointTypeClass.scala 133:23]
   assign _T_440 = $signed(_T_437) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
   assign butterfly_outputs_1_imag = _T_440[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
   assign _T_411 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   assign _T_413 = _T_411[17:1]; // @[FixedPointTypeClass.scala 133:23]
   assign _T_416 = $signed(_T_413) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_416[16:1]; // @[FixedPointTypeClass.scala 176:41]
   assign _T_418 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   assign _T_420 = _T_418[17:1]; // @[FixedPointTypeClass.scala 133:23]
   assign _T_423 = $signed(_T_420) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+  assign butt_out_0_imag = _T_423[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -1141,11 +3922,11 @@ initial begin
     `endif
   `ifdef RANDOMIZE_REG_INIT
   _RAND_0 = {1{`RANDOM}};
-  shift_out_real = _RAND_0[15:0];
+  feedback_real = _RAND_0[15:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_1 = {1{`RANDOM}};
-  shift_out_imag = _RAND_1[15:0];
+  feedback_imag = _RAND_1[15:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_2 = {1{`RANDOM}};
@@ -2163,35 +4944,15 @@ initial begin
   _RAND_255 = {1{`RANDOM}};
   _T_399_imag = _RAND_255[15:0];
   `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_256 = {1{`RANDOM}};
-  feedback_real = _RAND_256[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_257 = {1{`RANDOM}};
-  feedback_imag = _RAND_257[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_258 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_258[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_259 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_259[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_260 = {1{`RANDOM}};
-  load_output = _RAND_260[0:0];
-  `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
 `endif // SYNTHESIS
   always @(posedge clock) begin
     if (io_en) begin
-      shift_out_real <= _T_399_real;
+      feedback_real <= _T_399_real;
     end
     if (io_en) begin
-      shift_out_imag <= _T_399_imag;
+      feedback_imag <= _T_399_imag;
     end
     if (io_en) begin
       if (load_input) begin
@@ -2963,3087 +5724,6 @@ end // initial
     if (io_en) begin
       _T_399_imag <= _T_396_imag;
     end
-    feedback_real <= shift_out_real;
-    feedback_imag <= shift_out_imag;
-    butt_out_0_real <= _T_416[16:1];
-    butt_out_0_imag <= _T_423[16:1];
-    if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
-    end
-  end
-endmodule
-module SDFStageRadix22_2(
-  input         clock,
-  input         reset,
-  input  [15:0] io_in_real,
-  input  [15:0] io_in_imag,
-  output [15:0] io_out_real,
-  output [15:0] io_out_imag,
-  input  [8:0]  io_cntr,
-  input         io_en
-);
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  reg [15:0] shift_out_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_0;
-  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_236; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_238; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_241; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] shift_out_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_1;
-  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_243; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_245; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_248; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_2;
-  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_3;
-  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_4;
-  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_5;
-  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_6;
-  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_7;
-  reg [15:0] _T_30_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_8;
-  reg [15:0] _T_30_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_9;
-  reg [15:0] _T_33_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_10;
-  reg [15:0] _T_33_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_11;
-  reg [15:0] _T_36_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_12;
-  reg [15:0] _T_36_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_13;
-  reg [15:0] _T_39_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_14;
-  reg [15:0] _T_39_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_15;
-  reg [15:0] _T_42_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_16;
-  reg [15:0] _T_42_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_17;
-  reg [15:0] _T_45_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_18;
-  reg [15:0] _T_45_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_19;
-  reg [15:0] _T_48_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_20;
-  reg [15:0] _T_48_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_21;
-  reg [15:0] _T_51_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_22;
-  reg [15:0] _T_51_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_23;
-  reg [15:0] _T_54_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_24;
-  reg [15:0] _T_54_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_25;
-  reg [15:0] _T_57_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_26;
-  reg [15:0] _T_57_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_27;
-  reg [15:0] _T_60_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_28;
-  reg [15:0] _T_60_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_29;
-  reg [15:0] _T_63_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_30;
-  reg [15:0] _T_63_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_31;
-  reg [15:0] _T_66_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_32;
-  reg [15:0] _T_66_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_33;
-  reg [15:0] _T_69_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_34;
-  reg [15:0] _T_69_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_35;
-  reg [15:0] _T_72_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_36;
-  reg [15:0] _T_72_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_37;
-  reg [15:0] _T_75_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_38;
-  reg [15:0] _T_75_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_39;
-  reg [15:0] _T_78_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_40;
-  reg [15:0] _T_78_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_41;
-  reg [15:0] _T_81_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_42;
-  reg [15:0] _T_81_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_43;
-  reg [15:0] _T_84_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_44;
-  reg [15:0] _T_84_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_45;
-  reg [15:0] _T_87_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_46;
-  reg [15:0] _T_87_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_47;
-  reg [15:0] _T_90_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_48;
-  reg [15:0] _T_90_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_49;
-  reg [15:0] _T_93_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_50;
-  reg [15:0] _T_93_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_51;
-  reg [15:0] _T_96_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_52;
-  reg [15:0] _T_96_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_53;
-  reg [15:0] _T_99_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_54;
-  reg [15:0] _T_99_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_55;
-  reg [15:0] _T_102_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_56;
-  reg [15:0] _T_102_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_57;
-  reg [15:0] _T_105_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_58;
-  reg [15:0] _T_105_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_59;
-  reg [15:0] _T_108_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_60;
-  reg [15:0] _T_108_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_61;
-  reg [15:0] _T_111_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_62;
-  reg [15:0] _T_111_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_63;
-  reg [15:0] _T_114_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_64;
-  reg [15:0] _T_114_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_65;
-  reg [15:0] _T_117_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_66;
-  reg [15:0] _T_117_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_67;
-  reg [15:0] _T_120_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_68;
-  reg [15:0] _T_120_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_69;
-  reg [15:0] _T_123_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_70;
-  reg [15:0] _T_123_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_71;
-  reg [15:0] _T_126_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_72;
-  reg [15:0] _T_126_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_73;
-  reg [15:0] _T_129_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_74;
-  reg [15:0] _T_129_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_75;
-  reg [15:0] _T_132_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_76;
-  reg [15:0] _T_132_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_77;
-  reg [15:0] _T_135_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_78;
-  reg [15:0] _T_135_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_79;
-  reg [15:0] _T_138_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_80;
-  reg [15:0] _T_138_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_81;
-  reg [15:0] _T_141_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_82;
-  reg [15:0] _T_141_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_83;
-  reg [15:0] _T_144_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_84;
-  reg [15:0] _T_144_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_85;
-  reg [15:0] _T_147_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_86;
-  reg [15:0] _T_147_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_87;
-  reg [15:0] _T_150_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_88;
-  reg [15:0] _T_150_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_89;
-  reg [15:0] _T_153_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_90;
-  reg [15:0] _T_153_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_91;
-  reg [15:0] _T_156_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_92;
-  reg [15:0] _T_156_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_93;
-  reg [15:0] _T_159_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_94;
-  reg [15:0] _T_159_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_95;
-  reg [15:0] _T_162_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_96;
-  reg [15:0] _T_162_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_97;
-  reg [15:0] _T_165_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_98;
-  reg [15:0] _T_165_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_99;
-  reg [15:0] _T_168_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_100;
-  reg [15:0] _T_168_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_101;
-  reg [15:0] _T_171_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_102;
-  reg [15:0] _T_171_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_103;
-  reg [15:0] _T_174_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_104;
-  reg [15:0] _T_174_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_105;
-  reg [15:0] _T_177_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_106;
-  reg [15:0] _T_177_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_107;
-  reg [15:0] _T_180_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_108;
-  reg [15:0] _T_180_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_109;
-  reg [15:0] _T_183_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_110;
-  reg [15:0] _T_183_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_111;
-  reg [15:0] _T_186_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_112;
-  reg [15:0] _T_186_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_113;
-  reg [15:0] _T_189_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_114;
-  reg [15:0] _T_189_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_115;
-  reg [15:0] _T_192_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_116;
-  reg [15:0] _T_192_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_117;
-  reg [15:0] _T_195_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_118;
-  reg [15:0] _T_195_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_119;
-  reg [15:0] _T_198_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_120;
-  reg [15:0] _T_198_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_121;
-  reg [15:0] _T_201_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_122;
-  reg [15:0] _T_201_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_123;
-  reg [15:0] _T_204_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_124;
-  reg [15:0] _T_204_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_125;
-  reg [15:0] _T_207_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_126;
-  reg [15:0] _T_207_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_127;
-  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
-  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
-  wire [17:0] _T_219; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_221; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_224; // @[FixedPointTypeClass.scala 20:58]
-  wire [17:0] _T_226; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_228; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_231; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_128;
-  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_129;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_130;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_131;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_132;
-  assign load_input = io_cntr < 9'h40; // @[SDFChainRadix22.scala 467:66]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_236 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_238 = _T_236[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_241 = $signed(_T_238) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_real = _T_241[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_243 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_245 = _T_243[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_248 = $signed(_T_245) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_imag = _T_248[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
-  assign _T_219 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_221 = _T_219[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_224 = $signed(_T_221) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_226 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_228 = _T_226[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_231 = $signed(_T_228) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  shift_out_real = _RAND_0[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  shift_out_imag = _RAND_1[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  _T_21_real = _RAND_2[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  _T_21_imag = _RAND_3[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  _T_24_real = _RAND_4[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  _T_24_imag = _RAND_5[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  _T_27_real = _RAND_6[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_7 = {1{`RANDOM}};
-  _T_27_imag = _RAND_7[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_8 = {1{`RANDOM}};
-  _T_30_real = _RAND_8[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_9 = {1{`RANDOM}};
-  _T_30_imag = _RAND_9[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_10 = {1{`RANDOM}};
-  _T_33_real = _RAND_10[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_11 = {1{`RANDOM}};
-  _T_33_imag = _RAND_11[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_12 = {1{`RANDOM}};
-  _T_36_real = _RAND_12[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_13 = {1{`RANDOM}};
-  _T_36_imag = _RAND_13[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_14 = {1{`RANDOM}};
-  _T_39_real = _RAND_14[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_15 = {1{`RANDOM}};
-  _T_39_imag = _RAND_15[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_16 = {1{`RANDOM}};
-  _T_42_real = _RAND_16[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_17 = {1{`RANDOM}};
-  _T_42_imag = _RAND_17[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_18 = {1{`RANDOM}};
-  _T_45_real = _RAND_18[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_19 = {1{`RANDOM}};
-  _T_45_imag = _RAND_19[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_20 = {1{`RANDOM}};
-  _T_48_real = _RAND_20[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_21 = {1{`RANDOM}};
-  _T_48_imag = _RAND_21[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_22 = {1{`RANDOM}};
-  _T_51_real = _RAND_22[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_23 = {1{`RANDOM}};
-  _T_51_imag = _RAND_23[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_24 = {1{`RANDOM}};
-  _T_54_real = _RAND_24[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_25 = {1{`RANDOM}};
-  _T_54_imag = _RAND_25[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_26 = {1{`RANDOM}};
-  _T_57_real = _RAND_26[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_27 = {1{`RANDOM}};
-  _T_57_imag = _RAND_27[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_28 = {1{`RANDOM}};
-  _T_60_real = _RAND_28[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_29 = {1{`RANDOM}};
-  _T_60_imag = _RAND_29[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_30 = {1{`RANDOM}};
-  _T_63_real = _RAND_30[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_31 = {1{`RANDOM}};
-  _T_63_imag = _RAND_31[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_32 = {1{`RANDOM}};
-  _T_66_real = _RAND_32[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_33 = {1{`RANDOM}};
-  _T_66_imag = _RAND_33[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_34 = {1{`RANDOM}};
-  _T_69_real = _RAND_34[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_35 = {1{`RANDOM}};
-  _T_69_imag = _RAND_35[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_36 = {1{`RANDOM}};
-  _T_72_real = _RAND_36[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_37 = {1{`RANDOM}};
-  _T_72_imag = _RAND_37[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_38 = {1{`RANDOM}};
-  _T_75_real = _RAND_38[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_39 = {1{`RANDOM}};
-  _T_75_imag = _RAND_39[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_40 = {1{`RANDOM}};
-  _T_78_real = _RAND_40[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_41 = {1{`RANDOM}};
-  _T_78_imag = _RAND_41[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_42 = {1{`RANDOM}};
-  _T_81_real = _RAND_42[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_43 = {1{`RANDOM}};
-  _T_81_imag = _RAND_43[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_44 = {1{`RANDOM}};
-  _T_84_real = _RAND_44[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_45 = {1{`RANDOM}};
-  _T_84_imag = _RAND_45[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_46 = {1{`RANDOM}};
-  _T_87_real = _RAND_46[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_47 = {1{`RANDOM}};
-  _T_87_imag = _RAND_47[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_48 = {1{`RANDOM}};
-  _T_90_real = _RAND_48[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_49 = {1{`RANDOM}};
-  _T_90_imag = _RAND_49[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_50 = {1{`RANDOM}};
-  _T_93_real = _RAND_50[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_51 = {1{`RANDOM}};
-  _T_93_imag = _RAND_51[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_52 = {1{`RANDOM}};
-  _T_96_real = _RAND_52[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_53 = {1{`RANDOM}};
-  _T_96_imag = _RAND_53[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_54 = {1{`RANDOM}};
-  _T_99_real = _RAND_54[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_55 = {1{`RANDOM}};
-  _T_99_imag = _RAND_55[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_56 = {1{`RANDOM}};
-  _T_102_real = _RAND_56[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_57 = {1{`RANDOM}};
-  _T_102_imag = _RAND_57[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_58 = {1{`RANDOM}};
-  _T_105_real = _RAND_58[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_59 = {1{`RANDOM}};
-  _T_105_imag = _RAND_59[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_60 = {1{`RANDOM}};
-  _T_108_real = _RAND_60[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_61 = {1{`RANDOM}};
-  _T_108_imag = _RAND_61[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_62 = {1{`RANDOM}};
-  _T_111_real = _RAND_62[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_63 = {1{`RANDOM}};
-  _T_111_imag = _RAND_63[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_64 = {1{`RANDOM}};
-  _T_114_real = _RAND_64[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_65 = {1{`RANDOM}};
-  _T_114_imag = _RAND_65[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_66 = {1{`RANDOM}};
-  _T_117_real = _RAND_66[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_67 = {1{`RANDOM}};
-  _T_117_imag = _RAND_67[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_68 = {1{`RANDOM}};
-  _T_120_real = _RAND_68[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_69 = {1{`RANDOM}};
-  _T_120_imag = _RAND_69[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_70 = {1{`RANDOM}};
-  _T_123_real = _RAND_70[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_71 = {1{`RANDOM}};
-  _T_123_imag = _RAND_71[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_72 = {1{`RANDOM}};
-  _T_126_real = _RAND_72[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_73 = {1{`RANDOM}};
-  _T_126_imag = _RAND_73[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_74 = {1{`RANDOM}};
-  _T_129_real = _RAND_74[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_75 = {1{`RANDOM}};
-  _T_129_imag = _RAND_75[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_76 = {1{`RANDOM}};
-  _T_132_real = _RAND_76[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_77 = {1{`RANDOM}};
-  _T_132_imag = _RAND_77[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_78 = {1{`RANDOM}};
-  _T_135_real = _RAND_78[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_79 = {1{`RANDOM}};
-  _T_135_imag = _RAND_79[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_80 = {1{`RANDOM}};
-  _T_138_real = _RAND_80[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_81 = {1{`RANDOM}};
-  _T_138_imag = _RAND_81[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_82 = {1{`RANDOM}};
-  _T_141_real = _RAND_82[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_83 = {1{`RANDOM}};
-  _T_141_imag = _RAND_83[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_84 = {1{`RANDOM}};
-  _T_144_real = _RAND_84[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_85 = {1{`RANDOM}};
-  _T_144_imag = _RAND_85[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_86 = {1{`RANDOM}};
-  _T_147_real = _RAND_86[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_87 = {1{`RANDOM}};
-  _T_147_imag = _RAND_87[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_88 = {1{`RANDOM}};
-  _T_150_real = _RAND_88[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_89 = {1{`RANDOM}};
-  _T_150_imag = _RAND_89[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_90 = {1{`RANDOM}};
-  _T_153_real = _RAND_90[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_91 = {1{`RANDOM}};
-  _T_153_imag = _RAND_91[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_92 = {1{`RANDOM}};
-  _T_156_real = _RAND_92[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_93 = {1{`RANDOM}};
-  _T_156_imag = _RAND_93[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_94 = {1{`RANDOM}};
-  _T_159_real = _RAND_94[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_95 = {1{`RANDOM}};
-  _T_159_imag = _RAND_95[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_96 = {1{`RANDOM}};
-  _T_162_real = _RAND_96[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_97 = {1{`RANDOM}};
-  _T_162_imag = _RAND_97[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_98 = {1{`RANDOM}};
-  _T_165_real = _RAND_98[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_99 = {1{`RANDOM}};
-  _T_165_imag = _RAND_99[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_100 = {1{`RANDOM}};
-  _T_168_real = _RAND_100[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_101 = {1{`RANDOM}};
-  _T_168_imag = _RAND_101[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_102 = {1{`RANDOM}};
-  _T_171_real = _RAND_102[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_103 = {1{`RANDOM}};
-  _T_171_imag = _RAND_103[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_104 = {1{`RANDOM}};
-  _T_174_real = _RAND_104[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_105 = {1{`RANDOM}};
-  _T_174_imag = _RAND_105[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_106 = {1{`RANDOM}};
-  _T_177_real = _RAND_106[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_107 = {1{`RANDOM}};
-  _T_177_imag = _RAND_107[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_108 = {1{`RANDOM}};
-  _T_180_real = _RAND_108[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_109 = {1{`RANDOM}};
-  _T_180_imag = _RAND_109[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_110 = {1{`RANDOM}};
-  _T_183_real = _RAND_110[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_111 = {1{`RANDOM}};
-  _T_183_imag = _RAND_111[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_112 = {1{`RANDOM}};
-  _T_186_real = _RAND_112[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_113 = {1{`RANDOM}};
-  _T_186_imag = _RAND_113[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_114 = {1{`RANDOM}};
-  _T_189_real = _RAND_114[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_115 = {1{`RANDOM}};
-  _T_189_imag = _RAND_115[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_116 = {1{`RANDOM}};
-  _T_192_real = _RAND_116[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_117 = {1{`RANDOM}};
-  _T_192_imag = _RAND_117[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_118 = {1{`RANDOM}};
-  _T_195_real = _RAND_118[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_119 = {1{`RANDOM}};
-  _T_195_imag = _RAND_119[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_120 = {1{`RANDOM}};
-  _T_198_real = _RAND_120[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_121 = {1{`RANDOM}};
-  _T_198_imag = _RAND_121[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_122 = {1{`RANDOM}};
-  _T_201_real = _RAND_122[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_123 = {1{`RANDOM}};
-  _T_201_imag = _RAND_123[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_124 = {1{`RANDOM}};
-  _T_204_real = _RAND_124[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_125 = {1{`RANDOM}};
-  _T_204_imag = _RAND_125[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_126 = {1{`RANDOM}};
-  _T_207_real = _RAND_126[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_127 = {1{`RANDOM}};
-  _T_207_imag = _RAND_127[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_128 = {1{`RANDOM}};
-  feedback_real = _RAND_128[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_129 = {1{`RANDOM}};
-  feedback_imag = _RAND_129[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_130 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_130[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_131 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_131[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_132 = {1{`RANDOM}};
-  load_output = _RAND_132[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if (io_en) begin
-      shift_out_real <= _T_207_real;
-    end
-    if (io_en) begin
-      shift_out_imag <= _T_207_imag;
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_real <= io_in_real;
-      end else begin
-        _T_21_real <= butterfly_outputs_1_real;
-      end
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_imag <= io_in_imag;
-      end else begin
-        _T_21_imag <= butterfly_outputs_1_imag;
-      end
-    end
-    if (io_en) begin
-      _T_24_real <= _T_21_real;
-    end
-    if (io_en) begin
-      _T_24_imag <= _T_21_imag;
-    end
-    if (io_en) begin
-      _T_27_real <= _T_24_real;
-    end
-    if (io_en) begin
-      _T_27_imag <= _T_24_imag;
-    end
-    if (io_en) begin
-      _T_30_real <= _T_27_real;
-    end
-    if (io_en) begin
-      _T_30_imag <= _T_27_imag;
-    end
-    if (io_en) begin
-      _T_33_real <= _T_30_real;
-    end
-    if (io_en) begin
-      _T_33_imag <= _T_30_imag;
-    end
-    if (io_en) begin
-      _T_36_real <= _T_33_real;
-    end
-    if (io_en) begin
-      _T_36_imag <= _T_33_imag;
-    end
-    if (io_en) begin
-      _T_39_real <= _T_36_real;
-    end
-    if (io_en) begin
-      _T_39_imag <= _T_36_imag;
-    end
-    if (io_en) begin
-      _T_42_real <= _T_39_real;
-    end
-    if (io_en) begin
-      _T_42_imag <= _T_39_imag;
-    end
-    if (io_en) begin
-      _T_45_real <= _T_42_real;
-    end
-    if (io_en) begin
-      _T_45_imag <= _T_42_imag;
-    end
-    if (io_en) begin
-      _T_48_real <= _T_45_real;
-    end
-    if (io_en) begin
-      _T_48_imag <= _T_45_imag;
-    end
-    if (io_en) begin
-      _T_51_real <= _T_48_real;
-    end
-    if (io_en) begin
-      _T_51_imag <= _T_48_imag;
-    end
-    if (io_en) begin
-      _T_54_real <= _T_51_real;
-    end
-    if (io_en) begin
-      _T_54_imag <= _T_51_imag;
-    end
-    if (io_en) begin
-      _T_57_real <= _T_54_real;
-    end
-    if (io_en) begin
-      _T_57_imag <= _T_54_imag;
-    end
-    if (io_en) begin
-      _T_60_real <= _T_57_real;
-    end
-    if (io_en) begin
-      _T_60_imag <= _T_57_imag;
-    end
-    if (io_en) begin
-      _T_63_real <= _T_60_real;
-    end
-    if (io_en) begin
-      _T_63_imag <= _T_60_imag;
-    end
-    if (io_en) begin
-      _T_66_real <= _T_63_real;
-    end
-    if (io_en) begin
-      _T_66_imag <= _T_63_imag;
-    end
-    if (io_en) begin
-      _T_69_real <= _T_66_real;
-    end
-    if (io_en) begin
-      _T_69_imag <= _T_66_imag;
-    end
-    if (io_en) begin
-      _T_72_real <= _T_69_real;
-    end
-    if (io_en) begin
-      _T_72_imag <= _T_69_imag;
-    end
-    if (io_en) begin
-      _T_75_real <= _T_72_real;
-    end
-    if (io_en) begin
-      _T_75_imag <= _T_72_imag;
-    end
-    if (io_en) begin
-      _T_78_real <= _T_75_real;
-    end
-    if (io_en) begin
-      _T_78_imag <= _T_75_imag;
-    end
-    if (io_en) begin
-      _T_81_real <= _T_78_real;
-    end
-    if (io_en) begin
-      _T_81_imag <= _T_78_imag;
-    end
-    if (io_en) begin
-      _T_84_real <= _T_81_real;
-    end
-    if (io_en) begin
-      _T_84_imag <= _T_81_imag;
-    end
-    if (io_en) begin
-      _T_87_real <= _T_84_real;
-    end
-    if (io_en) begin
-      _T_87_imag <= _T_84_imag;
-    end
-    if (io_en) begin
-      _T_90_real <= _T_87_real;
-    end
-    if (io_en) begin
-      _T_90_imag <= _T_87_imag;
-    end
-    if (io_en) begin
-      _T_93_real <= _T_90_real;
-    end
-    if (io_en) begin
-      _T_93_imag <= _T_90_imag;
-    end
-    if (io_en) begin
-      _T_96_real <= _T_93_real;
-    end
-    if (io_en) begin
-      _T_96_imag <= _T_93_imag;
-    end
-    if (io_en) begin
-      _T_99_real <= _T_96_real;
-    end
-    if (io_en) begin
-      _T_99_imag <= _T_96_imag;
-    end
-    if (io_en) begin
-      _T_102_real <= _T_99_real;
-    end
-    if (io_en) begin
-      _T_102_imag <= _T_99_imag;
-    end
-    if (io_en) begin
-      _T_105_real <= _T_102_real;
-    end
-    if (io_en) begin
-      _T_105_imag <= _T_102_imag;
-    end
-    if (io_en) begin
-      _T_108_real <= _T_105_real;
-    end
-    if (io_en) begin
-      _T_108_imag <= _T_105_imag;
-    end
-    if (io_en) begin
-      _T_111_real <= _T_108_real;
-    end
-    if (io_en) begin
-      _T_111_imag <= _T_108_imag;
-    end
-    if (io_en) begin
-      _T_114_real <= _T_111_real;
-    end
-    if (io_en) begin
-      _T_114_imag <= _T_111_imag;
-    end
-    if (io_en) begin
-      _T_117_real <= _T_114_real;
-    end
-    if (io_en) begin
-      _T_117_imag <= _T_114_imag;
-    end
-    if (io_en) begin
-      _T_120_real <= _T_117_real;
-    end
-    if (io_en) begin
-      _T_120_imag <= _T_117_imag;
-    end
-    if (io_en) begin
-      _T_123_real <= _T_120_real;
-    end
-    if (io_en) begin
-      _T_123_imag <= _T_120_imag;
-    end
-    if (io_en) begin
-      _T_126_real <= _T_123_real;
-    end
-    if (io_en) begin
-      _T_126_imag <= _T_123_imag;
-    end
-    if (io_en) begin
-      _T_129_real <= _T_126_real;
-    end
-    if (io_en) begin
-      _T_129_imag <= _T_126_imag;
-    end
-    if (io_en) begin
-      _T_132_real <= _T_129_real;
-    end
-    if (io_en) begin
-      _T_132_imag <= _T_129_imag;
-    end
-    if (io_en) begin
-      _T_135_real <= _T_132_real;
-    end
-    if (io_en) begin
-      _T_135_imag <= _T_132_imag;
-    end
-    if (io_en) begin
-      _T_138_real <= _T_135_real;
-    end
-    if (io_en) begin
-      _T_138_imag <= _T_135_imag;
-    end
-    if (io_en) begin
-      _T_141_real <= _T_138_real;
-    end
-    if (io_en) begin
-      _T_141_imag <= _T_138_imag;
-    end
-    if (io_en) begin
-      _T_144_real <= _T_141_real;
-    end
-    if (io_en) begin
-      _T_144_imag <= _T_141_imag;
-    end
-    if (io_en) begin
-      _T_147_real <= _T_144_real;
-    end
-    if (io_en) begin
-      _T_147_imag <= _T_144_imag;
-    end
-    if (io_en) begin
-      _T_150_real <= _T_147_real;
-    end
-    if (io_en) begin
-      _T_150_imag <= _T_147_imag;
-    end
-    if (io_en) begin
-      _T_153_real <= _T_150_real;
-    end
-    if (io_en) begin
-      _T_153_imag <= _T_150_imag;
-    end
-    if (io_en) begin
-      _T_156_real <= _T_153_real;
-    end
-    if (io_en) begin
-      _T_156_imag <= _T_153_imag;
-    end
-    if (io_en) begin
-      _T_159_real <= _T_156_real;
-    end
-    if (io_en) begin
-      _T_159_imag <= _T_156_imag;
-    end
-    if (io_en) begin
-      _T_162_real <= _T_159_real;
-    end
-    if (io_en) begin
-      _T_162_imag <= _T_159_imag;
-    end
-    if (io_en) begin
-      _T_165_real <= _T_162_real;
-    end
-    if (io_en) begin
-      _T_165_imag <= _T_162_imag;
-    end
-    if (io_en) begin
-      _T_168_real <= _T_165_real;
-    end
-    if (io_en) begin
-      _T_168_imag <= _T_165_imag;
-    end
-    if (io_en) begin
-      _T_171_real <= _T_168_real;
-    end
-    if (io_en) begin
-      _T_171_imag <= _T_168_imag;
-    end
-    if (io_en) begin
-      _T_174_real <= _T_171_real;
-    end
-    if (io_en) begin
-      _T_174_imag <= _T_171_imag;
-    end
-    if (io_en) begin
-      _T_177_real <= _T_174_real;
-    end
-    if (io_en) begin
-      _T_177_imag <= _T_174_imag;
-    end
-    if (io_en) begin
-      _T_180_real <= _T_177_real;
-    end
-    if (io_en) begin
-      _T_180_imag <= _T_177_imag;
-    end
-    if (io_en) begin
-      _T_183_real <= _T_180_real;
-    end
-    if (io_en) begin
-      _T_183_imag <= _T_180_imag;
-    end
-    if (io_en) begin
-      _T_186_real <= _T_183_real;
-    end
-    if (io_en) begin
-      _T_186_imag <= _T_183_imag;
-    end
-    if (io_en) begin
-      _T_189_real <= _T_186_real;
-    end
-    if (io_en) begin
-      _T_189_imag <= _T_186_imag;
-    end
-    if (io_en) begin
-      _T_192_real <= _T_189_real;
-    end
-    if (io_en) begin
-      _T_192_imag <= _T_189_imag;
-    end
-    if (io_en) begin
-      _T_195_real <= _T_192_real;
-    end
-    if (io_en) begin
-      _T_195_imag <= _T_192_imag;
-    end
-    if (io_en) begin
-      _T_198_real <= _T_195_real;
-    end
-    if (io_en) begin
-      _T_198_imag <= _T_195_imag;
-    end
-    if (io_en) begin
-      _T_201_real <= _T_198_real;
-    end
-    if (io_en) begin
-      _T_201_imag <= _T_198_imag;
-    end
-    if (io_en) begin
-      _T_204_real <= _T_201_real;
-    end
-    if (io_en) begin
-      _T_204_imag <= _T_201_imag;
-    end
-    if (io_en) begin
-      _T_207_real <= _T_204_real;
-    end
-    if (io_en) begin
-      _T_207_imag <= _T_204_imag;
-    end
-    feedback_real <= shift_out_real;
-    feedback_imag <= shift_out_imag;
-    butt_out_0_real <= _T_224[16:1];
-    butt_out_0_imag <= _T_231[16:1];
-    if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
-    end
-  end
-endmodule
-module SDFStageRadix22_3(
-  input         clock,
-  input         reset,
-  input  [15:0] io_in_real,
-  input  [15:0] io_in_imag,
-  output [15:0] io_out_real,
-  output [15:0] io_out_imag,
-  input  [8:0]  io_cntr,
-  input         io_en
-);
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  reg [15:0] shift_out_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_0;
-  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_140; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_142; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_145; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] shift_out_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_1;
-  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_147; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_149; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_152; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_2;
-  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_3;
-  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_4;
-  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_5;
-  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_6;
-  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_7;
-  reg [15:0] _T_30_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_8;
-  reg [15:0] _T_30_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_9;
-  reg [15:0] _T_33_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_10;
-  reg [15:0] _T_33_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_11;
-  reg [15:0] _T_36_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_12;
-  reg [15:0] _T_36_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_13;
-  reg [15:0] _T_39_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_14;
-  reg [15:0] _T_39_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_15;
-  reg [15:0] _T_42_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_16;
-  reg [15:0] _T_42_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_17;
-  reg [15:0] _T_45_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_18;
-  reg [15:0] _T_45_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_19;
-  reg [15:0] _T_48_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_20;
-  reg [15:0] _T_48_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_21;
-  reg [15:0] _T_51_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_22;
-  reg [15:0] _T_51_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_23;
-  reg [15:0] _T_54_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_24;
-  reg [15:0] _T_54_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_25;
-  reg [15:0] _T_57_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_26;
-  reg [15:0] _T_57_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_27;
-  reg [15:0] _T_60_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_28;
-  reg [15:0] _T_60_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_29;
-  reg [15:0] _T_63_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_30;
-  reg [15:0] _T_63_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_31;
-  reg [15:0] _T_66_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_32;
-  reg [15:0] _T_66_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_33;
-  reg [15:0] _T_69_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_34;
-  reg [15:0] _T_69_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_35;
-  reg [15:0] _T_72_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_36;
-  reg [15:0] _T_72_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_37;
-  reg [15:0] _T_75_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_38;
-  reg [15:0] _T_75_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_39;
-  reg [15:0] _T_78_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_40;
-  reg [15:0] _T_78_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_41;
-  reg [15:0] _T_81_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_42;
-  reg [15:0] _T_81_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_43;
-  reg [15:0] _T_84_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_44;
-  reg [15:0] _T_84_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_45;
-  reg [15:0] _T_87_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_46;
-  reg [15:0] _T_87_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_47;
-  reg [15:0] _T_90_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_48;
-  reg [15:0] _T_90_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_49;
-  reg [15:0] _T_93_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_50;
-  reg [15:0] _T_93_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_51;
-  reg [15:0] _T_96_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_52;
-  reg [15:0] _T_96_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_53;
-  reg [15:0] _T_99_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_54;
-  reg [15:0] _T_99_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_55;
-  reg [15:0] _T_102_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_56;
-  reg [15:0] _T_102_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_57;
-  reg [15:0] _T_105_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_58;
-  reg [15:0] _T_105_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_59;
-  reg [15:0] _T_108_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_60;
-  reg [15:0] _T_108_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_61;
-  reg [15:0] _T_111_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_62;
-  reg [15:0] _T_111_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_63;
-  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
-  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
-  wire [17:0] _T_123; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_125; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_128; // @[FixedPointTypeClass.scala 20:58]
-  wire [17:0] _T_130; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_132; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_135; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_64;
-  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_65;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_66;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_67;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_68;
-  assign load_input = io_cntr < 9'h20; // @[SDFChainRadix22.scala 467:66]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_140 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_142 = _T_140[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_145 = $signed(_T_142) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_real = _T_145[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_147 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_149 = _T_147[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_152 = $signed(_T_149) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_imag = _T_152[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
-  assign _T_123 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_125 = _T_123[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_128 = $signed(_T_125) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_130 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_132 = _T_130[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_135 = $signed(_T_132) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  shift_out_real = _RAND_0[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  shift_out_imag = _RAND_1[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  _T_21_real = _RAND_2[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  _T_21_imag = _RAND_3[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  _T_24_real = _RAND_4[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  _T_24_imag = _RAND_5[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  _T_27_real = _RAND_6[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_7 = {1{`RANDOM}};
-  _T_27_imag = _RAND_7[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_8 = {1{`RANDOM}};
-  _T_30_real = _RAND_8[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_9 = {1{`RANDOM}};
-  _T_30_imag = _RAND_9[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_10 = {1{`RANDOM}};
-  _T_33_real = _RAND_10[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_11 = {1{`RANDOM}};
-  _T_33_imag = _RAND_11[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_12 = {1{`RANDOM}};
-  _T_36_real = _RAND_12[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_13 = {1{`RANDOM}};
-  _T_36_imag = _RAND_13[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_14 = {1{`RANDOM}};
-  _T_39_real = _RAND_14[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_15 = {1{`RANDOM}};
-  _T_39_imag = _RAND_15[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_16 = {1{`RANDOM}};
-  _T_42_real = _RAND_16[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_17 = {1{`RANDOM}};
-  _T_42_imag = _RAND_17[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_18 = {1{`RANDOM}};
-  _T_45_real = _RAND_18[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_19 = {1{`RANDOM}};
-  _T_45_imag = _RAND_19[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_20 = {1{`RANDOM}};
-  _T_48_real = _RAND_20[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_21 = {1{`RANDOM}};
-  _T_48_imag = _RAND_21[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_22 = {1{`RANDOM}};
-  _T_51_real = _RAND_22[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_23 = {1{`RANDOM}};
-  _T_51_imag = _RAND_23[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_24 = {1{`RANDOM}};
-  _T_54_real = _RAND_24[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_25 = {1{`RANDOM}};
-  _T_54_imag = _RAND_25[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_26 = {1{`RANDOM}};
-  _T_57_real = _RAND_26[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_27 = {1{`RANDOM}};
-  _T_57_imag = _RAND_27[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_28 = {1{`RANDOM}};
-  _T_60_real = _RAND_28[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_29 = {1{`RANDOM}};
-  _T_60_imag = _RAND_29[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_30 = {1{`RANDOM}};
-  _T_63_real = _RAND_30[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_31 = {1{`RANDOM}};
-  _T_63_imag = _RAND_31[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_32 = {1{`RANDOM}};
-  _T_66_real = _RAND_32[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_33 = {1{`RANDOM}};
-  _T_66_imag = _RAND_33[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_34 = {1{`RANDOM}};
-  _T_69_real = _RAND_34[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_35 = {1{`RANDOM}};
-  _T_69_imag = _RAND_35[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_36 = {1{`RANDOM}};
-  _T_72_real = _RAND_36[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_37 = {1{`RANDOM}};
-  _T_72_imag = _RAND_37[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_38 = {1{`RANDOM}};
-  _T_75_real = _RAND_38[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_39 = {1{`RANDOM}};
-  _T_75_imag = _RAND_39[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_40 = {1{`RANDOM}};
-  _T_78_real = _RAND_40[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_41 = {1{`RANDOM}};
-  _T_78_imag = _RAND_41[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_42 = {1{`RANDOM}};
-  _T_81_real = _RAND_42[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_43 = {1{`RANDOM}};
-  _T_81_imag = _RAND_43[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_44 = {1{`RANDOM}};
-  _T_84_real = _RAND_44[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_45 = {1{`RANDOM}};
-  _T_84_imag = _RAND_45[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_46 = {1{`RANDOM}};
-  _T_87_real = _RAND_46[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_47 = {1{`RANDOM}};
-  _T_87_imag = _RAND_47[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_48 = {1{`RANDOM}};
-  _T_90_real = _RAND_48[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_49 = {1{`RANDOM}};
-  _T_90_imag = _RAND_49[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_50 = {1{`RANDOM}};
-  _T_93_real = _RAND_50[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_51 = {1{`RANDOM}};
-  _T_93_imag = _RAND_51[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_52 = {1{`RANDOM}};
-  _T_96_real = _RAND_52[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_53 = {1{`RANDOM}};
-  _T_96_imag = _RAND_53[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_54 = {1{`RANDOM}};
-  _T_99_real = _RAND_54[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_55 = {1{`RANDOM}};
-  _T_99_imag = _RAND_55[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_56 = {1{`RANDOM}};
-  _T_102_real = _RAND_56[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_57 = {1{`RANDOM}};
-  _T_102_imag = _RAND_57[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_58 = {1{`RANDOM}};
-  _T_105_real = _RAND_58[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_59 = {1{`RANDOM}};
-  _T_105_imag = _RAND_59[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_60 = {1{`RANDOM}};
-  _T_108_real = _RAND_60[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_61 = {1{`RANDOM}};
-  _T_108_imag = _RAND_61[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_62 = {1{`RANDOM}};
-  _T_111_real = _RAND_62[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_63 = {1{`RANDOM}};
-  _T_111_imag = _RAND_63[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_64 = {1{`RANDOM}};
-  feedback_real = _RAND_64[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_65 = {1{`RANDOM}};
-  feedback_imag = _RAND_65[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_66 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_66[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_67 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_67[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_68 = {1{`RANDOM}};
-  load_output = _RAND_68[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if (io_en) begin
-      shift_out_real <= _T_111_real;
-    end
-    if (io_en) begin
-      shift_out_imag <= _T_111_imag;
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_real <= io_in_real;
-      end else begin
-        _T_21_real <= butterfly_outputs_1_real;
-      end
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_imag <= io_in_imag;
-      end else begin
-        _T_21_imag <= butterfly_outputs_1_imag;
-      end
-    end
-    if (io_en) begin
-      _T_24_real <= _T_21_real;
-    end
-    if (io_en) begin
-      _T_24_imag <= _T_21_imag;
-    end
-    if (io_en) begin
-      _T_27_real <= _T_24_real;
-    end
-    if (io_en) begin
-      _T_27_imag <= _T_24_imag;
-    end
-    if (io_en) begin
-      _T_30_real <= _T_27_real;
-    end
-    if (io_en) begin
-      _T_30_imag <= _T_27_imag;
-    end
-    if (io_en) begin
-      _T_33_real <= _T_30_real;
-    end
-    if (io_en) begin
-      _T_33_imag <= _T_30_imag;
-    end
-    if (io_en) begin
-      _T_36_real <= _T_33_real;
-    end
-    if (io_en) begin
-      _T_36_imag <= _T_33_imag;
-    end
-    if (io_en) begin
-      _T_39_real <= _T_36_real;
-    end
-    if (io_en) begin
-      _T_39_imag <= _T_36_imag;
-    end
-    if (io_en) begin
-      _T_42_real <= _T_39_real;
-    end
-    if (io_en) begin
-      _T_42_imag <= _T_39_imag;
-    end
-    if (io_en) begin
-      _T_45_real <= _T_42_real;
-    end
-    if (io_en) begin
-      _T_45_imag <= _T_42_imag;
-    end
-    if (io_en) begin
-      _T_48_real <= _T_45_real;
-    end
-    if (io_en) begin
-      _T_48_imag <= _T_45_imag;
-    end
-    if (io_en) begin
-      _T_51_real <= _T_48_real;
-    end
-    if (io_en) begin
-      _T_51_imag <= _T_48_imag;
-    end
-    if (io_en) begin
-      _T_54_real <= _T_51_real;
-    end
-    if (io_en) begin
-      _T_54_imag <= _T_51_imag;
-    end
-    if (io_en) begin
-      _T_57_real <= _T_54_real;
-    end
-    if (io_en) begin
-      _T_57_imag <= _T_54_imag;
-    end
-    if (io_en) begin
-      _T_60_real <= _T_57_real;
-    end
-    if (io_en) begin
-      _T_60_imag <= _T_57_imag;
-    end
-    if (io_en) begin
-      _T_63_real <= _T_60_real;
-    end
-    if (io_en) begin
-      _T_63_imag <= _T_60_imag;
-    end
-    if (io_en) begin
-      _T_66_real <= _T_63_real;
-    end
-    if (io_en) begin
-      _T_66_imag <= _T_63_imag;
-    end
-    if (io_en) begin
-      _T_69_real <= _T_66_real;
-    end
-    if (io_en) begin
-      _T_69_imag <= _T_66_imag;
-    end
-    if (io_en) begin
-      _T_72_real <= _T_69_real;
-    end
-    if (io_en) begin
-      _T_72_imag <= _T_69_imag;
-    end
-    if (io_en) begin
-      _T_75_real <= _T_72_real;
-    end
-    if (io_en) begin
-      _T_75_imag <= _T_72_imag;
-    end
-    if (io_en) begin
-      _T_78_real <= _T_75_real;
-    end
-    if (io_en) begin
-      _T_78_imag <= _T_75_imag;
-    end
-    if (io_en) begin
-      _T_81_real <= _T_78_real;
-    end
-    if (io_en) begin
-      _T_81_imag <= _T_78_imag;
-    end
-    if (io_en) begin
-      _T_84_real <= _T_81_real;
-    end
-    if (io_en) begin
-      _T_84_imag <= _T_81_imag;
-    end
-    if (io_en) begin
-      _T_87_real <= _T_84_real;
-    end
-    if (io_en) begin
-      _T_87_imag <= _T_84_imag;
-    end
-    if (io_en) begin
-      _T_90_real <= _T_87_real;
-    end
-    if (io_en) begin
-      _T_90_imag <= _T_87_imag;
-    end
-    if (io_en) begin
-      _T_93_real <= _T_90_real;
-    end
-    if (io_en) begin
-      _T_93_imag <= _T_90_imag;
-    end
-    if (io_en) begin
-      _T_96_real <= _T_93_real;
-    end
-    if (io_en) begin
-      _T_96_imag <= _T_93_imag;
-    end
-    if (io_en) begin
-      _T_99_real <= _T_96_real;
-    end
-    if (io_en) begin
-      _T_99_imag <= _T_96_imag;
-    end
-    if (io_en) begin
-      _T_102_real <= _T_99_real;
-    end
-    if (io_en) begin
-      _T_102_imag <= _T_99_imag;
-    end
-    if (io_en) begin
-      _T_105_real <= _T_102_real;
-    end
-    if (io_en) begin
-      _T_105_imag <= _T_102_imag;
-    end
-    if (io_en) begin
-      _T_108_real <= _T_105_real;
-    end
-    if (io_en) begin
-      _T_108_imag <= _T_105_imag;
-    end
-    if (io_en) begin
-      _T_111_real <= _T_108_real;
-    end
-    if (io_en) begin
-      _T_111_imag <= _T_108_imag;
-    end
-    feedback_real <= shift_out_real;
-    feedback_imag <= shift_out_imag;
-    butt_out_0_real <= _T_128[16:1];
-    butt_out_0_imag <= _T_135[16:1];
-    if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
-    end
-  end
-endmodule
-module SDFStageRadix22_4(
-  input         clock,
-  input         reset,
-  input  [15:0] io_in_real,
-  input  [15:0] io_in_imag,
-  output [15:0] io_out_real,
-  output [15:0] io_out_imag,
-  input  [8:0]  io_cntr,
-  input         io_en
-);
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  reg [15:0] shift_out_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_0;
-  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_92; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_94; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_97; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] shift_out_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_1;
-  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_99; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_101; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_104; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_2;
-  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_3;
-  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_4;
-  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_5;
-  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_6;
-  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_7;
-  reg [15:0] _T_30_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_8;
-  reg [15:0] _T_30_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_9;
-  reg [15:0] _T_33_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_10;
-  reg [15:0] _T_33_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_11;
-  reg [15:0] _T_36_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_12;
-  reg [15:0] _T_36_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_13;
-  reg [15:0] _T_39_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_14;
-  reg [15:0] _T_39_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_15;
-  reg [15:0] _T_42_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_16;
-  reg [15:0] _T_42_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_17;
-  reg [15:0] _T_45_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_18;
-  reg [15:0] _T_45_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_19;
-  reg [15:0] _T_48_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_20;
-  reg [15:0] _T_48_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_21;
-  reg [15:0] _T_51_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_22;
-  reg [15:0] _T_51_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_23;
-  reg [15:0] _T_54_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_24;
-  reg [15:0] _T_54_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_25;
-  reg [15:0] _T_57_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_26;
-  reg [15:0] _T_57_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_27;
-  reg [15:0] _T_60_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_28;
-  reg [15:0] _T_60_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_29;
-  reg [15:0] _T_63_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_30;
-  reg [15:0] _T_63_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_31;
-  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
-  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
-  wire [17:0] _T_75; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_77; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_80; // @[FixedPointTypeClass.scala 20:58]
-  wire [17:0] _T_82; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_84; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_87; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_32;
-  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_33;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_34;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_35;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_36;
-  assign load_input = io_cntr < 9'h10; // @[SDFChainRadix22.scala 467:66]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_92 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_94 = _T_92[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_97 = $signed(_T_94) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_real = _T_97[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_99 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_101 = _T_99[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_104 = $signed(_T_101) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_imag = _T_104[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
-  assign _T_75 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_77 = _T_75[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_80 = $signed(_T_77) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_82 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_84 = _T_82[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_87 = $signed(_T_84) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  shift_out_real = _RAND_0[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  shift_out_imag = _RAND_1[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  _T_21_real = _RAND_2[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  _T_21_imag = _RAND_3[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  _T_24_real = _RAND_4[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  _T_24_imag = _RAND_5[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  _T_27_real = _RAND_6[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_7 = {1{`RANDOM}};
-  _T_27_imag = _RAND_7[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_8 = {1{`RANDOM}};
-  _T_30_real = _RAND_8[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_9 = {1{`RANDOM}};
-  _T_30_imag = _RAND_9[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_10 = {1{`RANDOM}};
-  _T_33_real = _RAND_10[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_11 = {1{`RANDOM}};
-  _T_33_imag = _RAND_11[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_12 = {1{`RANDOM}};
-  _T_36_real = _RAND_12[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_13 = {1{`RANDOM}};
-  _T_36_imag = _RAND_13[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_14 = {1{`RANDOM}};
-  _T_39_real = _RAND_14[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_15 = {1{`RANDOM}};
-  _T_39_imag = _RAND_15[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_16 = {1{`RANDOM}};
-  _T_42_real = _RAND_16[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_17 = {1{`RANDOM}};
-  _T_42_imag = _RAND_17[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_18 = {1{`RANDOM}};
-  _T_45_real = _RAND_18[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_19 = {1{`RANDOM}};
-  _T_45_imag = _RAND_19[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_20 = {1{`RANDOM}};
-  _T_48_real = _RAND_20[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_21 = {1{`RANDOM}};
-  _T_48_imag = _RAND_21[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_22 = {1{`RANDOM}};
-  _T_51_real = _RAND_22[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_23 = {1{`RANDOM}};
-  _T_51_imag = _RAND_23[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_24 = {1{`RANDOM}};
-  _T_54_real = _RAND_24[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_25 = {1{`RANDOM}};
-  _T_54_imag = _RAND_25[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_26 = {1{`RANDOM}};
-  _T_57_real = _RAND_26[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_27 = {1{`RANDOM}};
-  _T_57_imag = _RAND_27[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_28 = {1{`RANDOM}};
-  _T_60_real = _RAND_28[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_29 = {1{`RANDOM}};
-  _T_60_imag = _RAND_29[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_30 = {1{`RANDOM}};
-  _T_63_real = _RAND_30[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_31 = {1{`RANDOM}};
-  _T_63_imag = _RAND_31[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_32 = {1{`RANDOM}};
-  feedback_real = _RAND_32[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_33 = {1{`RANDOM}};
-  feedback_imag = _RAND_33[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_34 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_34[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_35 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_35[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_36 = {1{`RANDOM}};
-  load_output = _RAND_36[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if (io_en) begin
-      shift_out_real <= _T_63_real;
-    end
-    if (io_en) begin
-      shift_out_imag <= _T_63_imag;
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_real <= io_in_real;
-      end else begin
-        _T_21_real <= butterfly_outputs_1_real;
-      end
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_imag <= io_in_imag;
-      end else begin
-        _T_21_imag <= butterfly_outputs_1_imag;
-      end
-    end
-    if (io_en) begin
-      _T_24_real <= _T_21_real;
-    end
-    if (io_en) begin
-      _T_24_imag <= _T_21_imag;
-    end
-    if (io_en) begin
-      _T_27_real <= _T_24_real;
-    end
-    if (io_en) begin
-      _T_27_imag <= _T_24_imag;
-    end
-    if (io_en) begin
-      _T_30_real <= _T_27_real;
-    end
-    if (io_en) begin
-      _T_30_imag <= _T_27_imag;
-    end
-    if (io_en) begin
-      _T_33_real <= _T_30_real;
-    end
-    if (io_en) begin
-      _T_33_imag <= _T_30_imag;
-    end
-    if (io_en) begin
-      _T_36_real <= _T_33_real;
-    end
-    if (io_en) begin
-      _T_36_imag <= _T_33_imag;
-    end
-    if (io_en) begin
-      _T_39_real <= _T_36_real;
-    end
-    if (io_en) begin
-      _T_39_imag <= _T_36_imag;
-    end
-    if (io_en) begin
-      _T_42_real <= _T_39_real;
-    end
-    if (io_en) begin
-      _T_42_imag <= _T_39_imag;
-    end
-    if (io_en) begin
-      _T_45_real <= _T_42_real;
-    end
-    if (io_en) begin
-      _T_45_imag <= _T_42_imag;
-    end
-    if (io_en) begin
-      _T_48_real <= _T_45_real;
-    end
-    if (io_en) begin
-      _T_48_imag <= _T_45_imag;
-    end
-    if (io_en) begin
-      _T_51_real <= _T_48_real;
-    end
-    if (io_en) begin
-      _T_51_imag <= _T_48_imag;
-    end
-    if (io_en) begin
-      _T_54_real <= _T_51_real;
-    end
-    if (io_en) begin
-      _T_54_imag <= _T_51_imag;
-    end
-    if (io_en) begin
-      _T_57_real <= _T_54_real;
-    end
-    if (io_en) begin
-      _T_57_imag <= _T_54_imag;
-    end
-    if (io_en) begin
-      _T_60_real <= _T_57_real;
-    end
-    if (io_en) begin
-      _T_60_imag <= _T_57_imag;
-    end
-    if (io_en) begin
-      _T_63_real <= _T_60_real;
-    end
-    if (io_en) begin
-      _T_63_imag <= _T_60_imag;
-    end
-    feedback_real <= shift_out_real;
-    feedback_imag <= shift_out_imag;
-    butt_out_0_real <= _T_80[16:1];
-    butt_out_0_imag <= _T_87[16:1];
-    if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
-    end
-  end
-endmodule
-module SDFStageRadix22_5(
-  input         clock,
-  input         reset,
-  input  [15:0] io_in_real,
-  input  [15:0] io_in_imag,
-  output [15:0] io_out_real,
-  output [15:0] io_out_imag,
-  input  [8:0]  io_cntr,
-  input         io_en
-);
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  reg [15:0] shift_out_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_0;
-  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_68; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_70; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_73; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] shift_out_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_1;
-  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_75; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_77; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_80; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_2;
-  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_3;
-  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_4;
-  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_5;
-  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_6;
-  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_7;
-  reg [15:0] _T_30_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_8;
-  reg [15:0] _T_30_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_9;
-  reg [15:0] _T_33_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_10;
-  reg [15:0] _T_33_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_11;
-  reg [15:0] _T_36_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_12;
-  reg [15:0] _T_36_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_13;
-  reg [15:0] _T_39_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_14;
-  reg [15:0] _T_39_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_15;
-  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
-  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
-  wire [17:0] _T_51; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_53; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_56; // @[FixedPointTypeClass.scala 20:58]
-  wire [17:0] _T_58; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_60; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_63; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_16;
-  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_17;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_18;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_19;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_20;
-  assign load_input = io_cntr < 9'h8; // @[SDFChainRadix22.scala 467:66]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_68 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_70 = _T_68[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_73 = $signed(_T_70) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_real = _T_73[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_75 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_77 = _T_75[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_80 = $signed(_T_77) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_imag = _T_80[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
-  assign _T_51 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_53 = _T_51[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_56 = $signed(_T_53) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_58 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_60 = _T_58[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_63 = $signed(_T_60) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  shift_out_real = _RAND_0[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  shift_out_imag = _RAND_1[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  _T_21_real = _RAND_2[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  _T_21_imag = _RAND_3[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  _T_24_real = _RAND_4[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  _T_24_imag = _RAND_5[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  _T_27_real = _RAND_6[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_7 = {1{`RANDOM}};
-  _T_27_imag = _RAND_7[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_8 = {1{`RANDOM}};
-  _T_30_real = _RAND_8[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_9 = {1{`RANDOM}};
-  _T_30_imag = _RAND_9[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_10 = {1{`RANDOM}};
-  _T_33_real = _RAND_10[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_11 = {1{`RANDOM}};
-  _T_33_imag = _RAND_11[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_12 = {1{`RANDOM}};
-  _T_36_real = _RAND_12[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_13 = {1{`RANDOM}};
-  _T_36_imag = _RAND_13[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_14 = {1{`RANDOM}};
-  _T_39_real = _RAND_14[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_15 = {1{`RANDOM}};
-  _T_39_imag = _RAND_15[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_16 = {1{`RANDOM}};
-  feedback_real = _RAND_16[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_17 = {1{`RANDOM}};
-  feedback_imag = _RAND_17[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_18 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_18[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_19 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_19[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_20 = {1{`RANDOM}};
-  load_output = _RAND_20[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if (io_en) begin
-      shift_out_real <= _T_39_real;
-    end
-    if (io_en) begin
-      shift_out_imag <= _T_39_imag;
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_real <= io_in_real;
-      end else begin
-        _T_21_real <= butterfly_outputs_1_real;
-      end
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_imag <= io_in_imag;
-      end else begin
-        _T_21_imag <= butterfly_outputs_1_imag;
-      end
-    end
-    if (io_en) begin
-      _T_24_real <= _T_21_real;
-    end
-    if (io_en) begin
-      _T_24_imag <= _T_21_imag;
-    end
-    if (io_en) begin
-      _T_27_real <= _T_24_real;
-    end
-    if (io_en) begin
-      _T_27_imag <= _T_24_imag;
-    end
-    if (io_en) begin
-      _T_30_real <= _T_27_real;
-    end
-    if (io_en) begin
-      _T_30_imag <= _T_27_imag;
-    end
-    if (io_en) begin
-      _T_33_real <= _T_30_real;
-    end
-    if (io_en) begin
-      _T_33_imag <= _T_30_imag;
-    end
-    if (io_en) begin
-      _T_36_real <= _T_33_real;
-    end
-    if (io_en) begin
-      _T_36_imag <= _T_33_imag;
-    end
-    if (io_en) begin
-      _T_39_real <= _T_36_real;
-    end
-    if (io_en) begin
-      _T_39_imag <= _T_36_imag;
-    end
-    feedback_real <= shift_out_real;
-    feedback_imag <= shift_out_imag;
-    butt_out_0_real <= _T_56[16:1];
-    butt_out_0_imag <= _T_63[16:1];
-    if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
-    end
-  end
-endmodule
-module SDFStageRadix22_6(
-  input         clock,
-  input         reset,
-  input  [15:0] io_in_real,
-  input  [15:0] io_in_imag,
-  output [15:0] io_out_real,
-  output [15:0] io_out_imag,
-  input  [8:0]  io_cntr,
-  input         io_en
-);
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  reg [15:0] shift_out_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_0;
-  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_56; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_58; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_61; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] shift_out_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_1;
-  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_63; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_65; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_68; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_2;
-  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_3;
-  reg [15:0] _T_24_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_4;
-  reg [15:0] _T_24_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_5;
-  reg [15:0] _T_27_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_6;
-  reg [15:0] _T_27_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_7;
-  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
-  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
-  wire [17:0] _T_39; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_41; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_44; // @[FixedPointTypeClass.scala 20:58]
-  wire [17:0] _T_46; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_48; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_51; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_8;
-  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_9;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_10;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_11;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_12;
-  assign load_input = io_cntr < 9'h4; // @[SDFChainRadix22.scala 467:66]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_56 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_58 = _T_56[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_61 = $signed(_T_58) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_real = _T_61[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_63 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_65 = _T_63[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_68 = $signed(_T_65) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_imag = _T_68[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
-  assign _T_39 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_41 = _T_39[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_44 = $signed(_T_41) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_46 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_48 = _T_46[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_51 = $signed(_T_48) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  shift_out_real = _RAND_0[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  shift_out_imag = _RAND_1[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  _T_21_real = _RAND_2[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  _T_21_imag = _RAND_3[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  _T_24_real = _RAND_4[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  _T_24_imag = _RAND_5[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  _T_27_real = _RAND_6[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_7 = {1{`RANDOM}};
-  _T_27_imag = _RAND_7[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_8 = {1{`RANDOM}};
-  feedback_real = _RAND_8[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_9 = {1{`RANDOM}};
-  feedback_imag = _RAND_9[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_10 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_10[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_11 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_11[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_12 = {1{`RANDOM}};
-  load_output = _RAND_12[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if (io_en) begin
-      shift_out_real <= _T_27_real;
-    end
-    if (io_en) begin
-      shift_out_imag <= _T_27_imag;
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_real <= io_in_real;
-      end else begin
-        _T_21_real <= butterfly_outputs_1_real;
-      end
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_imag <= io_in_imag;
-      end else begin
-        _T_21_imag <= butterfly_outputs_1_imag;
-      end
-    end
-    if (io_en) begin
-      _T_24_real <= _T_21_real;
-    end
-    if (io_en) begin
-      _T_24_imag <= _T_21_imag;
-    end
-    if (io_en) begin
-      _T_27_real <= _T_24_real;
-    end
-    if (io_en) begin
-      _T_27_imag <= _T_24_imag;
-    end
-    feedback_real <= shift_out_real;
-    feedback_imag <= shift_out_imag;
-    butt_out_0_real <= _T_44[16:1];
-    butt_out_0_imag <= _T_51[16:1];
-    if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
-    end
-  end
-endmodule
-module SDFStageRadix22_7(
-  input         clock,
-  input         reset,
-  input  [15:0] io_in_real,
-  input  [15:0] io_in_imag,
-  output [15:0] io_out_real,
-  output [15:0] io_out_imag,
-  input  [8:0]  io_cntr,
-  input         io_en
-);
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  reg [15:0] shift_out_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_0;
-  wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_50; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_52; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_55; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] shift_out_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_1;
-  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_57; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_59; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_62; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] _T_21_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_2;
-  reg [15:0] _T_21_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_3;
-  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
-  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
-  wire [17:0] _T_33; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_35; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_38; // @[FixedPointTypeClass.scala 20:58]
-  wire [17:0] _T_40; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_42; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_45; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_4;
-  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_5;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_6;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_7;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_8;
-  assign load_input = io_cntr < 9'h2; // @[SDFChainRadix22.scala 467:66]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_50 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_52 = _T_50[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_55 = $signed(_T_52) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_real = _T_55[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_57 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_59 = _T_57[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_62 = $signed(_T_59) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_imag = _T_62[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
-  assign _T_33 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_35 = _T_33[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_38 = $signed(_T_35) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_40 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_42 = _T_40[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_45 = $signed(_T_42) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  shift_out_real = _RAND_0[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  shift_out_imag = _RAND_1[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  _T_21_real = _RAND_2[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  _T_21_imag = _RAND_3[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  feedback_real = _RAND_4[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  feedback_imag = _RAND_5[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_6[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_7 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_7[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_8 = {1{`RANDOM}};
-  load_output = _RAND_8[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if (io_en) begin
-      shift_out_real <= _T_21_real;
-    end
-    if (io_en) begin
-      shift_out_imag <= _T_21_imag;
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_real <= io_in_real;
-      end else begin
-        _T_21_real <= butterfly_outputs_1_real;
-      end
-    end
-    if (io_en) begin
-      if (load_input) begin
-        _T_21_imag <= io_in_imag;
-      end else begin
-        _T_21_imag <= butterfly_outputs_1_imag;
-      end
-    end
-    feedback_real <= shift_out_real;
-    feedback_imag <= shift_out_imag;
-    butt_out_0_real <= _T_38[16:1];
-    butt_out_0_imag <= _T_45[16:1];
-    if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
-    end
   end
 endmodule
 module SDFStageRadix22_8(
@@ -6056,60 +5736,90 @@ module SDFStageRadix22_8(
   input  [8:0]  io_cntr,
   input         io_en
 );
-  wire  load_input; // @[SDFChainRadix22.scala 467:66]
-  reg [15:0] shift_out_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_0;
+  wire [7:0] SRAM_depth_256_width_32_mem_R0_addr; // @[ShiftRegisterMem.scala 48:28]
+  wire  SRAM_depth_256_width_32_mem_R0_en; // @[ShiftRegisterMem.scala 48:28]
+  wire  SRAM_depth_256_width_32_mem_R0_clk; // @[ShiftRegisterMem.scala 48:28]
+  wire [15:0] SRAM_depth_256_width_32_mem_R0_data_real; // @[ShiftRegisterMem.scala 48:28]
+  wire [15:0] SRAM_depth_256_width_32_mem_R0_data_imag; // @[ShiftRegisterMem.scala 48:28]
+  wire [7:0] SRAM_depth_256_width_32_mem_W0_addr; // @[ShiftRegisterMem.scala 48:28]
+  wire  SRAM_depth_256_width_32_mem_W0_en; // @[ShiftRegisterMem.scala 48:28]
+  wire  SRAM_depth_256_width_32_mem_W0_clk; // @[ShiftRegisterMem.scala 48:28]
+  wire [15:0] SRAM_depth_256_width_32_mem_W0_data_real; // @[ShiftRegisterMem.scala 48:28]
+  wire [15:0] SRAM_depth_256_width_32_mem_W0_data_imag; // @[ShiftRegisterMem.scala 48:28]
+  wire  load_input; // @[UIntTypeClass.scala 52:47]
+  wire [15:0] feedback_real; // @[SDFChainRadix22.scala 470:23 SDFChainRadix22.scala 483:17]
   wire [16:0] butt_outputs_1_real; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_57; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_59; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_62; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
+  wire [15:0] feedback_imag; // @[SDFChainRadix22.scala 470:23 SDFChainRadix22.scala 483:17]
+  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
+  wire [17:0] _T_64; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_66; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_69; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
+  reg [7:0] value; // @[Counter.scala 29:33]
+  reg [31:0] _RAND_0;
+  wire [7:0] _T_22; // @[Counter.scala 39:22]
+  reg [7:0] _T_26; // @[Reg.scala 27:20]
+  reg [31:0] _RAND_1;
+  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
+  wire [17:0] _T_40; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [16:0] _T_42; // @[FixedPointTypeClass.scala 133:23]
+  wire [16:0] _T_45; // @[FixedPointTypeClass.scala 20:58]
+  wire [15:0] butt_out_0_real; // @[FixedPointTypeClass.scala 176:41]
   wire [17:0] _T_47; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   wire [16:0] _T_49; // @[FixedPointTypeClass.scala 133:23]
   wire [16:0] _T_52; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_real; // @[FixedPointTypeClass.scala 176:41]
-  reg [15:0] shift_out_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_1;
-  wire [16:0] butt_outputs_1_imag; // @[FixedPointTypeClass.scala 33:22]
-  wire [17:0] _T_54; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_56; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_59; // @[FixedPointTypeClass.scala 20:58]
-  wire [15:0] butterfly_outputs_1_imag; // @[FixedPointTypeClass.scala 176:41]
-  wire [16:0] butt_outputs_0_real; // @[FixedPointTypeClass.scala 24:22]
-  wire [16:0] butt_outputs_0_imag; // @[FixedPointTypeClass.scala 24:22]
-  wire [17:0] _T_30; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_32; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_35; // @[FixedPointTypeClass.scala 20:58]
-  wire [17:0] _T_37; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [16:0] _T_39; // @[FixedPointTypeClass.scala 133:23]
-  wire [16:0] _T_42; // @[FixedPointTypeClass.scala 20:58]
-  reg [15:0] feedback_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_2;
-  reg [15:0] feedback_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_3;
-  reg [15:0] butt_out_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_4;
-  reg [15:0] butt_out_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_5;
-  reg  load_output; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_6;
-  assign load_input = io_cntr < 9'h1; // @[SDFChainRadix22.scala 467:66]
-  assign butt_outputs_1_real = $signed(shift_out_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_47 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [15:0] butt_out_0_imag; // @[FixedPointTypeClass.scala 176:41]
+  SRAM_depth_256_width_32_mem SRAM_depth_256_width_32_mem ( // @[ShiftRegisterMem.scala 48:28]
+    .R0_addr(SRAM_depth_256_width_32_mem_R0_addr),
+    .R0_en(SRAM_depth_256_width_32_mem_R0_en),
+    .R0_clk(SRAM_depth_256_width_32_mem_R0_clk),
+    .R0_data_real(SRAM_depth_256_width_32_mem_R0_data_real),
+    .R0_data_imag(SRAM_depth_256_width_32_mem_R0_data_imag),
+    .W0_addr(SRAM_depth_256_width_32_mem_W0_addr),
+    .W0_en(SRAM_depth_256_width_32_mem_W0_en),
+    .W0_clk(SRAM_depth_256_width_32_mem_W0_clk),
+    .W0_data_real(SRAM_depth_256_width_32_mem_W0_data_real),
+    .W0_data_imag(SRAM_depth_256_width_32_mem_W0_data_imag)
+  );
+  assign load_input = io_cntr < 9'h100; // @[UIntTypeClass.scala 52:47]
+  assign feedback_real = SRAM_depth_256_width_32_mem_R0_data_real; // @[SDFChainRadix22.scala 470:23 SDFChainRadix22.scala 483:17]
+  assign butt_outputs_1_real = $signed(feedback_real) - $signed(io_in_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_57 = {$signed(butt_outputs_1_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_59 = _T_57[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_62 = $signed(_T_59) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_real = _T_62[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign feedback_imag = SRAM_depth_256_width_32_mem_R0_data_imag; // @[SDFChainRadix22.scala 470:23 SDFChainRadix22.scala 483:17]
+  assign butt_outputs_1_imag = $signed(feedback_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_64 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_66 = _T_64[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_69 = $signed(_T_66) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butterfly_outputs_1_imag = _T_69[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_22 = value + 8'h1; // @[Counter.scala 39:22]
+  assign butt_outputs_0_real = $signed(feedback_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
+  assign butt_outputs_0_imag = $signed(feedback_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_40 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_42 = _T_40[17:1]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_45 = $signed(_T_42) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
+  assign butt_out_0_real = _T_45[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_47 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
   assign _T_49 = _T_47[17:1]; // @[FixedPointTypeClass.scala 133:23]
   assign _T_52 = $signed(_T_49) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_real = _T_52[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_1_imag = $signed(shift_out_imag) - $signed(io_in_imag); // @[FixedPointTypeClass.scala 33:22]
-  assign _T_54 = {$signed(butt_outputs_1_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_56 = _T_54[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_59 = $signed(_T_56) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign butterfly_outputs_1_imag = _T_59[16:1]; // @[FixedPointTypeClass.scala 176:41]
-  assign butt_outputs_0_real = $signed(shift_out_real) + $signed(io_in_real); // @[FixedPointTypeClass.scala 24:22]
-  assign butt_outputs_0_imag = $signed(shift_out_imag) + $signed(io_in_imag); // @[FixedPointTypeClass.scala 24:22]
-  assign _T_30 = {$signed(butt_outputs_0_real), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_32 = _T_30[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_35 = $signed(_T_32) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_37 = {$signed(butt_outputs_0_imag), 1'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_39 = _T_37[17:1]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_42 = $signed(_T_39) + 17'sh1; // @[FixedPointTypeClass.scala 20:58]
-  assign io_out_real = load_output ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
-  assign io_out_imag = load_output ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+  assign butt_out_0_imag = _T_52[16:1]; // @[FixedPointTypeClass.scala 176:41]
+  assign io_out_real = load_input ? $signed(feedback_real) : $signed(butt_out_0_real); // @[SDFChainRadix22.scala 463:10]
+  assign io_out_imag = load_input ? $signed(feedback_imag) : $signed(butt_out_0_imag); // @[SDFChainRadix22.scala 463:10]
+  assign SRAM_depth_256_width_32_mem_R0_addr = value; // @[ShiftRegisterMem.scala 53:25]
+  assign SRAM_depth_256_width_32_mem_R0_en = io_en; // @[ShiftRegisterMem.scala 48:28 Counter.scala 39:13]
+  assign SRAM_depth_256_width_32_mem_R0_clk = clock; // @[ShiftRegisterMem.scala 53:25]
+  assign SRAM_depth_256_width_32_mem_W0_addr = _T_26;
+  assign SRAM_depth_256_width_32_mem_W0_en = io_en; // @[ShiftRegisterMem.scala 48:28]
+  assign SRAM_depth_256_width_32_mem_W0_clk = clock;
+  assign SRAM_depth_256_width_32_mem_W0_data_real = load_input ? $signed(io_in_real) : $signed(butterfly_outputs_1_real);
+  assign SRAM_depth_256_width_32_mem_W0_data_imag = load_input ? $signed(io_in_imag) : $signed(butterfly_outputs_1_imag);
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -6143,248 +5853,25 @@ initial begin
     `endif
   `ifdef RANDOMIZE_REG_INIT
   _RAND_0 = {1{`RANDOM}};
-  shift_out_real = _RAND_0[15:0];
+  value = _RAND_0[7:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_1 = {1{`RANDOM}};
-  shift_out_imag = _RAND_1[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  feedback_real = _RAND_2[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  feedback_imag = _RAND_3[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  butt_out_0_real = _RAND_4[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  butt_out_0_imag = _RAND_5[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  load_output = _RAND_6[0:0];
+  _T_26 = _RAND_1[7:0];
   `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
 `endif // SYNTHESIS
   always @(posedge clock) begin
-    if (io_en) begin
-      if (load_input) begin
-        shift_out_real <= io_in_real;
-      end else begin
-        shift_out_real <= butterfly_outputs_1_real;
-      end
-    end
-    if (io_en) begin
-      if (load_input) begin
-        shift_out_imag <= io_in_imag;
-      end else begin
-        shift_out_imag <= butterfly_outputs_1_imag;
-      end
-    end
-    feedback_real <= shift_out_real;
-    feedback_imag <= shift_out_imag;
-    butt_out_0_real <= _T_35[16:1];
-    butt_out_0_imag <= _T_42[16:1];
     if (reset) begin
-      load_output <= 1'h0;
-    end else begin
-      load_output <= load_input;
-    end
-  end
-endmodule
-module Queue(
-  input         clock,
-  input         reset,
-  output        io_enq_ready,
-  input         io_enq_valid,
-  input  [15:0] io_enq_bits_real,
-  input  [15:0] io_enq_bits_imag,
-  input         io_deq_ready,
-  output        io_deq_valid,
-  output [15:0] io_deq_bits_real,
-  output [15:0] io_deq_bits_imag
-);
-  reg [15:0] _T_4_real [0:27]; // @[Decoupled.scala 209:24]
-  reg [31:0] _RAND_0;
-  wire [15:0] _T_4_real__T_26_data; // @[Decoupled.scala 209:24]
-  wire [4:0] _T_4_real__T_26_addr; // @[Decoupled.scala 209:24]
-  reg [31:0] _RAND_1;
-  wire [15:0] _T_4_real__T_16_data; // @[Decoupled.scala 209:24]
-  wire [4:0] _T_4_real__T_16_addr; // @[Decoupled.scala 209:24]
-  wire  _T_4_real__T_16_mask; // @[Decoupled.scala 209:24]
-  wire  _T_4_real__T_16_en; // @[Decoupled.scala 209:24]
-  reg [15:0] _T_4_imag [0:27]; // @[Decoupled.scala 209:24]
-  reg [31:0] _RAND_2;
-  wire [15:0] _T_4_imag__T_26_data; // @[Decoupled.scala 209:24]
-  wire [4:0] _T_4_imag__T_26_addr; // @[Decoupled.scala 209:24]
-  reg [31:0] _RAND_3;
-  wire [15:0] _T_4_imag__T_16_data; // @[Decoupled.scala 209:24]
-  wire [4:0] _T_4_imag__T_16_addr; // @[Decoupled.scala 209:24]
-  wire  _T_4_imag__T_16_mask; // @[Decoupled.scala 209:24]
-  wire  _T_4_imag__T_16_en; // @[Decoupled.scala 209:24]
-  reg [4:0] value; // @[Counter.scala 29:33]
-  reg [31:0] _RAND_4;
-  reg [4:0] value_1; // @[Counter.scala 29:33]
-  reg [31:0] _RAND_5;
-  reg  _T_5; // @[Decoupled.scala 212:35]
-  reg [31:0] _RAND_6;
-  wire  _T_6; // @[Decoupled.scala 214:41]
-  wire  _T_7; // @[Decoupled.scala 215:36]
-  wire  _T_8; // @[Decoupled.scala 215:33]
-  wire  _T_9; // @[Decoupled.scala 216:32]
-  wire  _T_10; // @[Decoupled.scala 40:37]
-  wire  _T_12; // @[Decoupled.scala 40:37]
-  wire  wrap; // @[Counter.scala 38:24]
-  wire [4:0] _T_18; // @[Counter.scala 39:22]
-  wire  _GEN_12; // @[Decoupled.scala 240:27]
-  wire  _GEN_16; // @[Decoupled.scala 237:18]
-  wire  wrap_1; // @[Counter.scala 38:24]
-  wire [4:0] _T_20; // @[Counter.scala 39:22]
-  wire  _GEN_15; // @[Decoupled.scala 237:18]
-  wire  _T_21; // @[Decoupled.scala 227:16]
-  wire  _T_22; // @[Decoupled.scala 231:19]
-  wire  _T_23; // @[Decoupled.scala 232:19]
-  assign _T_4_real__T_26_addr = value_1;
-  `ifndef RANDOMIZE_GARBAGE_ASSIGN
-  assign _T_4_real__T_26_data = _T_4_real[_T_4_real__T_26_addr]; // @[Decoupled.scala 209:24]
-  `else
-  assign _T_4_real__T_26_data = _T_4_real__T_26_addr >= 5'h1c ? _RAND_1[15:0] : _T_4_real[_T_4_real__T_26_addr]; // @[Decoupled.scala 209:24]
-  `endif // RANDOMIZE_GARBAGE_ASSIGN
-  assign _T_4_real__T_16_data = io_enq_bits_real;
-  assign _T_4_real__T_16_addr = value;
-  assign _T_4_real__T_16_mask = 1'h1;
-  assign _T_4_real__T_16_en = _T_8 ? _GEN_12 : _T_10;
-  assign _T_4_imag__T_26_addr = value_1;
-  `ifndef RANDOMIZE_GARBAGE_ASSIGN
-  assign _T_4_imag__T_26_data = _T_4_imag[_T_4_imag__T_26_addr]; // @[Decoupled.scala 209:24]
-  `else
-  assign _T_4_imag__T_26_data = _T_4_imag__T_26_addr >= 5'h1c ? _RAND_3[15:0] : _T_4_imag[_T_4_imag__T_26_addr]; // @[Decoupled.scala 209:24]
-  `endif // RANDOMIZE_GARBAGE_ASSIGN
-  assign _T_4_imag__T_16_data = io_enq_bits_imag;
-  assign _T_4_imag__T_16_addr = value;
-  assign _T_4_imag__T_16_mask = 1'h1;
-  assign _T_4_imag__T_16_en = _T_8 ? _GEN_12 : _T_10;
-  assign _T_6 = value == value_1; // @[Decoupled.scala 214:41]
-  assign _T_7 = ~_T_5; // @[Decoupled.scala 215:36]
-  assign _T_8 = _T_6 & _T_7; // @[Decoupled.scala 215:33]
-  assign _T_9 = _T_6 & _T_5; // @[Decoupled.scala 216:32]
-  assign _T_10 = io_enq_ready & io_enq_valid; // @[Decoupled.scala 40:37]
-  assign _T_12 = io_deq_ready & io_deq_valid; // @[Decoupled.scala 40:37]
-  assign wrap = value == 5'h1b; // @[Counter.scala 38:24]
-  assign _T_18 = value + 5'h1; // @[Counter.scala 39:22]
-  assign _GEN_12 = io_deq_ready ? 1'h0 : _T_10; // @[Decoupled.scala 240:27]
-  assign _GEN_16 = _T_8 ? _GEN_12 : _T_10; // @[Decoupled.scala 237:18]
-  assign wrap_1 = value_1 == 5'h1b; // @[Counter.scala 38:24]
-  assign _T_20 = value_1 + 5'h1; // @[Counter.scala 39:22]
-  assign _GEN_15 = _T_8 ? 1'h0 : _T_12; // @[Decoupled.scala 237:18]
-  assign _T_21 = _GEN_16 != _GEN_15; // @[Decoupled.scala 227:16]
-  assign _T_22 = ~_T_8; // @[Decoupled.scala 231:19]
-  assign _T_23 = ~_T_9; // @[Decoupled.scala 232:19]
-  assign io_enq_ready = io_deq_ready | _T_23; // @[Decoupled.scala 232:16 Decoupled.scala 245:40]
-  assign io_deq_valid = io_enq_valid | _T_22; // @[Decoupled.scala 231:16 Decoupled.scala 236:40]
-  assign io_deq_bits_real = _T_8 ? $signed(io_enq_bits_real) : $signed(_T_4_real__T_26_data); // @[Decoupled.scala 233:15 Decoupled.scala 238:19]
-  assign io_deq_bits_imag = _T_8 ? $signed(io_enq_bits_imag) : $signed(_T_4_imag__T_26_data); // @[Decoupled.scala 233:15 Decoupled.scala 238:19]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  _RAND_0 = {1{`RANDOM}};
-  `ifdef RANDOMIZE_MEM_INIT
-  for (initvar = 0; initvar < 28; initvar = initvar+1)
-    _T_4_real[initvar] = _RAND_0[15:0];
-  `endif // RANDOMIZE_MEM_INIT
-  _RAND_1 = {1{`RANDOM}};
-  _RAND_2 = {1{`RANDOM}};
-  `ifdef RANDOMIZE_MEM_INIT
-  for (initvar = 0; initvar < 28; initvar = initvar+1)
-    _T_4_imag[initvar] = _RAND_2[15:0];
-  `endif // RANDOMIZE_MEM_INIT
-  _RAND_3 = {1{`RANDOM}};
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  value = _RAND_4[4:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  value_1 = _RAND_5[4:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  _T_5 = _RAND_6[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if(_T_4_real__T_16_en & _T_4_real__T_16_mask) begin
-      _T_4_real[_T_4_real__T_16_addr] <= _T_4_real__T_16_data; // @[Decoupled.scala 209:24]
-    end
-    if(_T_4_imag__T_16_en & _T_4_imag__T_16_mask) begin
-      _T_4_imag[_T_4_imag__T_16_addr] <= _T_4_imag__T_16_data; // @[Decoupled.scala 209:24]
+      value <= 8'h0;
+    end else if (io_en) begin
+      value <= _T_22;
     end
     if (reset) begin
-      value <= 5'h0;
-    end else if (_GEN_16) begin
-      if (wrap) begin
-        value <= 5'h0;
-      end else begin
-        value <= _T_18;
-      end
-    end
-    if (reset) begin
-      value_1 <= 5'h0;
-    end else if (_GEN_15) begin
-      if (wrap_1) begin
-        value_1 <= 5'h0;
-      end else begin
-        value_1 <= _T_20;
-      end
-    end
-    if (reset) begin
-      _T_5 <= 1'h0;
-    end else if (_T_21) begin
-      if (_T_8) begin
-        if (io_deq_ready) begin
-          _T_5 <= 1'h0;
-        end else begin
-          _T_5 <= _T_10;
-        end
-      end else begin
-        _T_5 <= _T_10;
-      end
+      _T_26 <= 8'hff;
+    end else if (io_en) begin
+      _T_26 <= value;
     end
   end
 endmodule
@@ -6401,11 +5888,9 @@ module SDFChainRadix22(
   output [15:0] io_out_bits_imag,
   output        io_lastOut,
   input         io_lastIn,
-  input  [8:0]  io_fftSize,
   output        io_busy
 );
   wire  sdf_stages_0_clock; // @[SDFChainRadix22.scala 164:25]
-  wire  sdf_stages_0_reset; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_0_io_in_real; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_0_io_in_imag; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_0_io_out_real; // @[SDFChainRadix22.scala 164:25]
@@ -6413,7 +5898,6 @@ module SDFChainRadix22(
   wire [8:0] sdf_stages_0_io_cntr; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_0_io_en; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_1_clock; // @[SDFChainRadix22.scala 164:25]
-  wire  sdf_stages_1_reset; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_1_io_in_real; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_1_io_in_imag; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_1_io_out_real; // @[SDFChainRadix22.scala 164:25]
@@ -6421,7 +5905,6 @@ module SDFChainRadix22(
   wire [8:0] sdf_stages_1_io_cntr; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_1_io_en; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_2_clock; // @[SDFChainRadix22.scala 164:25]
-  wire  sdf_stages_2_reset; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_2_io_in_real; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_2_io_in_imag; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_2_io_out_real; // @[SDFChainRadix22.scala 164:25]
@@ -6429,7 +5912,6 @@ module SDFChainRadix22(
   wire [8:0] sdf_stages_2_io_cntr; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_2_io_en; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_3_clock; // @[SDFChainRadix22.scala 164:25]
-  wire  sdf_stages_3_reset; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_3_io_in_real; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_3_io_in_imag; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_3_io_out_real; // @[SDFChainRadix22.scala 164:25]
@@ -6437,7 +5919,6 @@ module SDFChainRadix22(
   wire [8:0] sdf_stages_3_io_cntr; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_3_io_en; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_4_clock; // @[SDFChainRadix22.scala 164:25]
-  wire  sdf_stages_4_reset; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_4_io_in_real; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_4_io_in_imag; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_4_io_out_real; // @[SDFChainRadix22.scala 164:25]
@@ -6445,7 +5926,6 @@ module SDFChainRadix22(
   wire [8:0] sdf_stages_4_io_cntr; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_4_io_en; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_5_clock; // @[SDFChainRadix22.scala 164:25]
-  wire  sdf_stages_5_reset; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_5_io_in_real; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_5_io_in_imag; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_5_io_out_real; // @[SDFChainRadix22.scala 164:25]
@@ -6453,7 +5933,6 @@ module SDFChainRadix22(
   wire [8:0] sdf_stages_5_io_cntr; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_5_io_en; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_6_clock; // @[SDFChainRadix22.scala 164:25]
-  wire  sdf_stages_6_reset; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_6_io_in_real; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_6_io_in_imag; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_6_io_out_real; // @[SDFChainRadix22.scala 164:25]
@@ -6461,7 +5940,6 @@ module SDFChainRadix22(
   wire [8:0] sdf_stages_6_io_cntr; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_6_io_en; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_7_clock; // @[SDFChainRadix22.scala 164:25]
-  wire  sdf_stages_7_reset; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_7_io_in_real; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_7_io_in_imag; // @[SDFChainRadix22.scala 164:25]
   wire [15:0] sdf_stages_7_io_out_real; // @[SDFChainRadix22.scala 164:25]
@@ -6476,1134 +5954,1373 @@ module SDFChainRadix22(
   wire [15:0] sdf_stages_8_io_out_imag; // @[SDFChainRadix22.scala 164:25]
   wire [8:0] sdf_stages_8_io_cntr; // @[SDFChainRadix22.scala 164:25]
   wire  sdf_stages_8_io_en; // @[SDFChainRadix22.scala 164:25]
-  wire  outQueue_clock; // @[SDFChainRadix22.scala 363:25]
-  wire  outQueue_reset; // @[SDFChainRadix22.scala 363:25]
-  wire  outQueue_io_enq_ready; // @[SDFChainRadix22.scala 363:25]
-  wire  outQueue_io_enq_valid; // @[SDFChainRadix22.scala 363:25]
-  wire [15:0] outQueue_io_enq_bits_real; // @[SDFChainRadix22.scala 363:25]
-  wire [15:0] outQueue_io_enq_bits_imag; // @[SDFChainRadix22.scala 363:25]
-  wire  outQueue_io_deq_ready; // @[SDFChainRadix22.scala 363:25]
-  wire  outQueue_io_deq_valid; // @[SDFChainRadix22.scala 363:25]
-  wire [15:0] outQueue_io_deq_bits_real; // @[SDFChainRadix22.scala 363:25]
-  wire [15:0] outQueue_io_deq_bits_imag; // @[SDFChainRadix22.scala 363:25]
-  reg [8:0] regNumStages; // @[SDFChainRadix22.scala 45:29]
-  reg [31:0] _RAND_0;
   reg [1:0] state; // @[SDFChainRadix22.scala 56:22]
-  reg [31:0] _RAND_1;
+  reg [31:0] _RAND_0;
   reg  initialOutDone; // @[SDFChainRadix22.scala 59:31]
-  reg [31:0] _RAND_2;
+  reg [31:0] _RAND_1;
   reg [9:0] cnt; // @[SDFChainRadix22.scala 60:20]
-  reg [31:0] _RAND_3;
-  wire [8:0] _T_47; // @[SDFChainRadix22.scala 73:39]
-  wire [512:0] _T_48; // @[SDFChainRadix22.scala 73:23]
-  wire  _T_49; // @[Decoupled.scala 40:37]
+  reg [31:0] _RAND_2;
+  wire  _T_46; // @[Decoupled.scala 40:37]
   wire  fireLast; // @[SDFChainRadix22.scala 79:28]
-  wire  _T_56; // @[Conditional.scala 37:30]
+  wire [8:0] _T_48; // @[SDFChainRadix22.scala 81:45]
+  wire  _T_53; // @[Conditional.scala 37:30]
   wire [1:0] _GEN_0; // @[SDFChainRadix22.scala 90:27]
-  wire  _T_59; // @[Conditional.scala 37:30]
+  wire  _T_56; // @[Conditional.scala 37:30]
   wire [1:0] _GEN_1; // @[SDFChainRadix22.scala 93:23]
-  wire  _T_60; // @[Conditional.scala 37:30]
+  wire  _T_57; // @[Conditional.scala 37:30]
   wire [1:0] _GEN_2; // @[SDFChainRadix22.scala 98:25]
   wire [1:0] _GEN_3; // @[Conditional.scala 39:67]
   wire [1:0] _GEN_4; // @[Conditional.scala 39:67]
   wire [1:0] state_next; // @[Conditional.scala 40:58]
   reg [8:0] cntValidOut; // @[SDFChainRadix22.scala 106:28]
-  reg [31:0] _RAND_4;
-  reg  lastWait; // @[SDFChainRadix22.scala 107:25]
-  reg [31:0] _RAND_5;
-  reg  lastIndeed; // @[SDFChainRadix22.scala 108:27]
-  reg [31:0] _RAND_6;
-  reg  initialInDone; // @[SDFChainRadix22.scala 109:30]
-  reg [31:0] _RAND_7;
-  reg  initialInDonePrev; // @[SDFChainRadix22.scala 110:34]
-  reg [31:0] _RAND_8;
-  wire [9:0] numPoints; // @[SDFChainRadix22.scala 50:23 SDFChainRadix22.scala 73:15]
-  wire [9:0] _T_62; // @[SDFChainRadix22.scala 111:44]
-  wire [9:0] _GEN_2584; // @[SDFChainRadix22.scala 111:29]
-  wire  _T_63; // @[SDFChainRadix22.scala 111:29]
-  wire  _T_64; // @[Decoupled.scala 40:37]
+  reg [31:0] _RAND_3;
+  wire [9:0] _T_59; // @[SDFChainRadix22.scala 111:44]
+  wire [9:0] _GEN_2109; // @[SDFChainRadix22.scala 111:29]
+  wire  _T_60; // @[SDFChainRadix22.scala 111:29]
+  wire  _T_61; // @[Decoupled.scala 40:37]
   wire  pktEnd; // @[SDFChainRadix22.scala 111:52]
-  wire  _T_65; // @[SDFChainRadix22.scala 114:20]
-  wire  _T_68; // @[SDFChainRadix22.scala 117:18]
-  wire  _T_70; // @[SDFChainRadix22.scala 117:40]
-  wire  _GEN_17; // @[SDFChainRadix22.scala 117:57]
-  wire  _T_72; // @[SDFChainRadix22.scala 126:41]
-  wire  _T_73; // @[SDFChainRadix22.scala 126:23]
+  wire  _T_62; // @[SDFChainRadix22.scala 114:20]
   wire [8:0] cntr_wires_0; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  reg [9:0] _T_141; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_9;
-  wire [8:0] cntr_wires_1; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
   wire [8:0] _GEN_20; // @[SDFChainRadix22.scala 126:79]
-  reg [9:0] _T_149; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_10;
-  wire [8:0] cntr_wires_2; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
   wire [8:0] _GEN_21; // @[SDFChainRadix22.scala 126:79]
-  reg [9:0] _T_157; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_11;
-  wire [8:0] cntr_wires_3; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
   wire [8:0] _GEN_22; // @[SDFChainRadix22.scala 126:79]
-  reg [9:0] _T_165; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_12;
-  wire [8:0] cntr_wires_4; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
   wire [8:0] _GEN_23; // @[SDFChainRadix22.scala 126:79]
-  reg [9:0] _T_173; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_13;
-  wire [8:0] cntr_wires_5; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
   wire [8:0] _GEN_24; // @[SDFChainRadix22.scala 126:79]
-  reg [9:0] _T_181; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_14;
-  wire [8:0] cntr_wires_6; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
   wire [8:0] _GEN_25; // @[SDFChainRadix22.scala 126:79]
-  reg [9:0] _T_189; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_15;
-  wire [8:0] cntr_wires_7; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
   wire [8:0] _GEN_26; // @[SDFChainRadix22.scala 126:79]
-  reg [9:0] _T_197; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_16;
-  wire [8:0] cntr_wires_8; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
   wire [8:0] _GEN_27; // @[SDFChainRadix22.scala 126:79]
-  wire [9:0] _GEN_2585; // @[SDFChainRadix22.scala 126:79]
-  wire  _T_76; // @[SDFChainRadix22.scala 126:79]
-  wire  _T_77; // @[SDFChainRadix22.scala 126:63]
-  wire  _GEN_28; // @[SDFChainRadix22.scala 126:102]
-  wire  _T_79; // @[SDFChainRadix22.scala 130:31]
-  wire  _T_80; // @[SDFChainRadix22.scala 130:42]
-  wire [8:0] _T_83; // @[SDFChainRadix22.scala 134:32]
-  wire  _T_85; // @[SDFChainRadix22.scala 140:23]
-  wire  _GEN_32; // @[SDFChainRadix22.scala 140:34]
-  wire  _T_86; // @[SDFChainRadix22.scala 144:132]
-  wire  _T_87; // @[SDFChainRadix22.scala 144:159]
-  wire  _T_88; // @[SDFChainRadix22.scala 144:150]
-  wire [8:0] _T_90; // @[SDFChainRadix22.scala 147:62]
-  wire [8:0] _GEN_35; // @[SDFChainRadix22.scala 147:25]
-  wire [8:0] _GEN_36; // @[SDFChainRadix22.scala 147:25]
-  wire [8:0] _GEN_37; // @[SDFChainRadix22.scala 147:25]
-  wire [8:0] _GEN_38; // @[SDFChainRadix22.scala 147:25]
-  wire [8:0] _GEN_39; // @[SDFChainRadix22.scala 147:25]
-  wire [8:0] _GEN_40; // @[SDFChainRadix22.scala 147:25]
-  wire [8:0] _GEN_41; // @[SDFChainRadix22.scala 147:25]
-  wire [8:0] _GEN_42; // @[SDFChainRadix22.scala 147:25]
-  wire [8:0] cumulativeDelayWire; // @[SDFChainRadix22.scala 147:25]
-  wire  activeStages_0; // @[SDFChainRadix22.scala 155:48]
-  wire  activeStages_1; // @[SDFChainRadix22.scala 155:48]
-  wire  activeStages_2; // @[SDFChainRadix22.scala 155:48]
-  wire  activeStages_3; // @[SDFChainRadix22.scala 155:48]
-  wire  activeStages_4; // @[SDFChainRadix22.scala 155:48]
-  wire  activeStages_5; // @[SDFChainRadix22.scala 155:48]
-  wire  activeStages_6; // @[SDFChainRadix22.scala 155:48]
-  wire  activeStages_7; // @[SDFChainRadix22.scala 155:48]
-  wire  activeStages_8; // @[SDFChainRadix22.scala 155:48]
-  wire  _T_130; // @[SDFChainRadix22.scala 173:54]
+  wire [9:0] _GEN_2110; // @[SDFChainRadix22.scala 126:79]
+  wire  _T_76; // @[SDFChainRadix22.scala 130:31]
+  wire  _T_77; // @[SDFChainRadix22.scala 130:42]
+  wire [8:0] _T_80; // @[SDFChainRadix22.scala 134:32]
+  wire  _T_83; // @[SDFChainRadix22.scala 144:90]
+  wire  _T_122; // @[SDFChainRadix22.scala 173:54]
   wire  enableInit; // @[SDFChainRadix22.scala 173:33]
-  wire [9:0] _T_133; // @[SDFChainRadix22.scala 179:16]
-  reg  _T_135; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_17;
-  reg  _T_136; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_18;
-  reg  enableVector_1; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_19;
-  reg [9:0] _T_139; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_20;
-  reg [9:0] _T_140; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_21;
-  reg  _T_143; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_22;
-  reg  _T_144; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_23;
-  reg  enableVector_2; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_24;
-  reg [9:0] _T_147; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_25;
-  reg [9:0] _T_148; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_26;
-  reg  _T_151; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_27;
-  reg  _T_152; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_28;
-  reg  enableVector_3; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_29;
-  reg [9:0] _T_155; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_30;
-  reg [9:0] _T_156; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_31;
-  reg  _T_159; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_32;
-  reg  _T_160; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_33;
-  reg  enableVector_4; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_34;
-  reg [9:0] _T_163; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_35;
-  reg [9:0] _T_164; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_36;
-  reg  _T_167; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_37;
-  reg  _T_168; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_38;
-  reg  enableVector_5; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_39;
-  reg [9:0] _T_171; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_40;
-  reg [9:0] _T_172; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_41;
-  reg  _T_175; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_42;
-  reg  _T_176; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_43;
-  reg  enableVector_6; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_44;
-  reg [9:0] _T_179; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_45;
-  reg [9:0] _T_180; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_46;
-  reg  _T_183; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_47;
-  reg  _T_184; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_48;
-  reg  enableVector_7; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_49;
-  reg [9:0] _T_187; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_50;
-  reg [9:0] _T_188; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_51;
-  reg  _T_191; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_52;
-  reg  _T_192; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_53;
-  reg  enableVector_8; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_54;
-  reg [9:0] _T_195; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_55;
-  reg [9:0] _T_196; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_56;
-  wire [9:0] _T_207; // @[SDFChainRadix22.scala 193:37]
-  wire  _T_208; // @[SDFChainRadix22.scala 193:22]
-  wire  _GEN_155; // @[SDFChainRadix22.scala 193:44]
-  wire  _GEN_156; // @[SDFChainRadix22.scala 193:44]
-  wire  _GEN_157; // @[SDFChainRadix22.scala 193:44]
-  wire  _GEN_158; // @[SDFChainRadix22.scala 193:44]
-  wire  _GEN_159; // @[SDFChainRadix22.scala 193:44]
-  wire  _GEN_160; // @[SDFChainRadix22.scala 193:44]
-  wire  _GEN_161; // @[SDFChainRadix22.scala 193:44]
-  wire  _GEN_162; // @[SDFChainRadix22.scala 193:44]
-  wire  _T_209; // @[SDFChainRadix22.scala 193:44]
-  wire  _GEN_163; // @[SDFChainRadix22.scala 196:36]
-  wire  _GEN_164; // @[SDFChainRadix22.scala 193:60]
-  wire  _T_211; // @[SDFChainRadix22.scala 200:43]
-  reg  _T_212; // @[SDFChainRadix22.scala 200:59]
-  reg [31:0] _RAND_57;
-  wire  _T_214; // @[SDFChainRadix22.scala 200:72]
-  wire  _T_215; // @[SDFChainRadix22.scala 200:101]
-  wire [15:0] input_data_real; // @[SDFChainRadix22.scala 218:23]
-  wire [15:0] input_data_imag; // @[SDFChainRadix22.scala 218:23]
-  wire  _T_225; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_229; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_168; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_169; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_170; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_171; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_172; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_173; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_174; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_175; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_234; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_177; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_178; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_179; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_180; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_181; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_182; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_183; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_184; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_240; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_244; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_186; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_187; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_188; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_189; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_190; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_191; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_192; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_193; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_249; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_195; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_196; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_197; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_198; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_199; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_200; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_201; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_202; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _T_251; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_255; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_259; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_204; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_205; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_206; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_207; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_208; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_209; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_210; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_211; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_264; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_213; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_214; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_215; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_216; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_217; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_218; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_219; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_220; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _T_266; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_270; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_274; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_222; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_223; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_224; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_225; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_226; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_227; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_228; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_229; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_279; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_231; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_232; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_233; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_234; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_235; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_236; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_237; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_238; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _T_281; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_285; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_289; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_240; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_241; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_242; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_243; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_244; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_245; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_246; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_247; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_294; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_249; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_250; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_251; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_252; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_253; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_254; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_255; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_256; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _T_296; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_300; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_304; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_258; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_259; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_260; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_261; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_262; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_263; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_264; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_265; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_309; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_267; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_268; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_269; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_270; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_271; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_272; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_273; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_274; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _T_311; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_315; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_319; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_276; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_277; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_278; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_279; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_280; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_281; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_282; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_283; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_324; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_285; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_286; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_287; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_288; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_289; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_290; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_291; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_292; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _T_326; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_330; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_334; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_294; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_295; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_296; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_297; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_298; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_299; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_300; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_301; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_339; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_303; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_304; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_305; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_306; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_307; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_308; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_309; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_310; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _T_341; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_345; // @[SDFChainRadix22.scala 221:67]
-  wire [8:0] _T_349; // @[SDFChainRadix22.scala 222:63]
-  wire  _GEN_312; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_313; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_314; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_315; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_316; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_317; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_318; // @[SDFChainRadix22.scala 223:20]
-  wire  _GEN_319; // @[SDFChainRadix22.scala 223:20]
-  wire [8:0] _T_354; // @[SDFChainRadix22.scala 224:68]
-  wire [8:0] _GEN_321; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_322; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_323; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_324; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_325; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_326; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_327; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _GEN_328; // @[SDFChainRadix22.scala 224:38]
-  wire [8:0] _T_356; // @[SDFChainRadix22.scala 224:38]
-  wire  _T_363; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] _GEN_329; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] _GEN_330; // @[SDFChainRadix22.scala 241:55]
-  wire  _T_364; // @[SDFChainRadix22.scala 327:98]
-  wire  _T_366; // @[SDFChainRadix22.scala 327:135]
-  wire  _T_367; // @[SDFChainRadix22.scala 327:122]
-  reg  _T_369; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_58;
-  wire [15:0] _T_375; // @[FixedPointTypeClass.scala 39:43]
-  wire [15:0] _T_372_real; // @[SDFChainRadix22.scala 329:32 SDFChainRadix22.scala 332:29]
-  reg [15:0] _T_381_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_59;
-  reg [15:0] _T_381_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_60;
-  reg [15:0] outputWires_0_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_61;
-  reg [15:0] outputWires_0_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_62;
-  wire  _T_390; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] _GEN_338; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] _GEN_339; // @[SDFChainRadix22.scala 241:55]
-  wire [8:0] _T_1683; // @[SDFChainRadix22.scala 283:83]
-  wire [8:0] _T_1687; // @[SDFChainRadix22.scala 283:89]
-  reg [8:0] _T_1689; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_63;
-  reg [15:0] twiddles_1_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_64;
-  reg [15:0] twiddles_1_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_65;
-  wire [7:0] _GEN_499; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_500; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_501; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_502; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_503; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_504; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_505; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_506; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_507; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_508; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_509; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_510; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_511; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_512; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_513; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_514; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_515; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_516; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_517; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_518; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_519; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_520; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_521; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_522; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_523; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_524; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_525; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_526; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_527; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_528; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_529; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_530; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_531; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_532; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_533; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_534; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_535; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_536; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_537; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_538; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_539; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_540; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_541; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_542; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_543; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_544; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_545; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_546; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_547; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_548; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_549; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_550; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_551; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_552; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_553; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_554; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_555; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_556; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_557; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_558; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_559; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_560; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_561; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_562; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_563; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_564; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_565; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_566; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_567; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_568; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_569; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_570; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_571; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_572; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_573; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_574; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_575; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_576; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_577; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_578; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_579; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_580; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_581; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_582; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_583; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_584; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_585; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_586; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_587; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_588; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_589; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_590; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_591; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_592; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_593; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_594; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_595; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_596; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_597; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_598; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_599; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_600; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_601; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_602; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_603; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_604; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_605; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_606; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_607; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_608; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_609; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_610; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_611; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_612; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_613; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_614; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_615; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_616; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_617; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_618; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_619; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_620; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_621; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_622; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_623; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_624; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_625; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_626; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_627; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_628; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_629; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_630; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_631; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_632; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_633; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_634; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_635; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_636; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_637; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_638; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_639; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_640; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_641; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_642; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_643; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_644; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_645; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_646; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_647; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_648; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_649; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_650; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_651; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_652; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_653; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_654; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_655; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_656; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_657; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_658; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_659; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_660; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_661; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_662; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_663; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_664; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_665; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_666; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_667; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_668; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_669; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_670; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_671; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_672; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_673; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_674; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_675; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_676; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_677; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_678; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_679; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_680; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_681; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_682; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_683; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_684; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_685; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_686; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_687; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_688; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_689; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_690; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_691; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_692; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_693; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_694; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_695; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_696; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_697; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_698; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_699; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_700; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_701; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_702; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_703; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_704; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_705; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_706; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_707; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_708; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_709; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_710; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_711; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_712; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_713; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_714; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_715; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_716; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_717; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_718; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_719; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_720; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_721; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_722; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_723; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_724; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_725; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_726; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_727; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_728; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_729; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_730; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_731; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_732; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_733; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_734; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_735; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_736; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_737; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_738; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_739; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_740; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_741; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_742; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_743; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_744; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_745; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_746; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_747; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_748; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_749; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_750; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_751; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_752; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_753; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_754; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_755; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_756; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_757; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_758; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_759; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_760; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_761; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_762; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_763; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_764; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_765; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_766; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_767; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_768; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_769; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_770; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_771; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_772; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_773; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_774; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_775; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_776; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_777; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_778; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_779; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_780; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_781; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_782; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_783; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_784; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_785; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_786; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_787; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_788; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_789; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_790; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_791; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_792; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_793; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_794; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_795; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_796; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_797; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_798; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_799; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_800; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_801; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_802; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_803; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_804; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_805; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_806; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_807; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_808; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_809; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_810; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_811; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_812; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_813; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_814; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_815; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_816; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_817; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_818; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_819; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_820; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_821; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_822; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_823; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_824; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_825; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_826; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_827; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_828; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_829; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_830; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_831; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_832; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_833; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_834; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_835; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_836; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_837; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_838; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_839; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_840; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_841; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_842; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_843; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_844; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_845; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_846; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_847; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_848; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_849; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_850; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_851; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_852; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_853; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_854; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_855; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_856; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_857; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_858; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_859; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_860; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_861; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_862; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_863; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_864; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_865; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_866; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_867; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_868; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_869; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_870; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_871; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_872; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_873; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_874; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_875; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_876; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_877; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_878; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_879; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_880; // @[Reg.scala 16:23]
-  wire [7:0] _GEN_881; // @[Reg.scala 16:23]
-  reg [31:0] _T_1699; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_66;
-  reg [31:0] _T_1701; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_67;
-  reg [32:0] _T_1703; // @[Reg.scala 15:16]
-  reg [63:0] _RAND_68;
-  reg [31:0] _T_1705; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_69;
-  reg [31:0] _T_1707; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_70;
-  reg [32:0] _T_1709; // @[Reg.scala 15:16]
-  reg [63:0] _RAND_71;
-  wire [32:0] _T_1715; // @[FixedPointTypeClass.scala 20:58]
-  wire [18:0] _T_1716; // @[FixedPointTypeClass.scala 176:41]
-  wire [32:0] _T_1719; // @[FixedPointTypeClass.scala 20:58]
-  wire [18:0] _T_1720; // @[FixedPointTypeClass.scala 176:41]
-  wire  _T_1729; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] outputWires_1_imag; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  wire [15:0] _GEN_1914; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] outputWires_1_real; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  wire [15:0] _GEN_1915; // @[SDFChainRadix22.scala 241:55]
-  wire  _T_1730; // @[SDFChainRadix22.scala 327:98]
-  wire  _T_1732; // @[SDFChainRadix22.scala 327:135]
-  wire  _T_1733; // @[SDFChainRadix22.scala 327:122]
-  reg  _T_1735; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_72;
-  wire [15:0] _T_1741; // @[FixedPointTypeClass.scala 39:43]
-  wire [15:0] _T_1738_real; // @[SDFChainRadix22.scala 329:32 SDFChainRadix22.scala 332:29]
-  reg [15:0] _T_1747_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_73;
-  reg [15:0] _T_1747_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_74;
-  reg [15:0] outputWires_2_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_75;
-  reg [15:0] outputWires_2_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_76;
-  wire  _T_1756; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] _GEN_1923; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] _GEN_1924; // @[SDFChainRadix22.scala 241:55]
-  wire [8:0] _T_2089; // @[SDFChainRadix22.scala 283:83]
-  wire [8:0] _T_2093; // @[SDFChainRadix22.scala 283:89]
-  reg [8:0] _T_2095; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_77;
-  reg [15:0] twiddles_3_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_78;
-  reg [15:0] twiddles_3_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_79;
-  wire [5:0] _GEN_1988; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1989; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1990; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1991; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1992; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1993; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1994; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1995; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1996; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1997; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1998; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_1999; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2000; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2001; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2002; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2003; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2004; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2005; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2006; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2007; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2008; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2009; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2010; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2011; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2012; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2013; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2014; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2015; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2016; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2017; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2018; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2019; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2020; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2021; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2022; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2023; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2024; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2025; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2026; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2027; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2028; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2029; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2030; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2031; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2032; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2033; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2034; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2035; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2036; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2037; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2038; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2039; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2040; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2041; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2042; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2043; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2044; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2045; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2046; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2047; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2048; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2049; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2050; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2051; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2052; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2053; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2054; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2055; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2056; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2057; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2058; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2059; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2060; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2061; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2062; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2063; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2064; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2065; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2066; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2067; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2068; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2069; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2070; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2071; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2072; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2073; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2074; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2075; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2076; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2077; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2078; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2079; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2080; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2081; // @[Reg.scala 16:23]
-  wire [5:0] _GEN_2082; // @[Reg.scala 16:23]
-  reg [31:0] _T_2106; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_80;
-  reg [31:0] _T_2108; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_81;
-  reg [32:0] _T_2110; // @[Reg.scala 15:16]
-  reg [63:0] _RAND_82;
-  reg [31:0] _T_2112; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_83;
-  reg [31:0] _T_2114; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_84;
-  reg [32:0] _T_2116; // @[Reg.scala 15:16]
-  reg [63:0] _RAND_85;
-  wire [32:0] _T_2122; // @[FixedPointTypeClass.scala 20:58]
-  wire [18:0] _T_2123; // @[FixedPointTypeClass.scala 176:41]
-  wire [32:0] _T_2126; // @[FixedPointTypeClass.scala 20:58]
-  wire [18:0] _T_2127; // @[FixedPointTypeClass.scala 176:41]
-  wire  _T_2136; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] outputWires_3_imag; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  wire [15:0] _GEN_2347; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] outputWires_3_real; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  wire [15:0] _GEN_2348; // @[SDFChainRadix22.scala 241:55]
-  wire  _T_2137; // @[SDFChainRadix22.scala 327:98]
-  wire  _T_2139; // @[SDFChainRadix22.scala 327:135]
-  wire  _T_2140; // @[SDFChainRadix22.scala 327:122]
-  reg  _T_2142; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_86;
-  wire [15:0] _T_2148; // @[FixedPointTypeClass.scala 39:43]
-  wire [15:0] _T_2145_real; // @[SDFChainRadix22.scala 329:32 SDFChainRadix22.scala 332:29]
-  reg [15:0] _T_2154_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_87;
-  reg [15:0] _T_2154_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_88;
-  reg [15:0] outputWires_4_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_89;
-  reg [15:0] outputWires_4_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_90;
-  wire  _T_2163; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] _GEN_2356; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] _GEN_2357; // @[SDFChainRadix22.scala 241:55]
-  wire [8:0] _T_2256; // @[SDFChainRadix22.scala 283:83]
-  wire [8:0] _T_2260; // @[SDFChainRadix22.scala 283:89]
-  reg [8:0] _T_2262; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_91;
-  reg [15:0] twiddles_5_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_92;
-  reg [15:0] twiddles_5_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_93;
-  wire [3:0] _GEN_2397; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2398; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2399; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2400; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2401; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2402; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2403; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2404; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2405; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2406; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2407; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2408; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2409; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2410; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2411; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2412; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2413; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2414; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2415; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2416; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2417; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2418; // @[Reg.scala 16:23]
-  wire [3:0] _GEN_2419; // @[Reg.scala 16:23]
-  reg [31:0] _T_2273; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_94;
-  reg [31:0] _T_2275; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_95;
-  reg [32:0] _T_2277; // @[Reg.scala 15:16]
-  reg [63:0] _RAND_96;
-  reg [31:0] _T_2279; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_97;
-  reg [31:0] _T_2281; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_98;
-  reg [32:0] _T_2283; // @[Reg.scala 15:16]
-  reg [63:0] _RAND_99;
-  wire [32:0] _T_2289; // @[FixedPointTypeClass.scala 20:58]
-  wire [18:0] _T_2290; // @[FixedPointTypeClass.scala 176:41]
-  wire [32:0] _T_2293; // @[FixedPointTypeClass.scala 20:58]
-  wire [18:0] _T_2294; // @[FixedPointTypeClass.scala 176:41]
-  wire  _T_2303; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] outputWires_5_imag; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  wire [15:0] _GEN_2492; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] outputWires_5_real; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  wire [15:0] _GEN_2493; // @[SDFChainRadix22.scala 241:55]
-  wire  _T_2304; // @[SDFChainRadix22.scala 327:98]
-  wire  _T_2306; // @[SDFChainRadix22.scala 327:135]
-  wire  _T_2307; // @[SDFChainRadix22.scala 327:122]
-  reg  _T_2309; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_100;
-  wire [15:0] _T_2315; // @[FixedPointTypeClass.scala 39:43]
-  wire [15:0] _T_2312_real; // @[SDFChainRadix22.scala 329:32 SDFChainRadix22.scala 332:29]
-  reg [15:0] _T_2321_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_101;
-  reg [15:0] _T_2321_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_102;
-  reg [15:0] outputWires_6_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_103;
-  reg [15:0] outputWires_6_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_104;
-  wire  _T_2330; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] _GEN_2501; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] _GEN_2502; // @[SDFChainRadix22.scala 241:55]
-  wire [8:0] _T_2363; // @[SDFChainRadix22.scala 283:83]
-  wire [8:0] _T_2367; // @[SDFChainRadix22.scala 283:89]
-  reg [8:0] _T_2369; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_105;
-  reg [15:0] twiddles_7_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_106;
-  reg [15:0] twiddles_7_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_107;
-  wire [1:0] _GEN_2536; // @[Reg.scala 16:23]
-  wire [1:0] _GEN_2537; // @[Reg.scala 16:23]
-  wire [1:0] _GEN_2538; // @[Reg.scala 16:23]
-  wire [1:0] _GEN_2539; // @[Reg.scala 16:23]
-  wire [1:0] _GEN_2540; // @[Reg.scala 16:23]
-  reg [31:0] _T_2380; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_108;
-  reg [31:0] _T_2382; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_109;
-  reg [32:0] _T_2384; // @[Reg.scala 15:16]
-  reg [63:0] _RAND_110;
-  reg [31:0] _T_2386; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_111;
-  reg [31:0] _T_2388; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_112;
-  reg [32:0] _T_2390; // @[Reg.scala 15:16]
-  reg [63:0] _RAND_113;
-  wire [32:0] _T_2396; // @[FixedPointTypeClass.scala 20:58]
-  wire [18:0] _T_2397; // @[FixedPointTypeClass.scala 176:41]
-  wire [32:0] _T_2400; // @[FixedPointTypeClass.scala 20:58]
-  wire [18:0] _T_2401; // @[FixedPointTypeClass.scala 176:41]
-  wire  _T_2410; // @[SDFChainRadix22.scala 241:23]
-  wire [15:0] outputWires_7_imag; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  wire [15:0] _GEN_2565; // @[SDFChainRadix22.scala 241:55]
-  wire [15:0] outputWires_7_real; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  wire [15:0] _GEN_2566; // @[SDFChainRadix22.scala 241:55]
-  reg [15:0] _T_2413_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_114;
-  reg [15:0] _T_2413_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_115;
-  reg [15:0] outputWires_8_real; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_116;
-  reg [15:0] outputWires_8_imag; // @[Reg.scala 15:16]
-  reg [31:0] _RAND_117;
-  reg  _T_2418; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_118;
-  reg  _T_2419; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_119;
-  reg  outValid; // @[SDFFFTUtil.scala 20:20]
-  reg [31:0] _RAND_120;
-  wire  _T_2420; // @[SDFChainRadix22.scala 368:33]
-  reg  _T_2421; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_121;
-  reg  _T_2422; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_122;
-  reg  _T_2423; // @[Reg.scala 27:20]
-  reg [31:0] _RAND_123;
-  wire  _T_2424; // @[SDFChainRadix22.scala 368:127]
-  wire  _T_2425; // @[SDFChainRadix22.scala 368:117]
-  wire [29:0] _GEN_2595; // @[SDFChainRadix22.scala 404:33]
-  wire [31:0] _GEN_2582; // @[SDFChainRadix22.scala 404:33]
-  wire [29:0] _GEN_2596; // @[SDFChainRadix22.scala 404:33]
-  wire [31:0] _GEN_2583; // @[SDFChainRadix22.scala 404:33]
-  wire [17:0] _GEN_2597; // @[SDFChainRadix22.scala 63:26 SDFChainRadix22.scala 413:22 SDFChainRadix22.scala 418:25]
-  wire [17:0] _GEN_2599; // @[SDFChainRadix22.scala 63:26 SDFChainRadix22.scala 413:22 SDFChainRadix22.scala 419:25]
+  wire [9:0] _T_125; // @[SDFChainRadix22.scala 179:16]
+  wire [9:0] _T_145; // @[SDFChainRadix22.scala 193:37]
+  wire  _T_146; // @[SDFChainRadix22.scala 193:22]
+  wire  _T_147; // @[SDFChainRadix22.scala 193:44]
+  wire  _GEN_45; // @[SDFChainRadix22.scala 196:36]
+  wire  _GEN_46; // @[SDFChainRadix22.scala 193:60]
+  wire [8:0] _T_166; // @[SDFChainRadix22.scala 224:38]
+  wire [8:0] _T_171; // @[SDFChainRadix22.scala 224:68]
+  wire [8:0] _T_173; // @[SDFChainRadix22.scala 224:38]
+  wire [8:0] _T_178; // @[SDFChainRadix22.scala 224:68]
+  wire [8:0] _T_180; // @[SDFChainRadix22.scala 224:38]
+  wire [8:0] _T_185; // @[SDFChainRadix22.scala 224:68]
+  wire [8:0] _T_187; // @[SDFChainRadix22.scala 224:38]
+  wire [8:0] _T_192; // @[SDFChainRadix22.scala 224:68]
+  wire [8:0] _T_194; // @[SDFChainRadix22.scala 224:38]
+  wire [8:0] _T_199; // @[SDFChainRadix22.scala 224:68]
+  wire [8:0] _T_201; // @[SDFChainRadix22.scala 224:38]
+  wire [8:0] _T_206; // @[SDFChainRadix22.scala 224:68]
+  wire [8:0] _T_208; // @[SDFChainRadix22.scala 224:38]
+  wire [8:0] _T_213; // @[SDFChainRadix22.scala 224:68]
+  wire [8:0] _T_215; // @[SDFChainRadix22.scala 224:38]
+  wire [8:0] _T_220; // @[SDFChainRadix22.scala 224:68]
+  wire [1:0] _GEN_52; // @[SDFChainRadix22.scala 291:27]
+  wire [1:0] _GEN_53; // @[SDFChainRadix22.scala 291:27]
+  wire [1:0] _GEN_54; // @[SDFChainRadix22.scala 291:27]
+  wire [1:0] _GEN_55; // @[SDFChainRadix22.scala 291:27]
+  wire [1:0] _GEN_56; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_59; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_60; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_61; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_62; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_63; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] twiddles_1_imag; // @[SDFChainRadix22.scala 291:27]
+  wire [16:0] _T_261; // @[FixedPointTypeClass.scala 24:22]
+  wire [15:0] outputWires_0_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 348:32]
+  wire [15:0] outputWires_0_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 348:32]
+  wire [16:0] _T_262; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] _T_263; // @[FixedPointTypeClass.scala 33:22]
+  wire [16:0] _GEN_2112; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_264; // @[FixedPointTypeClass.scala 211:35]
+  wire [16:0] _GEN_2113; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_265; // @[FixedPointTypeClass.scala 211:35]
+  wire [16:0] _GEN_2114; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_266; // @[FixedPointTypeClass.scala 211:35]
+  wire [33:0] _T_267; // @[FixedPointTypeClass.scala 33:22]
+  wire [33:0] _T_268; // @[FixedPointTypeClass.scala 24:22]
+  wire [33:0] _T_274; // @[FixedPointTypeClass.scala 20:58]
+  wire [19:0] _T_275; // @[FixedPointTypeClass.scala 176:41]
+  wire [33:0] _T_278; // @[FixedPointTypeClass.scala 20:58]
+  wire [19:0] _T_279; // @[FixedPointTypeClass.scala 176:41]
+  wire  _T_286; // @[SDFChainRadix22.scala 328:32]
+  wire  _T_287; // @[SDFChainRadix22.scala 328:78]
+  wire  _T_288; // @[SDFChainRadix22.scala 328:65]
+  wire  _T_289; // @[SDFChainRadix22.scala 328:19]
+  wire [15:0] outputWires_1_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  wire [15:0] _T_295; // @[FixedPointTypeClass.scala 39:43]
+  wire [15:0] outputWires_1_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  wire [3:0] _GEN_82; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_83; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_84; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_85; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_86; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_87; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_88; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_89; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_90; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_91; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_92; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_93; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_94; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_95; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_96; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_97; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_98; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_99; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_100; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_101; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_102; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_103; // @[SDFChainRadix22.scala 291:27]
+  wire [3:0] _GEN_104; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_107; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_108; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_109; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_110; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_111; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_112; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_113; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_114; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_115; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_116; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_117; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_118; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_119; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_120; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_121; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_122; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_123; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_124; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_125; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_126; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_127; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_128; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_129; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_130; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_131; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_132; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_133; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_134; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_135; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] twiddles_3_imag; // @[SDFChainRadix22.scala 291:27]
+  wire [16:0] _T_393; // @[FixedPointTypeClass.scala 24:22]
+  wire [15:0] outputWires_2_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  wire [15:0] outputWires_2_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  wire [16:0] _T_394; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] _T_395; // @[FixedPointTypeClass.scala 33:22]
+  wire [16:0] _GEN_2115; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_396; // @[FixedPointTypeClass.scala 211:35]
+  wire [16:0] _GEN_2116; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_397; // @[FixedPointTypeClass.scala 211:35]
+  wire [16:0] _GEN_2117; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_398; // @[FixedPointTypeClass.scala 211:35]
+  wire [33:0] _T_399; // @[FixedPointTypeClass.scala 33:22]
+  wire [33:0] _T_400; // @[FixedPointTypeClass.scala 24:22]
+  wire [33:0] _T_406; // @[FixedPointTypeClass.scala 20:58]
+  wire [19:0] _T_407; // @[FixedPointTypeClass.scala 176:41]
+  wire [33:0] _T_410; // @[FixedPointTypeClass.scala 20:58]
+  wire [19:0] _T_411; // @[FixedPointTypeClass.scala 176:41]
+  wire  _T_418; // @[SDFChainRadix22.scala 328:32]
+  wire  _T_419; // @[SDFChainRadix22.scala 328:78]
+  wire  _T_420; // @[SDFChainRadix22.scala 328:65]
+  wire  _T_421; // @[SDFChainRadix22.scala 328:19]
+  wire [15:0] outputWires_3_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  wire [15:0] _T_427; // @[FixedPointTypeClass.scala 39:43]
+  wire [15:0] outputWires_3_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  wire [5:0] _GEN_202; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_203; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_204; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_205; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_206; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_207; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_208; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_209; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_210; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_211; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_212; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_213; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_214; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_215; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_216; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_217; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_218; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_219; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_220; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_221; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_222; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_223; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_224; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_225; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_226; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_227; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_228; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_229; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_230; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_231; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_232; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_233; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_234; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_235; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_236; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_237; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_238; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_239; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_240; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_241; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_242; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_243; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_244; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_245; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_246; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_247; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_248; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_249; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_250; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_251; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_252; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_253; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_254; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_255; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_256; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_257; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_258; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_259; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_260; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_261; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_262; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_263; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_264; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_265; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_266; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_267; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_268; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_269; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_270; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_271; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_272; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_273; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_274; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_275; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_276; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_277; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_278; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_279; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_280; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_281; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_282; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_283; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_284; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_285; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_286; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_287; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_288; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_289; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_290; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_291; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_292; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_293; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_294; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_295; // @[SDFChainRadix22.scala 291:27]
+  wire [5:0] _GEN_296; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_299; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_300; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_301; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_302; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_303; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_304; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_305; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_306; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_307; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_308; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_309; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_310; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_311; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_312; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_313; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_314; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_315; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_316; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_317; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_318; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_319; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_320; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_321; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_322; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_323; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_324; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_325; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_326; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_327; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_328; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_329; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_330; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_331; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_332; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_333; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_334; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_335; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_336; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_337; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_338; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_339; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_340; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_341; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_342; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_343; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_344; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_345; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_346; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_347; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_348; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_349; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_350; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_351; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_352; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_353; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_354; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_355; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_356; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_357; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_358; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_359; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_360; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_361; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_362; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_363; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_364; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_365; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_366; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_367; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_368; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_369; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_370; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_371; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_372; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_373; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_374; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_375; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_376; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_377; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_378; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_379; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_380; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_381; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_382; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_383; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_384; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_385; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_386; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_387; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_388; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_389; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_390; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_391; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_392; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_393; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_394; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_395; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_396; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_397; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_398; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_399; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_400; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_401; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_402; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_403; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_404; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_405; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_406; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_407; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_408; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_409; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_410; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_411; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_412; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_413; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_414; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_415; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_416; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_417; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_418; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_419; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_420; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_421; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_422; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_423; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] twiddles_5_imag; // @[SDFChainRadix22.scala 291:27]
+  wire [16:0] _T_765; // @[FixedPointTypeClass.scala 24:22]
+  wire [15:0] outputWires_4_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  wire [15:0] outputWires_4_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  wire [16:0] _T_766; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] _T_767; // @[FixedPointTypeClass.scala 33:22]
+  wire [16:0] _GEN_2118; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_768; // @[FixedPointTypeClass.scala 211:35]
+  wire [16:0] _GEN_2119; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_769; // @[FixedPointTypeClass.scala 211:35]
+  wire [16:0] _GEN_2120; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_770; // @[FixedPointTypeClass.scala 211:35]
+  wire [33:0] _T_771; // @[FixedPointTypeClass.scala 33:22]
+  wire [33:0] _T_772; // @[FixedPointTypeClass.scala 24:22]
+  wire [33:0] _T_778; // @[FixedPointTypeClass.scala 20:58]
+  wire [19:0] _T_779; // @[FixedPointTypeClass.scala 176:41]
+  wire [33:0] _T_782; // @[FixedPointTypeClass.scala 20:58]
+  wire [19:0] _T_783; // @[FixedPointTypeClass.scala 176:41]
+  wire  _T_790; // @[SDFChainRadix22.scala 328:32]
+  wire  _T_791; // @[SDFChainRadix22.scala 328:78]
+  wire  _T_792; // @[SDFChainRadix22.scala 328:65]
+  wire  _T_793; // @[SDFChainRadix22.scala 328:19]
+  wire [15:0] outputWires_5_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  wire [15:0] _T_799; // @[FixedPointTypeClass.scala 39:43]
+  wire [15:0] outputWires_5_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  wire [7:0] _GEN_682; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_683; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_684; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_685; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_686; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_687; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_688; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_689; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_690; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_691; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_692; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_693; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_694; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_695; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_696; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_697; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_698; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_699; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_700; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_701; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_702; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_703; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_704; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_705; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_706; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_707; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_708; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_709; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_710; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_711; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_712; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_713; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_714; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_715; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_716; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_717; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_718; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_719; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_720; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_721; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_722; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_723; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_724; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_725; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_726; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_727; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_728; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_729; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_730; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_731; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_732; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_733; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_734; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_735; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_736; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_737; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_738; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_739; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_740; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_741; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_742; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_743; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_744; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_745; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_746; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_747; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_748; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_749; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_750; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_751; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_752; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_753; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_754; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_755; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_756; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_757; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_758; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_759; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_760; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_761; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_762; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_763; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_764; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_765; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_766; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_767; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_768; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_769; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_770; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_771; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_772; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_773; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_774; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_775; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_776; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_777; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_778; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_779; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_780; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_781; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_782; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_783; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_784; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_785; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_786; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_787; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_788; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_789; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_790; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_791; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_792; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_793; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_794; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_795; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_796; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_797; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_798; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_799; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_800; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_801; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_802; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_803; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_804; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_805; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_806; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_807; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_808; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_809; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_810; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_811; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_812; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_813; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_814; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_815; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_816; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_817; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_818; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_819; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_820; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_821; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_822; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_823; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_824; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_825; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_826; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_827; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_828; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_829; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_830; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_831; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_832; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_833; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_834; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_835; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_836; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_837; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_838; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_839; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_840; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_841; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_842; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_843; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_844; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_845; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_846; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_847; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_848; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_849; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_850; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_851; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_852; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_853; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_854; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_855; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_856; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_857; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_858; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_859; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_860; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_861; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_862; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_863; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_864; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_865; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_866; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_867; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_868; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_869; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_870; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_871; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_872; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_873; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_874; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_875; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_876; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_877; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_878; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_879; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_880; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_881; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_882; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_883; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_884; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_885; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_886; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_887; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_888; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_889; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_890; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_891; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_892; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_893; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_894; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_895; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_896; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_897; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_898; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_899; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_900; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_901; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_902; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_903; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_904; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_905; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_906; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_907; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_908; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_909; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_910; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_911; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_912; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_913; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_914; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_915; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_916; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_917; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_918; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_919; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_920; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_921; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_922; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_923; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_924; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_925; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_926; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_927; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_928; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_929; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_930; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_931; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_932; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_933; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_934; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_935; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_936; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_937; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_938; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_939; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_940; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_941; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_942; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_943; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_944; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_945; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_946; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_947; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_948; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_949; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_950; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_951; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_952; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_953; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_954; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_955; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_956; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_957; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_958; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_959; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_960; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_961; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_962; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_963; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_964; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_965; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_966; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_967; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_968; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_969; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_970; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_971; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_972; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_973; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_974; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_975; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_976; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_977; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_978; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_979; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_980; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_981; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_982; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_983; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_984; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_985; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_986; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_987; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_988; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_989; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_990; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_991; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_992; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_993; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_994; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_995; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_996; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_997; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_998; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_999; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1000; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1001; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1002; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1003; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1004; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1005; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1006; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1007; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1008; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1009; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1010; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1011; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1012; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1013; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1014; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1015; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1016; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1017; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1018; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1019; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1020; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1021; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1022; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1023; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1024; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1025; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1026; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1027; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1028; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1029; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1030; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1031; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1032; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1033; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1034; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1035; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1036; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1037; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1038; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1039; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1040; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1041; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1042; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1043; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1044; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1045; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1046; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1047; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1048; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1049; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1050; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1051; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1052; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1053; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1054; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1055; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1056; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1057; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1058; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1059; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1060; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1061; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1062; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1063; // @[SDFChainRadix22.scala 291:27]
+  wire [7:0] _GEN_1064; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1067; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1068; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1069; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1070; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1071; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1072; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1073; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1074; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1075; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1076; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1077; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1078; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1079; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1080; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1081; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1082; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1083; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1084; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1085; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1086; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1087; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1088; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1089; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1090; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1091; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1092; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1093; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1094; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1095; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1096; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1097; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1098; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1099; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1100; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1101; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1102; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1103; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1104; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1105; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1106; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1107; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1108; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1109; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1110; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1111; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1112; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1113; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1114; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1115; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1116; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1117; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1118; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1119; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1120; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1121; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1122; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1123; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1124; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1125; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1126; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1127; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1128; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1129; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1130; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1131; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1132; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1133; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1134; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1135; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1136; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1137; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1138; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1139; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1140; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1141; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1142; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1143; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1144; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1145; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1146; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1147; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1148; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1149; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1150; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1151; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1152; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1153; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1154; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1155; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1156; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1157; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1158; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1159; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1160; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1161; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1162; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1163; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1164; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1165; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1166; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1167; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1168; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1169; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1170; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1171; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1172; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1173; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1174; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1175; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1176; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1177; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1178; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1179; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1180; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1181; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1182; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1183; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1184; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1185; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1186; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1187; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1188; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1189; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1190; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1191; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1192; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1193; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1194; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1195; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1196; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1197; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1198; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1199; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1200; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1201; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1202; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1203; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1204; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1205; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1206; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1207; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1208; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1209; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1210; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1211; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1212; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1213; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1214; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1215; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1216; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1217; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1218; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1219; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1220; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1221; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1222; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1223; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1224; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1225; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1226; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1227; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1228; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1229; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1230; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1231; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1232; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1233; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1234; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1235; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1236; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1237; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1238; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1239; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1240; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1241; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1242; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1243; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1244; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1245; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1246; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1247; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1248; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1249; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1250; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1251; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1252; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1253; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1254; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1255; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1256; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1257; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1258; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1259; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1260; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1261; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1262; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1263; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1264; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1265; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1266; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1267; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1268; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1269; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1270; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1271; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1272; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1273; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1274; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1275; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1276; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1277; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1278; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1279; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1280; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1281; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1282; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1283; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1284; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1285; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1286; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1287; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1288; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1289; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1290; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1291; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1292; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1293; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1294; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1295; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1296; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1297; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1298; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1299; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1300; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1301; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1302; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1303; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1304; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1305; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1306; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1307; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1308; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1309; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1310; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1311; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1312; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1313; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1314; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1315; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1316; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1317; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1318; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1319; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1320; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1321; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1322; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1323; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1324; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1325; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1326; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1327; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1328; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1329; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1330; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1331; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1332; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1333; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1334; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1335; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1336; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1337; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1338; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1339; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1340; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1341; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1342; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1343; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1344; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1345; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1346; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1347; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1348; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1349; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1350; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1351; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1352; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1353; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1354; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1355; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1356; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1357; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1358; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1359; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1360; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1361; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1362; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1363; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1364; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1365; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1366; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1367; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1368; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1369; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1370; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1371; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1372; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1373; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1374; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1375; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1376; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1377; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1378; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1379; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1380; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1381; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1382; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1383; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1384; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1385; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1386; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1387; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1388; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1389; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1390; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1391; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1392; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1393; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1394; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1395; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1396; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1397; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1398; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1399; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1400; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1401; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1402; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1403; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1404; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1405; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1406; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1407; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1408; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1409; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1410; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1411; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1412; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1413; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1414; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1415; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1416; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1417; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1418; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1419; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1420; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1421; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1422; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1423; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1424; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1425; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1426; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1427; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1428; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1429; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1430; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1431; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1432; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1433; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1434; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1435; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1436; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1437; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1438; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1439; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1440; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1441; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1442; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1443; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1444; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1445; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1446; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1447; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1448; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1449; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1450; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1451; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1452; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1453; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1454; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1455; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1456; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1457; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1458; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1459; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1460; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1461; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1462; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1463; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1464; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1465; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1466; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1467; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1468; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1469; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1470; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1471; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1472; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1473; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1474; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1475; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1476; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1477; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1478; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1479; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1480; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1481; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1482; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1483; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1484; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1485; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1486; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1487; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1488; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1489; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1490; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1491; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1492; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1493; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1494; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1495; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1496; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1497; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1498; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1499; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1500; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1501; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1502; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1503; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1504; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1505; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1506; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1507; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1508; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1509; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1510; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1511; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1512; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1513; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1514; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1515; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1516; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1517; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1518; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1519; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1520; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1521; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1522; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1523; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1524; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1525; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1526; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1527; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1528; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1529; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1530; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1531; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1532; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1533; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1534; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1535; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1536; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1537; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1538; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1539; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1540; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1541; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1542; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1543; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1544; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1545; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1546; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1547; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1548; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1549; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1550; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1551; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1552; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1553; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1554; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1555; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1556; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1557; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1558; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1559; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1560; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1561; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1562; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1563; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1564; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1565; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1566; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1567; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1568; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1569; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1570; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1571; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1572; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1573; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1574; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] _GEN_1575; // @[SDFChainRadix22.scala 291:27]
+  wire [15:0] twiddles_7_imag; // @[SDFChainRadix22.scala 291:27]
+  wire [16:0] _T_2096; // @[FixedPointTypeClass.scala 24:22]
+  wire [15:0] outputWires_6_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  wire [15:0] outputWires_6_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  wire [16:0] _T_2097; // @[FixedPointTypeClass.scala 24:22]
+  wire [16:0] _T_2098; // @[FixedPointTypeClass.scala 33:22]
+  wire [16:0] _GEN_2121; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_2099; // @[FixedPointTypeClass.scala 211:35]
+  wire [16:0] _GEN_2122; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_2100; // @[FixedPointTypeClass.scala 211:35]
+  wire [16:0] _GEN_2123; // @[FixedPointTypeClass.scala 211:35]
+  wire [32:0] _T_2101; // @[FixedPointTypeClass.scala 211:35]
+  wire [33:0] _T_2102; // @[FixedPointTypeClass.scala 33:22]
+  wire [33:0] _T_2103; // @[FixedPointTypeClass.scala 24:22]
+  wire [33:0] _T_2109; // @[FixedPointTypeClass.scala 20:58]
+  wire [19:0] _T_2110; // @[FixedPointTypeClass.scala 176:41]
+  wire [33:0] _T_2113; // @[FixedPointTypeClass.scala 20:58]
+  wire [19:0] _T_2114; // @[FixedPointTypeClass.scala 176:41]
+  wire  _T_2121; // @[SDFChainRadix22.scala 328:32]
+  wire  _T_2122; // @[SDFChainRadix22.scala 328:78]
+  wire  _T_2123; // @[SDFChainRadix22.scala 328:65]
+  wire  _T_2124; // @[SDFChainRadix22.scala 328:19]
+  wire [15:0] outputWires_7_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  wire [15:0] _T_2130; // @[FixedPointTypeClass.scala 39:43]
+  wire [15:0] outputWires_7_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  wire [15:0] _GEN_2091; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2092; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2093; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2094; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2095; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2096; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2097; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2098; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2099; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2100; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2101; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2102; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2103; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] _GEN_2104; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] outputWires_8_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  wire [15:0] _GEN_2105; // @[SDFChainRadix22.scala 364:24]
+  wire [15:0] outputWires_8_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  wire [15:0] _GEN_2106; // @[SDFChainRadix22.scala 364:24]
+  wire  _T_2140; // @[SDFChainRadix22.scala 368:33]
+  wire  _T_2141; // @[SDFChainRadix22.scala 368:127]
+  wire  _T_2142; // @[SDFChainRadix22.scala 368:117]
+  wire [29:0] _GEN_2124; // @[SDFChainRadix22.scala 375:33]
+  wire [31:0] _GEN_2107; // @[SDFChainRadix22.scala 375:33]
+  wire [29:0] _GEN_2125; // @[SDFChainRadix22.scala 375:33]
+  wire [31:0] _GEN_2108; // @[SDFChainRadix22.scala 375:33]
+  wire [17:0] _GEN_2126; // @[SDFChainRadix22.scala 63:26 SDFChainRadix22.scala 384:22 SDFChainRadix22.scala 396:27]
+  wire [17:0] _GEN_2128; // @[SDFChainRadix22.scala 63:26 SDFChainRadix22.scala 384:22 SDFChainRadix22.scala 397:27]
   SDFStageRadix22 sdf_stages_0 ( // @[SDFChainRadix22.scala 164:25]
     .clock(sdf_stages_0_clock),
-    .reset(sdf_stages_0_reset),
     .io_in_real(sdf_stages_0_io_in_real),
     .io_in_imag(sdf_stages_0_io_in_imag),
     .io_out_real(sdf_stages_0_io_out_real),
@@ -7613,7 +7330,6 @@ module SDFChainRadix22(
   );
   SDFStageRadix22_1 sdf_stages_1 ( // @[SDFChainRadix22.scala 164:25]
     .clock(sdf_stages_1_clock),
-    .reset(sdf_stages_1_reset),
     .io_in_real(sdf_stages_1_io_in_real),
     .io_in_imag(sdf_stages_1_io_in_imag),
     .io_out_real(sdf_stages_1_io_out_real),
@@ -7623,7 +7339,6 @@ module SDFChainRadix22(
   );
   SDFStageRadix22_2 sdf_stages_2 ( // @[SDFChainRadix22.scala 164:25]
     .clock(sdf_stages_2_clock),
-    .reset(sdf_stages_2_reset),
     .io_in_real(sdf_stages_2_io_in_real),
     .io_in_imag(sdf_stages_2_io_in_imag),
     .io_out_real(sdf_stages_2_io_out_real),
@@ -7633,7 +7348,6 @@ module SDFChainRadix22(
   );
   SDFStageRadix22_3 sdf_stages_3 ( // @[SDFChainRadix22.scala 164:25]
     .clock(sdf_stages_3_clock),
-    .reset(sdf_stages_3_reset),
     .io_in_real(sdf_stages_3_io_in_real),
     .io_in_imag(sdf_stages_3_io_in_imag),
     .io_out_real(sdf_stages_3_io_out_real),
@@ -7643,7 +7357,6 @@ module SDFChainRadix22(
   );
   SDFStageRadix22_4 sdf_stages_4 ( // @[SDFChainRadix22.scala 164:25]
     .clock(sdf_stages_4_clock),
-    .reset(sdf_stages_4_reset),
     .io_in_real(sdf_stages_4_io_in_real),
     .io_in_imag(sdf_stages_4_io_in_imag),
     .io_out_real(sdf_stages_4_io_out_real),
@@ -7653,7 +7366,6 @@ module SDFChainRadix22(
   );
   SDFStageRadix22_5 sdf_stages_5 ( // @[SDFChainRadix22.scala 164:25]
     .clock(sdf_stages_5_clock),
-    .reset(sdf_stages_5_reset),
     .io_in_real(sdf_stages_5_io_in_real),
     .io_in_imag(sdf_stages_5_io_in_imag),
     .io_out_real(sdf_stages_5_io_out_real),
@@ -7663,7 +7375,6 @@ module SDFChainRadix22(
   );
   SDFStageRadix22_6 sdf_stages_6 ( // @[SDFChainRadix22.scala 164:25]
     .clock(sdf_stages_6_clock),
-    .reset(sdf_stages_6_reset),
     .io_in_real(sdf_stages_6_io_in_real),
     .io_in_imag(sdf_stages_6_io_in_imag),
     .io_out_real(sdf_stages_6_io_out_real),
@@ -7673,7 +7384,6 @@ module SDFChainRadix22(
   );
   SDFStageRadix22_7 sdf_stages_7 ( // @[SDFChainRadix22.scala 164:25]
     .clock(sdf_stages_7_clock),
-    .reset(sdf_stages_7_reset),
     .io_in_real(sdf_stages_7_io_in_real),
     .io_in_imag(sdf_stages_7_io_in_imag),
     .io_out_real(sdf_stages_7_io_out_real),
@@ -7691,3836 +7401,1415 @@ module SDFChainRadix22(
     .io_cntr(sdf_stages_8_io_cntr),
     .io_en(sdf_stages_8_io_en)
   );
-  Queue outQueue ( // @[SDFChainRadix22.scala 363:25]
-    .clock(outQueue_clock),
-    .reset(outQueue_reset),
-    .io_enq_ready(outQueue_io_enq_ready),
-    .io_enq_valid(outQueue_io_enq_valid),
-    .io_enq_bits_real(outQueue_io_enq_bits_real),
-    .io_enq_bits_imag(outQueue_io_enq_bits_imag),
-    .io_deq_ready(outQueue_io_deq_ready),
-    .io_deq_valid(outQueue_io_deq_valid),
-    .io_deq_bits_real(outQueue_io_deq_bits_real),
-    .io_deq_bits_imag(outQueue_io_deq_bits_imag)
-  );
-  assign _T_47 = regNumStages - 9'h1; // @[SDFChainRadix22.scala 73:39]
-  assign _T_48 = 513'h2 << _T_47; // @[SDFChainRadix22.scala 73:23]
-  assign _T_49 = io_in_ready & io_in_valid; // @[Decoupled.scala 40:37]
-  assign fireLast = io_lastIn & _T_49; // @[SDFChainRadix22.scala 79:28]
-  assign _T_56 = 2'h0 == state; // @[Conditional.scala 37:30]
-  assign _GEN_0 = _T_49 ? 2'h1 : state; // @[SDFChainRadix22.scala 90:27]
-  assign _T_59 = 2'h1 == state; // @[Conditional.scala 37:30]
+  assign _T_46 = io_in_ready & io_in_valid; // @[Decoupled.scala 40:37]
+  assign fireLast = io_lastIn & _T_46; // @[SDFChainRadix22.scala 79:28]
+  assign _T_48 = 9'h9 - 9'h1; // @[SDFChainRadix22.scala 81:45]
+  assign _T_53 = 2'h0 == state; // @[Conditional.scala 37:30]
+  assign _GEN_0 = _T_46 ? 2'h1 : state; // @[SDFChainRadix22.scala 90:27]
+  assign _T_56 = 2'h1 == state; // @[Conditional.scala 37:30]
   assign _GEN_1 = fireLast ? 2'h2 : state; // @[SDFChainRadix22.scala 93:23]
-  assign _T_60 = 2'h2 == state; // @[Conditional.scala 37:30]
+  assign _T_57 = 2'h2 == state; // @[Conditional.scala 37:30]
   assign _GEN_2 = io_lastOut ? 2'h0 : state; // @[SDFChainRadix22.scala 98:25]
-  assign _GEN_3 = _T_60 ? _GEN_2 : state; // @[Conditional.scala 39:67]
-  assign _GEN_4 = _T_59 ? _GEN_1 : _GEN_3; // @[Conditional.scala 39:67]
-  assign state_next = _T_56 ? _GEN_0 : _GEN_4; // @[Conditional.scala 40:58]
-  assign numPoints = _T_48[9:0]; // @[SDFChainRadix22.scala 50:23 SDFChainRadix22.scala 73:15]
-  assign _T_62 = numPoints - 10'h1; // @[SDFChainRadix22.scala 111:44]
-  assign _GEN_2584 = {{1'd0}, cntValidOut}; // @[SDFChainRadix22.scala 111:29]
-  assign _T_63 = _GEN_2584 == _T_62; // @[SDFChainRadix22.scala 111:29]
-  assign _T_64 = io_out_ready & io_out_valid; // @[Decoupled.scala 40:37]
-  assign pktEnd = _T_63 & _T_64; // @[SDFChainRadix22.scala 111:52]
-  assign _T_65 = state_next == 2'h0; // @[SDFChainRadix22.scala 114:20]
-  assign _T_68 = cnt == _T_62; // @[SDFChainRadix22.scala 117:18]
-  assign _T_70 = _T_68 & _T_49; // @[SDFChainRadix22.scala 117:40]
-  assign _GEN_17 = _T_70 | initialInDone; // @[SDFChainRadix22.scala 117:57]
-  assign _T_72 = initialInDone & initialInDonePrev; // @[SDFChainRadix22.scala 126:41]
-  assign _T_73 = fireLast & _T_72; // @[SDFChainRadix22.scala 126:23]
+  assign _GEN_3 = _T_57 ? _GEN_2 : state; // @[Conditional.scala 39:67]
+  assign _GEN_4 = _T_56 ? _GEN_1 : _GEN_3; // @[Conditional.scala 39:67]
+  assign state_next = _T_53 ? _GEN_0 : _GEN_4; // @[Conditional.scala 40:58]
+  assign _T_59 = 10'h200 - 10'h1; // @[SDFChainRadix22.scala 111:44]
+  assign _GEN_2109 = {{1'd0}, cntValidOut}; // @[SDFChainRadix22.scala 111:29]
+  assign _T_60 = _GEN_2109 == _T_59; // @[SDFChainRadix22.scala 111:29]
+  assign _T_61 = io_out_ready & io_out_valid; // @[Decoupled.scala 40:37]
+  assign pktEnd = _T_60 & _T_61; // @[SDFChainRadix22.scala 111:52]
+  assign _T_62 = state_next == 2'h0; // @[SDFChainRadix22.scala 114:20]
   assign cntr_wires_0 = cnt[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign cntr_wires_1 = _T_141[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign _GEN_20 = 4'h1 == _T_47[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 126:79]
-  assign cntr_wires_2 = _T_149[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign _GEN_21 = 4'h2 == _T_47[3:0] ? cntr_wires_2 : _GEN_20; // @[SDFChainRadix22.scala 126:79]
-  assign cntr_wires_3 = _T_157[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign _GEN_22 = 4'h3 == _T_47[3:0] ? cntr_wires_3 : _GEN_21; // @[SDFChainRadix22.scala 126:79]
-  assign cntr_wires_4 = _T_165[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign _GEN_23 = 4'h4 == _T_47[3:0] ? cntr_wires_4 : _GEN_22; // @[SDFChainRadix22.scala 126:79]
-  assign cntr_wires_5 = _T_173[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign _GEN_24 = 4'h5 == _T_47[3:0] ? cntr_wires_5 : _GEN_23; // @[SDFChainRadix22.scala 126:79]
-  assign cntr_wires_6 = _T_181[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign _GEN_25 = 4'h6 == _T_47[3:0] ? cntr_wires_6 : _GEN_24; // @[SDFChainRadix22.scala 126:79]
-  assign cntr_wires_7 = _T_189[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign _GEN_26 = 4'h7 == _T_47[3:0] ? cntr_wires_7 : _GEN_25; // @[SDFChainRadix22.scala 126:79]
-  assign cntr_wires_8 = _T_197[8:0]; // @[SDFChainRadix22.scala 52:24 SDFChainRadix22.scala 185:29]
-  assign _GEN_27 = 4'h8 == _T_47[3:0] ? cntr_wires_8 : _GEN_26; // @[SDFChainRadix22.scala 126:79]
-  assign _GEN_2585 = {{1'd0}, _GEN_27}; // @[SDFChainRadix22.scala 126:79]
-  assign _T_76 = _GEN_2585 != _T_62; // @[SDFChainRadix22.scala 126:79]
-  assign _T_77 = _T_73 & _T_76; // @[SDFChainRadix22.scala 126:63]
-  assign _GEN_28 = _T_77 | lastWait; // @[SDFChainRadix22.scala 126:102]
-  assign _T_79 = _T_65 & pktEnd; // @[SDFChainRadix22.scala 130:31]
-  assign _T_80 = _T_79 | pktEnd; // @[SDFChainRadix22.scala 130:42]
-  assign _T_83 = cntValidOut + 9'h1; // @[SDFChainRadix22.scala 134:32]
-  assign _T_85 = lastWait & pktEnd; // @[SDFChainRadix22.scala 140:23]
-  assign _GEN_32 = _T_85 | lastIndeed; // @[SDFChainRadix22.scala 140:34]
-  assign _T_86 = lastIndeed & pktEnd; // @[SDFChainRadix22.scala 144:132]
-  assign _T_87 = state == 2'h2; // @[SDFChainRadix22.scala 144:159]
-  assign _T_88 = pktEnd & _T_87; // @[SDFChainRadix22.scala 144:150]
-  assign _T_90 = 9'h9 - regNumStages; // @[SDFChainRadix22.scala 147:62]
-  assign _GEN_35 = 4'h1 == _T_90[3:0] ? 9'h100 : 9'h0; // @[SDFChainRadix22.scala 147:25]
-  assign _GEN_36 = 4'h2 == _T_90[3:0] ? 9'h180 : _GEN_35; // @[SDFChainRadix22.scala 147:25]
-  assign _GEN_37 = 4'h3 == _T_90[3:0] ? 9'h1c0 : _GEN_36; // @[SDFChainRadix22.scala 147:25]
-  assign _GEN_38 = 4'h4 == _T_90[3:0] ? 9'h1e0 : _GEN_37; // @[SDFChainRadix22.scala 147:25]
-  assign _GEN_39 = 4'h5 == _T_90[3:0] ? 9'h1f0 : _GEN_38; // @[SDFChainRadix22.scala 147:25]
-  assign _GEN_40 = 4'h6 == _T_90[3:0] ? 9'h1f8 : _GEN_39; // @[SDFChainRadix22.scala 147:25]
-  assign _GEN_41 = 4'h7 == _T_90[3:0] ? 9'h1fc : _GEN_40; // @[SDFChainRadix22.scala 147:25]
-  assign _GEN_42 = 4'h8 == _T_90[3:0] ? 9'h1fe : _GEN_41; // @[SDFChainRadix22.scala 147:25]
-  assign cumulativeDelayWire = 4'h9 == _T_90[3:0] ? 9'h1ff : _GEN_42; // @[SDFChainRadix22.scala 147:25]
-  assign activeStages_0 = _T_90 <= 9'h0; // @[SDFChainRadix22.scala 155:48]
-  assign activeStages_1 = _T_90 <= 9'h1; // @[SDFChainRadix22.scala 155:48]
-  assign activeStages_2 = _T_90 <= 9'h2; // @[SDFChainRadix22.scala 155:48]
-  assign activeStages_3 = _T_90 <= 9'h3; // @[SDFChainRadix22.scala 155:48]
-  assign activeStages_4 = _T_90 <= 9'h4; // @[SDFChainRadix22.scala 155:48]
-  assign activeStages_5 = _T_90 <= 9'h5; // @[SDFChainRadix22.scala 155:48]
-  assign activeStages_6 = _T_90 <= 9'h6; // @[SDFChainRadix22.scala 155:48]
-  assign activeStages_7 = _T_90 <= 9'h7; // @[SDFChainRadix22.scala 155:48]
-  assign activeStages_8 = _T_90 <= 9'h8; // @[SDFChainRadix22.scala 155:48]
-  assign _T_130 = _T_87 & io_out_ready; // @[SDFChainRadix22.scala 173:54]
-  assign enableInit = _T_49 | _T_130; // @[SDFChainRadix22.scala 173:33]
-  assign _T_133 = cnt + 10'h1; // @[SDFChainRadix22.scala 179:16]
-  assign _T_207 = numPoints - 10'h2; // @[SDFChainRadix22.scala 193:37]
-  assign _T_208 = _GEN_2585 == _T_207; // @[SDFChainRadix22.scala 193:22]
-  assign _GEN_155 = 4'h1 == _T_47[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 193:44]
-  assign _GEN_156 = 4'h2 == _T_47[3:0] ? enableVector_2 : _GEN_155; // @[SDFChainRadix22.scala 193:44]
-  assign _GEN_157 = 4'h3 == _T_47[3:0] ? enableVector_3 : _GEN_156; // @[SDFChainRadix22.scala 193:44]
-  assign _GEN_158 = 4'h4 == _T_47[3:0] ? enableVector_4 : _GEN_157; // @[SDFChainRadix22.scala 193:44]
-  assign _GEN_159 = 4'h5 == _T_47[3:0] ? enableVector_5 : _GEN_158; // @[SDFChainRadix22.scala 193:44]
-  assign _GEN_160 = 4'h6 == _T_47[3:0] ? enableVector_6 : _GEN_159; // @[SDFChainRadix22.scala 193:44]
-  assign _GEN_161 = 4'h7 == _T_47[3:0] ? enableVector_7 : _GEN_160; // @[SDFChainRadix22.scala 193:44]
-  assign _GEN_162 = 4'h8 == _T_47[3:0] ? enableVector_8 : _GEN_161; // @[SDFChainRadix22.scala 193:44]
-  assign _T_209 = _T_208 & _GEN_162; // @[SDFChainRadix22.scala 193:44]
-  assign _GEN_163 = _T_65 ? 1'h0 : initialOutDone; // @[SDFChainRadix22.scala 196:36]
-  assign _GEN_164 = _T_209 | _GEN_163; // @[SDFChainRadix22.scala 193:60]
-  assign _T_211 = numPoints == 10'h2; // @[SDFChainRadix22.scala 200:43]
-  assign _T_214 = _T_212 & _T_49; // @[SDFChainRadix22.scala 200:72]
-  assign _T_215 = _GEN_162 & initialOutDone; // @[SDFChainRadix22.scala 200:101]
-  assign input_data_real = activeStages_0 ? $signed(io_in_bits_real) : $signed(16'sh0); // @[SDFChainRadix22.scala 218:23]
-  assign input_data_imag = activeStages_0 ? $signed(io_in_bits_imag) : $signed(16'sh0); // @[SDFChainRadix22.scala 218:23]
-  assign _T_225 = 9'h0 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_229 = 9'h0 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_168 = 4'h1 == _T_229[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_169 = 4'h2 == _T_229[3:0] ? enableVector_2 : _GEN_168; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_170 = 4'h3 == _T_229[3:0] ? enableVector_3 : _GEN_169; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_171 = 4'h4 == _T_229[3:0] ? enableVector_4 : _GEN_170; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_172 = 4'h5 == _T_229[3:0] ? enableVector_5 : _GEN_171; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_173 = 4'h6 == _T_229[3:0] ? enableVector_6 : _GEN_172; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_174 = 4'h7 == _T_229[3:0] ? enableVector_7 : _GEN_173; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_175 = 4'h8 == _T_229[3:0] ? enableVector_8 : _GEN_174; // @[SDFChainRadix22.scala 223:20]
-  assign _T_234 = 9'h0 - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_177 = 4'h1 == _T_229[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_178 = 4'h2 == _T_229[3:0] ? cntr_wires_2 : _GEN_177; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_179 = 4'h3 == _T_229[3:0] ? cntr_wires_3 : _GEN_178; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_180 = 4'h4 == _T_229[3:0] ? cntr_wires_4 : _GEN_179; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_181 = 4'h5 == _T_229[3:0] ? cntr_wires_5 : _GEN_180; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_182 = 4'h6 == _T_229[3:0] ? cntr_wires_6 : _GEN_181; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_183 = 4'h7 == _T_229[3:0] ? cntr_wires_7 : _GEN_182; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_184 = 4'h8 == _T_229[3:0] ? cntr_wires_8 : _GEN_183; // @[SDFChainRadix22.scala 224:38]
-  assign _T_240 = 9'h1 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_244 = 9'h1 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_186 = 4'h1 == _T_244[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_187 = 4'h2 == _T_244[3:0] ? enableVector_2 : _GEN_186; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_188 = 4'h3 == _T_244[3:0] ? enableVector_3 : _GEN_187; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_189 = 4'h4 == _T_244[3:0] ? enableVector_4 : _GEN_188; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_190 = 4'h5 == _T_244[3:0] ? enableVector_5 : _GEN_189; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_191 = 4'h6 == _T_244[3:0] ? enableVector_6 : _GEN_190; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_192 = 4'h7 == _T_244[3:0] ? enableVector_7 : _GEN_191; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_193 = 4'h8 == _T_244[3:0] ? enableVector_8 : _GEN_192; // @[SDFChainRadix22.scala 223:20]
-  assign _T_249 = 9'h100 - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_195 = 4'h1 == _T_244[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_196 = 4'h2 == _T_244[3:0] ? cntr_wires_2 : _GEN_195; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_197 = 4'h3 == _T_244[3:0] ? cntr_wires_3 : _GEN_196; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_198 = 4'h4 == _T_244[3:0] ? cntr_wires_4 : _GEN_197; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_199 = 4'h5 == _T_244[3:0] ? cntr_wires_5 : _GEN_198; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_200 = 4'h6 == _T_244[3:0] ? cntr_wires_6 : _GEN_199; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_201 = 4'h7 == _T_244[3:0] ? cntr_wires_7 : _GEN_200; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_202 = 4'h8 == _T_244[3:0] ? cntr_wires_8 : _GEN_201; // @[SDFChainRadix22.scala 224:38]
-  assign _T_251 = _GEN_202 - _T_249; // @[SDFChainRadix22.scala 224:38]
-  assign _T_255 = 9'h2 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_259 = 9'h2 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_204 = 4'h1 == _T_259[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_205 = 4'h2 == _T_259[3:0] ? enableVector_2 : _GEN_204; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_206 = 4'h3 == _T_259[3:0] ? enableVector_3 : _GEN_205; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_207 = 4'h4 == _T_259[3:0] ? enableVector_4 : _GEN_206; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_208 = 4'h5 == _T_259[3:0] ? enableVector_5 : _GEN_207; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_209 = 4'h6 == _T_259[3:0] ? enableVector_6 : _GEN_208; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_210 = 4'h7 == _T_259[3:0] ? enableVector_7 : _GEN_209; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_211 = 4'h8 == _T_259[3:0] ? enableVector_8 : _GEN_210; // @[SDFChainRadix22.scala 223:20]
-  assign _T_264 = 9'h180 - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_213 = 4'h1 == _T_259[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_214 = 4'h2 == _T_259[3:0] ? cntr_wires_2 : _GEN_213; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_215 = 4'h3 == _T_259[3:0] ? cntr_wires_3 : _GEN_214; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_216 = 4'h4 == _T_259[3:0] ? cntr_wires_4 : _GEN_215; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_217 = 4'h5 == _T_259[3:0] ? cntr_wires_5 : _GEN_216; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_218 = 4'h6 == _T_259[3:0] ? cntr_wires_6 : _GEN_217; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_219 = 4'h7 == _T_259[3:0] ? cntr_wires_7 : _GEN_218; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_220 = 4'h8 == _T_259[3:0] ? cntr_wires_8 : _GEN_219; // @[SDFChainRadix22.scala 224:38]
-  assign _T_266 = _GEN_220 - _T_264; // @[SDFChainRadix22.scala 224:38]
-  assign _T_270 = 9'h3 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_274 = 9'h3 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_222 = 4'h1 == _T_274[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_223 = 4'h2 == _T_274[3:0] ? enableVector_2 : _GEN_222; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_224 = 4'h3 == _T_274[3:0] ? enableVector_3 : _GEN_223; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_225 = 4'h4 == _T_274[3:0] ? enableVector_4 : _GEN_224; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_226 = 4'h5 == _T_274[3:0] ? enableVector_5 : _GEN_225; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_227 = 4'h6 == _T_274[3:0] ? enableVector_6 : _GEN_226; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_228 = 4'h7 == _T_274[3:0] ? enableVector_7 : _GEN_227; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_229 = 4'h8 == _T_274[3:0] ? enableVector_8 : _GEN_228; // @[SDFChainRadix22.scala 223:20]
-  assign _T_279 = 9'h1c0 - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_231 = 4'h1 == _T_274[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_232 = 4'h2 == _T_274[3:0] ? cntr_wires_2 : _GEN_231; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_233 = 4'h3 == _T_274[3:0] ? cntr_wires_3 : _GEN_232; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_234 = 4'h4 == _T_274[3:0] ? cntr_wires_4 : _GEN_233; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_235 = 4'h5 == _T_274[3:0] ? cntr_wires_5 : _GEN_234; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_236 = 4'h6 == _T_274[3:0] ? cntr_wires_6 : _GEN_235; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_237 = 4'h7 == _T_274[3:0] ? cntr_wires_7 : _GEN_236; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_238 = 4'h8 == _T_274[3:0] ? cntr_wires_8 : _GEN_237; // @[SDFChainRadix22.scala 224:38]
-  assign _T_281 = _GEN_238 - _T_279; // @[SDFChainRadix22.scala 224:38]
-  assign _T_285 = 9'h4 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_289 = 9'h4 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_240 = 4'h1 == _T_289[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_241 = 4'h2 == _T_289[3:0] ? enableVector_2 : _GEN_240; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_242 = 4'h3 == _T_289[3:0] ? enableVector_3 : _GEN_241; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_243 = 4'h4 == _T_289[3:0] ? enableVector_4 : _GEN_242; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_244 = 4'h5 == _T_289[3:0] ? enableVector_5 : _GEN_243; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_245 = 4'h6 == _T_289[3:0] ? enableVector_6 : _GEN_244; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_246 = 4'h7 == _T_289[3:0] ? enableVector_7 : _GEN_245; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_247 = 4'h8 == _T_289[3:0] ? enableVector_8 : _GEN_246; // @[SDFChainRadix22.scala 223:20]
-  assign _T_294 = 9'h1e0 - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_249 = 4'h1 == _T_289[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_250 = 4'h2 == _T_289[3:0] ? cntr_wires_2 : _GEN_249; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_251 = 4'h3 == _T_289[3:0] ? cntr_wires_3 : _GEN_250; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_252 = 4'h4 == _T_289[3:0] ? cntr_wires_4 : _GEN_251; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_253 = 4'h5 == _T_289[3:0] ? cntr_wires_5 : _GEN_252; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_254 = 4'h6 == _T_289[3:0] ? cntr_wires_6 : _GEN_253; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_255 = 4'h7 == _T_289[3:0] ? cntr_wires_7 : _GEN_254; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_256 = 4'h8 == _T_289[3:0] ? cntr_wires_8 : _GEN_255; // @[SDFChainRadix22.scala 224:38]
-  assign _T_296 = _GEN_256 - _T_294; // @[SDFChainRadix22.scala 224:38]
-  assign _T_300 = 9'h5 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_304 = 9'h5 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_258 = 4'h1 == _T_304[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_259 = 4'h2 == _T_304[3:0] ? enableVector_2 : _GEN_258; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_260 = 4'h3 == _T_304[3:0] ? enableVector_3 : _GEN_259; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_261 = 4'h4 == _T_304[3:0] ? enableVector_4 : _GEN_260; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_262 = 4'h5 == _T_304[3:0] ? enableVector_5 : _GEN_261; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_263 = 4'h6 == _T_304[3:0] ? enableVector_6 : _GEN_262; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_264 = 4'h7 == _T_304[3:0] ? enableVector_7 : _GEN_263; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_265 = 4'h8 == _T_304[3:0] ? enableVector_8 : _GEN_264; // @[SDFChainRadix22.scala 223:20]
-  assign _T_309 = 9'h1f0 - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_267 = 4'h1 == _T_304[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_268 = 4'h2 == _T_304[3:0] ? cntr_wires_2 : _GEN_267; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_269 = 4'h3 == _T_304[3:0] ? cntr_wires_3 : _GEN_268; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_270 = 4'h4 == _T_304[3:0] ? cntr_wires_4 : _GEN_269; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_271 = 4'h5 == _T_304[3:0] ? cntr_wires_5 : _GEN_270; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_272 = 4'h6 == _T_304[3:0] ? cntr_wires_6 : _GEN_271; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_273 = 4'h7 == _T_304[3:0] ? cntr_wires_7 : _GEN_272; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_274 = 4'h8 == _T_304[3:0] ? cntr_wires_8 : _GEN_273; // @[SDFChainRadix22.scala 224:38]
-  assign _T_311 = _GEN_274 - _T_309; // @[SDFChainRadix22.scala 224:38]
-  assign _T_315 = 9'h6 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_319 = 9'h6 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_276 = 4'h1 == _T_319[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_277 = 4'h2 == _T_319[3:0] ? enableVector_2 : _GEN_276; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_278 = 4'h3 == _T_319[3:0] ? enableVector_3 : _GEN_277; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_279 = 4'h4 == _T_319[3:0] ? enableVector_4 : _GEN_278; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_280 = 4'h5 == _T_319[3:0] ? enableVector_5 : _GEN_279; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_281 = 4'h6 == _T_319[3:0] ? enableVector_6 : _GEN_280; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_282 = 4'h7 == _T_319[3:0] ? enableVector_7 : _GEN_281; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_283 = 4'h8 == _T_319[3:0] ? enableVector_8 : _GEN_282; // @[SDFChainRadix22.scala 223:20]
-  assign _T_324 = 9'h1f8 - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_285 = 4'h1 == _T_319[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_286 = 4'h2 == _T_319[3:0] ? cntr_wires_2 : _GEN_285; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_287 = 4'h3 == _T_319[3:0] ? cntr_wires_3 : _GEN_286; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_288 = 4'h4 == _T_319[3:0] ? cntr_wires_4 : _GEN_287; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_289 = 4'h5 == _T_319[3:0] ? cntr_wires_5 : _GEN_288; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_290 = 4'h6 == _T_319[3:0] ? cntr_wires_6 : _GEN_289; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_291 = 4'h7 == _T_319[3:0] ? cntr_wires_7 : _GEN_290; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_292 = 4'h8 == _T_319[3:0] ? cntr_wires_8 : _GEN_291; // @[SDFChainRadix22.scala 224:38]
-  assign _T_326 = _GEN_292 - _T_324; // @[SDFChainRadix22.scala 224:38]
-  assign _T_330 = 9'h7 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_334 = 9'h7 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_294 = 4'h1 == _T_334[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_295 = 4'h2 == _T_334[3:0] ? enableVector_2 : _GEN_294; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_296 = 4'h3 == _T_334[3:0] ? enableVector_3 : _GEN_295; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_297 = 4'h4 == _T_334[3:0] ? enableVector_4 : _GEN_296; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_298 = 4'h5 == _T_334[3:0] ? enableVector_5 : _GEN_297; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_299 = 4'h6 == _T_334[3:0] ? enableVector_6 : _GEN_298; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_300 = 4'h7 == _T_334[3:0] ? enableVector_7 : _GEN_299; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_301 = 4'h8 == _T_334[3:0] ? enableVector_8 : _GEN_300; // @[SDFChainRadix22.scala 223:20]
-  assign _T_339 = 9'h1fc - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_303 = 4'h1 == _T_334[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_304 = 4'h2 == _T_334[3:0] ? cntr_wires_2 : _GEN_303; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_305 = 4'h3 == _T_334[3:0] ? cntr_wires_3 : _GEN_304; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_306 = 4'h4 == _T_334[3:0] ? cntr_wires_4 : _GEN_305; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_307 = 4'h5 == _T_334[3:0] ? cntr_wires_5 : _GEN_306; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_308 = 4'h6 == _T_334[3:0] ? cntr_wires_6 : _GEN_307; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_309 = 4'h7 == _T_334[3:0] ? cntr_wires_7 : _GEN_308; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_310 = 4'h8 == _T_334[3:0] ? cntr_wires_8 : _GEN_309; // @[SDFChainRadix22.scala 224:38]
-  assign _T_341 = _GEN_310 - _T_339; // @[SDFChainRadix22.scala 224:38]
-  assign _T_345 = 9'h8 < _T_90; // @[SDFChainRadix22.scala 221:67]
-  assign _T_349 = 9'h8 - _T_90; // @[SDFChainRadix22.scala 222:63]
-  assign _GEN_312 = 4'h1 == _T_349[3:0] ? enableVector_1 : enableInit; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_313 = 4'h2 == _T_349[3:0] ? enableVector_2 : _GEN_312; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_314 = 4'h3 == _T_349[3:0] ? enableVector_3 : _GEN_313; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_315 = 4'h4 == _T_349[3:0] ? enableVector_4 : _GEN_314; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_316 = 4'h5 == _T_349[3:0] ? enableVector_5 : _GEN_315; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_317 = 4'h6 == _T_349[3:0] ? enableVector_6 : _GEN_316; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_318 = 4'h7 == _T_349[3:0] ? enableVector_7 : _GEN_317; // @[SDFChainRadix22.scala 223:20]
-  assign _GEN_319 = 4'h8 == _T_349[3:0] ? enableVector_8 : _GEN_318; // @[SDFChainRadix22.scala 223:20]
-  assign _T_354 = 9'h1fe - cumulativeDelayWire; // @[SDFChainRadix22.scala 224:68]
-  assign _GEN_321 = 4'h1 == _T_349[3:0] ? cntr_wires_1 : cntr_wires_0; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_322 = 4'h2 == _T_349[3:0] ? cntr_wires_2 : _GEN_321; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_323 = 4'h3 == _T_349[3:0] ? cntr_wires_3 : _GEN_322; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_324 = 4'h4 == _T_349[3:0] ? cntr_wires_4 : _GEN_323; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_325 = 4'h5 == _T_349[3:0] ? cntr_wires_5 : _GEN_324; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_326 = 4'h6 == _T_349[3:0] ? cntr_wires_6 : _GEN_325; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_327 = 4'h7 == _T_349[3:0] ? cntr_wires_7 : _GEN_326; // @[SDFChainRadix22.scala 224:38]
-  assign _GEN_328 = 4'h8 == _T_349[3:0] ? cntr_wires_8 : _GEN_327; // @[SDFChainRadix22.scala 224:38]
-  assign _T_356 = _GEN_328 - _T_354; // @[SDFChainRadix22.scala 224:38]
-  assign _T_363 = 9'h0 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign _GEN_329 = _T_363 ? $signed(io_in_bits_imag) : $signed(input_data_imag); // @[SDFChainRadix22.scala 241:55]
-  assign _GEN_330 = _T_363 ? $signed(io_in_bits_real) : $signed(input_data_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_364 = sdf_stages_0_io_cntr < 9'h100; // @[SDFChainRadix22.scala 327:98]
-  assign _T_366 = sdf_stages_0_io_cntr < 9'h80; // @[SDFChainRadix22.scala 327:135]
-  assign _T_367 = _T_366 ? 1'h0 : 1'h1; // @[SDFChainRadix22.scala 327:122]
-  assign _T_375 = 16'sh0 - $signed(sdf_stages_0_io_out_real); // @[FixedPointTypeClass.scala 39:43]
-  assign _T_372_real = sdf_stages_0_io_out_imag; // @[SDFChainRadix22.scala 329:32 SDFChainRadix22.scala 332:29]
-  assign _T_390 = 9'h1 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign _GEN_338 = _T_390 ? $signed(io_in_bits_imag) : $signed(outputWires_0_imag); // @[SDFChainRadix22.scala 241:55]
-  assign _GEN_339 = _T_390 ? $signed(io_in_bits_real) : $signed(outputWires_0_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_1683 = _GEN_202 + 9'h1; // @[SDFChainRadix22.scala 283:83]
-  assign _T_1687 = _T_1683 - _T_264; // @[SDFChainRadix22.scala 283:89]
-  assign _GEN_499 = 9'h81 == _T_1689 ? 8'h2 : 8'h0; // @[Reg.scala 16:23]
-  assign _GEN_500 = 9'h82 == _T_1689 ? 8'h4 : _GEN_499; // @[Reg.scala 16:23]
-  assign _GEN_501 = 9'h83 == _T_1689 ? 8'h6 : _GEN_500; // @[Reg.scala 16:23]
-  assign _GEN_502 = 9'h84 == _T_1689 ? 8'h8 : _GEN_501; // @[Reg.scala 16:23]
-  assign _GEN_503 = 9'h85 == _T_1689 ? 8'ha : _GEN_502; // @[Reg.scala 16:23]
-  assign _GEN_504 = 9'h86 == _T_1689 ? 8'hc : _GEN_503; // @[Reg.scala 16:23]
-  assign _GEN_505 = 9'h87 == _T_1689 ? 8'he : _GEN_504; // @[Reg.scala 16:23]
-  assign _GEN_506 = 9'h88 == _T_1689 ? 8'h10 : _GEN_505; // @[Reg.scala 16:23]
-  assign _GEN_507 = 9'h89 == _T_1689 ? 8'h12 : _GEN_506; // @[Reg.scala 16:23]
-  assign _GEN_508 = 9'h8a == _T_1689 ? 8'h14 : _GEN_507; // @[Reg.scala 16:23]
-  assign _GEN_509 = 9'h8b == _T_1689 ? 8'h16 : _GEN_508; // @[Reg.scala 16:23]
-  assign _GEN_510 = 9'h8c == _T_1689 ? 8'h18 : _GEN_509; // @[Reg.scala 16:23]
-  assign _GEN_511 = 9'h8d == _T_1689 ? 8'h1a : _GEN_510; // @[Reg.scala 16:23]
-  assign _GEN_512 = 9'h8e == _T_1689 ? 8'h1c : _GEN_511; // @[Reg.scala 16:23]
-  assign _GEN_513 = 9'h8f == _T_1689 ? 8'h1e : _GEN_512; // @[Reg.scala 16:23]
-  assign _GEN_514 = 9'h90 == _T_1689 ? 8'h20 : _GEN_513; // @[Reg.scala 16:23]
-  assign _GEN_515 = 9'h91 == _T_1689 ? 8'h22 : _GEN_514; // @[Reg.scala 16:23]
-  assign _GEN_516 = 9'h92 == _T_1689 ? 8'h24 : _GEN_515; // @[Reg.scala 16:23]
-  assign _GEN_517 = 9'h93 == _T_1689 ? 8'h26 : _GEN_516; // @[Reg.scala 16:23]
-  assign _GEN_518 = 9'h94 == _T_1689 ? 8'h28 : _GEN_517; // @[Reg.scala 16:23]
-  assign _GEN_519 = 9'h95 == _T_1689 ? 8'h2a : _GEN_518; // @[Reg.scala 16:23]
-  assign _GEN_520 = 9'h96 == _T_1689 ? 8'h2c : _GEN_519; // @[Reg.scala 16:23]
-  assign _GEN_521 = 9'h97 == _T_1689 ? 8'h2e : _GEN_520; // @[Reg.scala 16:23]
-  assign _GEN_522 = 9'h98 == _T_1689 ? 8'h30 : _GEN_521; // @[Reg.scala 16:23]
-  assign _GEN_523 = 9'h99 == _T_1689 ? 8'h32 : _GEN_522; // @[Reg.scala 16:23]
-  assign _GEN_524 = 9'h9a == _T_1689 ? 8'h34 : _GEN_523; // @[Reg.scala 16:23]
-  assign _GEN_525 = 9'h9b == _T_1689 ? 8'h36 : _GEN_524; // @[Reg.scala 16:23]
-  assign _GEN_526 = 9'h9c == _T_1689 ? 8'h38 : _GEN_525; // @[Reg.scala 16:23]
-  assign _GEN_527 = 9'h9d == _T_1689 ? 8'h3a : _GEN_526; // @[Reg.scala 16:23]
-  assign _GEN_528 = 9'h9e == _T_1689 ? 8'h3c : _GEN_527; // @[Reg.scala 16:23]
-  assign _GEN_529 = 9'h9f == _T_1689 ? 8'h3e : _GEN_528; // @[Reg.scala 16:23]
-  assign _GEN_530 = 9'ha0 == _T_1689 ? 8'h40 : _GEN_529; // @[Reg.scala 16:23]
-  assign _GEN_531 = 9'ha1 == _T_1689 ? 8'h42 : _GEN_530; // @[Reg.scala 16:23]
-  assign _GEN_532 = 9'ha2 == _T_1689 ? 8'h44 : _GEN_531; // @[Reg.scala 16:23]
-  assign _GEN_533 = 9'ha3 == _T_1689 ? 8'h46 : _GEN_532; // @[Reg.scala 16:23]
-  assign _GEN_534 = 9'ha4 == _T_1689 ? 8'h48 : _GEN_533; // @[Reg.scala 16:23]
-  assign _GEN_535 = 9'ha5 == _T_1689 ? 8'h4a : _GEN_534; // @[Reg.scala 16:23]
-  assign _GEN_536 = 9'ha6 == _T_1689 ? 8'h4c : _GEN_535; // @[Reg.scala 16:23]
-  assign _GEN_537 = 9'ha7 == _T_1689 ? 8'h4e : _GEN_536; // @[Reg.scala 16:23]
-  assign _GEN_538 = 9'ha8 == _T_1689 ? 8'h50 : _GEN_537; // @[Reg.scala 16:23]
-  assign _GEN_539 = 9'ha9 == _T_1689 ? 8'h52 : _GEN_538; // @[Reg.scala 16:23]
-  assign _GEN_540 = 9'haa == _T_1689 ? 8'h54 : _GEN_539; // @[Reg.scala 16:23]
-  assign _GEN_541 = 9'hab == _T_1689 ? 8'h56 : _GEN_540; // @[Reg.scala 16:23]
-  assign _GEN_542 = 9'hac == _T_1689 ? 8'h58 : _GEN_541; // @[Reg.scala 16:23]
-  assign _GEN_543 = 9'had == _T_1689 ? 8'h5a : _GEN_542; // @[Reg.scala 16:23]
-  assign _GEN_544 = 9'hae == _T_1689 ? 8'h5c : _GEN_543; // @[Reg.scala 16:23]
-  assign _GEN_545 = 9'haf == _T_1689 ? 8'h5e : _GEN_544; // @[Reg.scala 16:23]
-  assign _GEN_546 = 9'hb0 == _T_1689 ? 8'h60 : _GEN_545; // @[Reg.scala 16:23]
-  assign _GEN_547 = 9'hb1 == _T_1689 ? 8'h62 : _GEN_546; // @[Reg.scala 16:23]
-  assign _GEN_548 = 9'hb2 == _T_1689 ? 8'h64 : _GEN_547; // @[Reg.scala 16:23]
-  assign _GEN_549 = 9'hb3 == _T_1689 ? 8'h66 : _GEN_548; // @[Reg.scala 16:23]
-  assign _GEN_550 = 9'hb4 == _T_1689 ? 8'h68 : _GEN_549; // @[Reg.scala 16:23]
-  assign _GEN_551 = 9'hb5 == _T_1689 ? 8'h6a : _GEN_550; // @[Reg.scala 16:23]
-  assign _GEN_552 = 9'hb6 == _T_1689 ? 8'h6c : _GEN_551; // @[Reg.scala 16:23]
-  assign _GEN_553 = 9'hb7 == _T_1689 ? 8'h6e : _GEN_552; // @[Reg.scala 16:23]
-  assign _GEN_554 = 9'hb8 == _T_1689 ? 8'h70 : _GEN_553; // @[Reg.scala 16:23]
-  assign _GEN_555 = 9'hb9 == _T_1689 ? 8'h72 : _GEN_554; // @[Reg.scala 16:23]
-  assign _GEN_556 = 9'hba == _T_1689 ? 8'h74 : _GEN_555; // @[Reg.scala 16:23]
-  assign _GEN_557 = 9'hbb == _T_1689 ? 8'h76 : _GEN_556; // @[Reg.scala 16:23]
-  assign _GEN_558 = 9'hbc == _T_1689 ? 8'h78 : _GEN_557; // @[Reg.scala 16:23]
-  assign _GEN_559 = 9'hbd == _T_1689 ? 8'h7a : _GEN_558; // @[Reg.scala 16:23]
-  assign _GEN_560 = 9'hbe == _T_1689 ? 8'h7c : _GEN_559; // @[Reg.scala 16:23]
-  assign _GEN_561 = 9'hbf == _T_1689 ? 8'h7e : _GEN_560; // @[Reg.scala 16:23]
-  assign _GEN_562 = 9'hc0 == _T_1689 ? 8'h80 : _GEN_561; // @[Reg.scala 16:23]
-  assign _GEN_563 = 9'hc1 == _T_1689 ? 8'h82 : _GEN_562; // @[Reg.scala 16:23]
-  assign _GEN_564 = 9'hc2 == _T_1689 ? 8'h83 : _GEN_563; // @[Reg.scala 16:23]
-  assign _GEN_565 = 9'hc3 == _T_1689 ? 8'h84 : _GEN_564; // @[Reg.scala 16:23]
-  assign _GEN_566 = 9'hc4 == _T_1689 ? 8'h86 : _GEN_565; // @[Reg.scala 16:23]
-  assign _GEN_567 = 9'hc5 == _T_1689 ? 8'h87 : _GEN_566; // @[Reg.scala 16:23]
-  assign _GEN_568 = 9'hc6 == _T_1689 ? 8'h88 : _GEN_567; // @[Reg.scala 16:23]
-  assign _GEN_569 = 9'hc7 == _T_1689 ? 8'h8a : _GEN_568; // @[Reg.scala 16:23]
-  assign _GEN_570 = 9'hc8 == _T_1689 ? 8'h8b : _GEN_569; // @[Reg.scala 16:23]
-  assign _GEN_571 = 9'hc9 == _T_1689 ? 8'h8c : _GEN_570; // @[Reg.scala 16:23]
-  assign _GEN_572 = 9'hca == _T_1689 ? 8'h8e : _GEN_571; // @[Reg.scala 16:23]
-  assign _GEN_573 = 9'hcb == _T_1689 ? 8'h8f : _GEN_572; // @[Reg.scala 16:23]
-  assign _GEN_574 = 9'hcc == _T_1689 ? 8'h90 : _GEN_573; // @[Reg.scala 16:23]
-  assign _GEN_575 = 9'hcd == _T_1689 ? 8'h92 : _GEN_574; // @[Reg.scala 16:23]
-  assign _GEN_576 = 9'hce == _T_1689 ? 8'h93 : _GEN_575; // @[Reg.scala 16:23]
-  assign _GEN_577 = 9'hcf == _T_1689 ? 8'h94 : _GEN_576; // @[Reg.scala 16:23]
-  assign _GEN_578 = 9'hd0 == _T_1689 ? 8'h96 : _GEN_577; // @[Reg.scala 16:23]
-  assign _GEN_579 = 9'hd1 == _T_1689 ? 8'h97 : _GEN_578; // @[Reg.scala 16:23]
-  assign _GEN_580 = 9'hd2 == _T_1689 ? 8'h98 : _GEN_579; // @[Reg.scala 16:23]
-  assign _GEN_581 = 9'hd3 == _T_1689 ? 8'h9a : _GEN_580; // @[Reg.scala 16:23]
-  assign _GEN_582 = 9'hd4 == _T_1689 ? 8'h9b : _GEN_581; // @[Reg.scala 16:23]
-  assign _GEN_583 = 9'hd5 == _T_1689 ? 8'h9c : _GEN_582; // @[Reg.scala 16:23]
-  assign _GEN_584 = 9'hd6 == _T_1689 ? 8'h9e : _GEN_583; // @[Reg.scala 16:23]
-  assign _GEN_585 = 9'hd7 == _T_1689 ? 8'h9f : _GEN_584; // @[Reg.scala 16:23]
-  assign _GEN_586 = 9'hd8 == _T_1689 ? 8'ha0 : _GEN_585; // @[Reg.scala 16:23]
-  assign _GEN_587 = 9'hd9 == _T_1689 ? 8'ha2 : _GEN_586; // @[Reg.scala 16:23]
-  assign _GEN_588 = 9'hda == _T_1689 ? 8'ha3 : _GEN_587; // @[Reg.scala 16:23]
-  assign _GEN_589 = 9'hdb == _T_1689 ? 8'ha4 : _GEN_588; // @[Reg.scala 16:23]
-  assign _GEN_590 = 9'hdc == _T_1689 ? 8'ha6 : _GEN_589; // @[Reg.scala 16:23]
-  assign _GEN_591 = 9'hdd == _T_1689 ? 8'ha7 : _GEN_590; // @[Reg.scala 16:23]
-  assign _GEN_592 = 9'hde == _T_1689 ? 8'ha8 : _GEN_591; // @[Reg.scala 16:23]
-  assign _GEN_593 = 9'hdf == _T_1689 ? 8'haa : _GEN_592; // @[Reg.scala 16:23]
-  assign _GEN_594 = 9'he0 == _T_1689 ? 8'hab : _GEN_593; // @[Reg.scala 16:23]
-  assign _GEN_595 = 9'he1 == _T_1689 ? 8'hac : _GEN_594; // @[Reg.scala 16:23]
-  assign _GEN_596 = 9'he2 == _T_1689 ? 8'hae : _GEN_595; // @[Reg.scala 16:23]
-  assign _GEN_597 = 9'he3 == _T_1689 ? 8'haf : _GEN_596; // @[Reg.scala 16:23]
-  assign _GEN_598 = 9'he4 == _T_1689 ? 8'hb0 : _GEN_597; // @[Reg.scala 16:23]
-  assign _GEN_599 = 9'he5 == _T_1689 ? 8'hb2 : _GEN_598; // @[Reg.scala 16:23]
-  assign _GEN_600 = 9'he6 == _T_1689 ? 8'hb3 : _GEN_599; // @[Reg.scala 16:23]
-  assign _GEN_601 = 9'he7 == _T_1689 ? 8'hb4 : _GEN_600; // @[Reg.scala 16:23]
-  assign _GEN_602 = 9'he8 == _T_1689 ? 8'hb6 : _GEN_601; // @[Reg.scala 16:23]
-  assign _GEN_603 = 9'he9 == _T_1689 ? 8'hb7 : _GEN_602; // @[Reg.scala 16:23]
-  assign _GEN_604 = 9'hea == _T_1689 ? 8'hb8 : _GEN_603; // @[Reg.scala 16:23]
-  assign _GEN_605 = 9'heb == _T_1689 ? 8'hba : _GEN_604; // @[Reg.scala 16:23]
-  assign _GEN_606 = 9'hec == _T_1689 ? 8'hbb : _GEN_605; // @[Reg.scala 16:23]
-  assign _GEN_607 = 9'hed == _T_1689 ? 8'hbc : _GEN_606; // @[Reg.scala 16:23]
-  assign _GEN_608 = 9'hee == _T_1689 ? 8'hbe : _GEN_607; // @[Reg.scala 16:23]
-  assign _GEN_609 = 9'hef == _T_1689 ? 8'hbf : _GEN_608; // @[Reg.scala 16:23]
-  assign _GEN_610 = 9'hf0 == _T_1689 ? 8'hc0 : _GEN_609; // @[Reg.scala 16:23]
-  assign _GEN_611 = 9'hf1 == _T_1689 ? 8'hc2 : _GEN_610; // @[Reg.scala 16:23]
-  assign _GEN_612 = 9'hf2 == _T_1689 ? 8'hc3 : _GEN_611; // @[Reg.scala 16:23]
-  assign _GEN_613 = 9'hf3 == _T_1689 ? 8'hc4 : _GEN_612; // @[Reg.scala 16:23]
-  assign _GEN_614 = 9'hf4 == _T_1689 ? 8'hc6 : _GEN_613; // @[Reg.scala 16:23]
-  assign _GEN_615 = 9'hf5 == _T_1689 ? 8'hc7 : _GEN_614; // @[Reg.scala 16:23]
-  assign _GEN_616 = 9'hf6 == _T_1689 ? 8'hc8 : _GEN_615; // @[Reg.scala 16:23]
-  assign _GEN_617 = 9'hf7 == _T_1689 ? 8'hca : _GEN_616; // @[Reg.scala 16:23]
-  assign _GEN_618 = 9'hf8 == _T_1689 ? 8'hcb : _GEN_617; // @[Reg.scala 16:23]
-  assign _GEN_619 = 9'hf9 == _T_1689 ? 8'hcc : _GEN_618; // @[Reg.scala 16:23]
-  assign _GEN_620 = 9'hfa == _T_1689 ? 8'hce : _GEN_619; // @[Reg.scala 16:23]
-  assign _GEN_621 = 9'hfb == _T_1689 ? 8'hcf : _GEN_620; // @[Reg.scala 16:23]
-  assign _GEN_622 = 9'hfc == _T_1689 ? 8'hd0 : _GEN_621; // @[Reg.scala 16:23]
-  assign _GEN_623 = 9'hfd == _T_1689 ? 8'hd2 : _GEN_622; // @[Reg.scala 16:23]
-  assign _GEN_624 = 9'hfe == _T_1689 ? 8'hd3 : _GEN_623; // @[Reg.scala 16:23]
-  assign _GEN_625 = 9'hff == _T_1689 ? 8'hd4 : _GEN_624; // @[Reg.scala 16:23]
-  assign _GEN_626 = 9'h100 == _T_1689 ? 8'h0 : _GEN_625; // @[Reg.scala 16:23]
-  assign _GEN_627 = 9'h101 == _T_1689 ? 8'h1 : _GEN_626; // @[Reg.scala 16:23]
-  assign _GEN_628 = 9'h102 == _T_1689 ? 8'h2 : _GEN_627; // @[Reg.scala 16:23]
-  assign _GEN_629 = 9'h103 == _T_1689 ? 8'h3 : _GEN_628; // @[Reg.scala 16:23]
-  assign _GEN_630 = 9'h104 == _T_1689 ? 8'h4 : _GEN_629; // @[Reg.scala 16:23]
-  assign _GEN_631 = 9'h105 == _T_1689 ? 8'h5 : _GEN_630; // @[Reg.scala 16:23]
-  assign _GEN_632 = 9'h106 == _T_1689 ? 8'h6 : _GEN_631; // @[Reg.scala 16:23]
-  assign _GEN_633 = 9'h107 == _T_1689 ? 8'h7 : _GEN_632; // @[Reg.scala 16:23]
-  assign _GEN_634 = 9'h108 == _T_1689 ? 8'h8 : _GEN_633; // @[Reg.scala 16:23]
-  assign _GEN_635 = 9'h109 == _T_1689 ? 8'h9 : _GEN_634; // @[Reg.scala 16:23]
-  assign _GEN_636 = 9'h10a == _T_1689 ? 8'ha : _GEN_635; // @[Reg.scala 16:23]
-  assign _GEN_637 = 9'h10b == _T_1689 ? 8'hb : _GEN_636; // @[Reg.scala 16:23]
-  assign _GEN_638 = 9'h10c == _T_1689 ? 8'hc : _GEN_637; // @[Reg.scala 16:23]
-  assign _GEN_639 = 9'h10d == _T_1689 ? 8'hd : _GEN_638; // @[Reg.scala 16:23]
-  assign _GEN_640 = 9'h10e == _T_1689 ? 8'he : _GEN_639; // @[Reg.scala 16:23]
-  assign _GEN_641 = 9'h10f == _T_1689 ? 8'hf : _GEN_640; // @[Reg.scala 16:23]
-  assign _GEN_642 = 9'h110 == _T_1689 ? 8'h10 : _GEN_641; // @[Reg.scala 16:23]
-  assign _GEN_643 = 9'h111 == _T_1689 ? 8'h11 : _GEN_642; // @[Reg.scala 16:23]
-  assign _GEN_644 = 9'h112 == _T_1689 ? 8'h12 : _GEN_643; // @[Reg.scala 16:23]
-  assign _GEN_645 = 9'h113 == _T_1689 ? 8'h13 : _GEN_644; // @[Reg.scala 16:23]
-  assign _GEN_646 = 9'h114 == _T_1689 ? 8'h14 : _GEN_645; // @[Reg.scala 16:23]
-  assign _GEN_647 = 9'h115 == _T_1689 ? 8'h15 : _GEN_646; // @[Reg.scala 16:23]
-  assign _GEN_648 = 9'h116 == _T_1689 ? 8'h16 : _GEN_647; // @[Reg.scala 16:23]
-  assign _GEN_649 = 9'h117 == _T_1689 ? 8'h17 : _GEN_648; // @[Reg.scala 16:23]
-  assign _GEN_650 = 9'h118 == _T_1689 ? 8'h18 : _GEN_649; // @[Reg.scala 16:23]
-  assign _GEN_651 = 9'h119 == _T_1689 ? 8'h19 : _GEN_650; // @[Reg.scala 16:23]
-  assign _GEN_652 = 9'h11a == _T_1689 ? 8'h1a : _GEN_651; // @[Reg.scala 16:23]
-  assign _GEN_653 = 9'h11b == _T_1689 ? 8'h1b : _GEN_652; // @[Reg.scala 16:23]
-  assign _GEN_654 = 9'h11c == _T_1689 ? 8'h1c : _GEN_653; // @[Reg.scala 16:23]
-  assign _GEN_655 = 9'h11d == _T_1689 ? 8'h1d : _GEN_654; // @[Reg.scala 16:23]
-  assign _GEN_656 = 9'h11e == _T_1689 ? 8'h1e : _GEN_655; // @[Reg.scala 16:23]
-  assign _GEN_657 = 9'h11f == _T_1689 ? 8'h1f : _GEN_656; // @[Reg.scala 16:23]
-  assign _GEN_658 = 9'h120 == _T_1689 ? 8'h20 : _GEN_657; // @[Reg.scala 16:23]
-  assign _GEN_659 = 9'h121 == _T_1689 ? 8'h21 : _GEN_658; // @[Reg.scala 16:23]
-  assign _GEN_660 = 9'h122 == _T_1689 ? 8'h22 : _GEN_659; // @[Reg.scala 16:23]
-  assign _GEN_661 = 9'h123 == _T_1689 ? 8'h23 : _GEN_660; // @[Reg.scala 16:23]
-  assign _GEN_662 = 9'h124 == _T_1689 ? 8'h24 : _GEN_661; // @[Reg.scala 16:23]
-  assign _GEN_663 = 9'h125 == _T_1689 ? 8'h25 : _GEN_662; // @[Reg.scala 16:23]
-  assign _GEN_664 = 9'h126 == _T_1689 ? 8'h26 : _GEN_663; // @[Reg.scala 16:23]
-  assign _GEN_665 = 9'h127 == _T_1689 ? 8'h27 : _GEN_664; // @[Reg.scala 16:23]
-  assign _GEN_666 = 9'h128 == _T_1689 ? 8'h28 : _GEN_665; // @[Reg.scala 16:23]
-  assign _GEN_667 = 9'h129 == _T_1689 ? 8'h29 : _GEN_666; // @[Reg.scala 16:23]
-  assign _GEN_668 = 9'h12a == _T_1689 ? 8'h2a : _GEN_667; // @[Reg.scala 16:23]
-  assign _GEN_669 = 9'h12b == _T_1689 ? 8'h2b : _GEN_668; // @[Reg.scala 16:23]
-  assign _GEN_670 = 9'h12c == _T_1689 ? 8'h2c : _GEN_669; // @[Reg.scala 16:23]
-  assign _GEN_671 = 9'h12d == _T_1689 ? 8'h2d : _GEN_670; // @[Reg.scala 16:23]
-  assign _GEN_672 = 9'h12e == _T_1689 ? 8'h2e : _GEN_671; // @[Reg.scala 16:23]
-  assign _GEN_673 = 9'h12f == _T_1689 ? 8'h2f : _GEN_672; // @[Reg.scala 16:23]
-  assign _GEN_674 = 9'h130 == _T_1689 ? 8'h30 : _GEN_673; // @[Reg.scala 16:23]
-  assign _GEN_675 = 9'h131 == _T_1689 ? 8'h31 : _GEN_674; // @[Reg.scala 16:23]
-  assign _GEN_676 = 9'h132 == _T_1689 ? 8'h32 : _GEN_675; // @[Reg.scala 16:23]
-  assign _GEN_677 = 9'h133 == _T_1689 ? 8'h33 : _GEN_676; // @[Reg.scala 16:23]
-  assign _GEN_678 = 9'h134 == _T_1689 ? 8'h34 : _GEN_677; // @[Reg.scala 16:23]
-  assign _GEN_679 = 9'h135 == _T_1689 ? 8'h35 : _GEN_678; // @[Reg.scala 16:23]
-  assign _GEN_680 = 9'h136 == _T_1689 ? 8'h36 : _GEN_679; // @[Reg.scala 16:23]
-  assign _GEN_681 = 9'h137 == _T_1689 ? 8'h37 : _GEN_680; // @[Reg.scala 16:23]
-  assign _GEN_682 = 9'h138 == _T_1689 ? 8'h38 : _GEN_681; // @[Reg.scala 16:23]
-  assign _GEN_683 = 9'h139 == _T_1689 ? 8'h39 : _GEN_682; // @[Reg.scala 16:23]
-  assign _GEN_684 = 9'h13a == _T_1689 ? 8'h3a : _GEN_683; // @[Reg.scala 16:23]
-  assign _GEN_685 = 9'h13b == _T_1689 ? 8'h3b : _GEN_684; // @[Reg.scala 16:23]
-  assign _GEN_686 = 9'h13c == _T_1689 ? 8'h3c : _GEN_685; // @[Reg.scala 16:23]
-  assign _GEN_687 = 9'h13d == _T_1689 ? 8'h3d : _GEN_686; // @[Reg.scala 16:23]
-  assign _GEN_688 = 9'h13e == _T_1689 ? 8'h3e : _GEN_687; // @[Reg.scala 16:23]
-  assign _GEN_689 = 9'h13f == _T_1689 ? 8'h3f : _GEN_688; // @[Reg.scala 16:23]
-  assign _GEN_690 = 9'h140 == _T_1689 ? 8'h40 : _GEN_689; // @[Reg.scala 16:23]
-  assign _GEN_691 = 9'h141 == _T_1689 ? 8'h41 : _GEN_690; // @[Reg.scala 16:23]
-  assign _GEN_692 = 9'h142 == _T_1689 ? 8'h42 : _GEN_691; // @[Reg.scala 16:23]
-  assign _GEN_693 = 9'h143 == _T_1689 ? 8'h43 : _GEN_692; // @[Reg.scala 16:23]
-  assign _GEN_694 = 9'h144 == _T_1689 ? 8'h44 : _GEN_693; // @[Reg.scala 16:23]
-  assign _GEN_695 = 9'h145 == _T_1689 ? 8'h45 : _GEN_694; // @[Reg.scala 16:23]
-  assign _GEN_696 = 9'h146 == _T_1689 ? 8'h46 : _GEN_695; // @[Reg.scala 16:23]
-  assign _GEN_697 = 9'h147 == _T_1689 ? 8'h47 : _GEN_696; // @[Reg.scala 16:23]
-  assign _GEN_698 = 9'h148 == _T_1689 ? 8'h48 : _GEN_697; // @[Reg.scala 16:23]
-  assign _GEN_699 = 9'h149 == _T_1689 ? 8'h49 : _GEN_698; // @[Reg.scala 16:23]
-  assign _GEN_700 = 9'h14a == _T_1689 ? 8'h4a : _GEN_699; // @[Reg.scala 16:23]
-  assign _GEN_701 = 9'h14b == _T_1689 ? 8'h4b : _GEN_700; // @[Reg.scala 16:23]
-  assign _GEN_702 = 9'h14c == _T_1689 ? 8'h4c : _GEN_701; // @[Reg.scala 16:23]
-  assign _GEN_703 = 9'h14d == _T_1689 ? 8'h4d : _GEN_702; // @[Reg.scala 16:23]
-  assign _GEN_704 = 9'h14e == _T_1689 ? 8'h4e : _GEN_703; // @[Reg.scala 16:23]
-  assign _GEN_705 = 9'h14f == _T_1689 ? 8'h4f : _GEN_704; // @[Reg.scala 16:23]
-  assign _GEN_706 = 9'h150 == _T_1689 ? 8'h50 : _GEN_705; // @[Reg.scala 16:23]
-  assign _GEN_707 = 9'h151 == _T_1689 ? 8'h51 : _GEN_706; // @[Reg.scala 16:23]
-  assign _GEN_708 = 9'h152 == _T_1689 ? 8'h52 : _GEN_707; // @[Reg.scala 16:23]
-  assign _GEN_709 = 9'h153 == _T_1689 ? 8'h53 : _GEN_708; // @[Reg.scala 16:23]
-  assign _GEN_710 = 9'h154 == _T_1689 ? 8'h54 : _GEN_709; // @[Reg.scala 16:23]
-  assign _GEN_711 = 9'h155 == _T_1689 ? 8'h55 : _GEN_710; // @[Reg.scala 16:23]
-  assign _GEN_712 = 9'h156 == _T_1689 ? 8'h56 : _GEN_711; // @[Reg.scala 16:23]
-  assign _GEN_713 = 9'h157 == _T_1689 ? 8'h57 : _GEN_712; // @[Reg.scala 16:23]
-  assign _GEN_714 = 9'h158 == _T_1689 ? 8'h58 : _GEN_713; // @[Reg.scala 16:23]
-  assign _GEN_715 = 9'h159 == _T_1689 ? 8'h59 : _GEN_714; // @[Reg.scala 16:23]
-  assign _GEN_716 = 9'h15a == _T_1689 ? 8'h5a : _GEN_715; // @[Reg.scala 16:23]
-  assign _GEN_717 = 9'h15b == _T_1689 ? 8'h5b : _GEN_716; // @[Reg.scala 16:23]
-  assign _GEN_718 = 9'h15c == _T_1689 ? 8'h5c : _GEN_717; // @[Reg.scala 16:23]
-  assign _GEN_719 = 9'h15d == _T_1689 ? 8'h5d : _GEN_718; // @[Reg.scala 16:23]
-  assign _GEN_720 = 9'h15e == _T_1689 ? 8'h5e : _GEN_719; // @[Reg.scala 16:23]
-  assign _GEN_721 = 9'h15f == _T_1689 ? 8'h5f : _GEN_720; // @[Reg.scala 16:23]
-  assign _GEN_722 = 9'h160 == _T_1689 ? 8'h60 : _GEN_721; // @[Reg.scala 16:23]
-  assign _GEN_723 = 9'h161 == _T_1689 ? 8'h61 : _GEN_722; // @[Reg.scala 16:23]
-  assign _GEN_724 = 9'h162 == _T_1689 ? 8'h62 : _GEN_723; // @[Reg.scala 16:23]
-  assign _GEN_725 = 9'h163 == _T_1689 ? 8'h63 : _GEN_724; // @[Reg.scala 16:23]
-  assign _GEN_726 = 9'h164 == _T_1689 ? 8'h64 : _GEN_725; // @[Reg.scala 16:23]
-  assign _GEN_727 = 9'h165 == _T_1689 ? 8'h65 : _GEN_726; // @[Reg.scala 16:23]
-  assign _GEN_728 = 9'h166 == _T_1689 ? 8'h66 : _GEN_727; // @[Reg.scala 16:23]
-  assign _GEN_729 = 9'h167 == _T_1689 ? 8'h67 : _GEN_728; // @[Reg.scala 16:23]
-  assign _GEN_730 = 9'h168 == _T_1689 ? 8'h68 : _GEN_729; // @[Reg.scala 16:23]
-  assign _GEN_731 = 9'h169 == _T_1689 ? 8'h69 : _GEN_730; // @[Reg.scala 16:23]
-  assign _GEN_732 = 9'h16a == _T_1689 ? 8'h6a : _GEN_731; // @[Reg.scala 16:23]
-  assign _GEN_733 = 9'h16b == _T_1689 ? 8'h6b : _GEN_732; // @[Reg.scala 16:23]
-  assign _GEN_734 = 9'h16c == _T_1689 ? 8'h6c : _GEN_733; // @[Reg.scala 16:23]
-  assign _GEN_735 = 9'h16d == _T_1689 ? 8'h6d : _GEN_734; // @[Reg.scala 16:23]
-  assign _GEN_736 = 9'h16e == _T_1689 ? 8'h6e : _GEN_735; // @[Reg.scala 16:23]
-  assign _GEN_737 = 9'h16f == _T_1689 ? 8'h6f : _GEN_736; // @[Reg.scala 16:23]
-  assign _GEN_738 = 9'h170 == _T_1689 ? 8'h70 : _GEN_737; // @[Reg.scala 16:23]
-  assign _GEN_739 = 9'h171 == _T_1689 ? 8'h71 : _GEN_738; // @[Reg.scala 16:23]
-  assign _GEN_740 = 9'h172 == _T_1689 ? 8'h72 : _GEN_739; // @[Reg.scala 16:23]
-  assign _GEN_741 = 9'h173 == _T_1689 ? 8'h73 : _GEN_740; // @[Reg.scala 16:23]
-  assign _GEN_742 = 9'h174 == _T_1689 ? 8'h74 : _GEN_741; // @[Reg.scala 16:23]
-  assign _GEN_743 = 9'h175 == _T_1689 ? 8'h75 : _GEN_742; // @[Reg.scala 16:23]
-  assign _GEN_744 = 9'h176 == _T_1689 ? 8'h76 : _GEN_743; // @[Reg.scala 16:23]
-  assign _GEN_745 = 9'h177 == _T_1689 ? 8'h77 : _GEN_744; // @[Reg.scala 16:23]
-  assign _GEN_746 = 9'h178 == _T_1689 ? 8'h78 : _GEN_745; // @[Reg.scala 16:23]
-  assign _GEN_747 = 9'h179 == _T_1689 ? 8'h79 : _GEN_746; // @[Reg.scala 16:23]
-  assign _GEN_748 = 9'h17a == _T_1689 ? 8'h7a : _GEN_747; // @[Reg.scala 16:23]
-  assign _GEN_749 = 9'h17b == _T_1689 ? 8'h7b : _GEN_748; // @[Reg.scala 16:23]
-  assign _GEN_750 = 9'h17c == _T_1689 ? 8'h7c : _GEN_749; // @[Reg.scala 16:23]
-  assign _GEN_751 = 9'h17d == _T_1689 ? 8'h7d : _GEN_750; // @[Reg.scala 16:23]
-  assign _GEN_752 = 9'h17e == _T_1689 ? 8'h7e : _GEN_751; // @[Reg.scala 16:23]
-  assign _GEN_753 = 9'h17f == _T_1689 ? 8'h7f : _GEN_752; // @[Reg.scala 16:23]
-  assign _GEN_754 = 9'h180 == _T_1689 ? 8'h0 : _GEN_753; // @[Reg.scala 16:23]
-  assign _GEN_755 = 9'h181 == _T_1689 ? 8'h3 : _GEN_754; // @[Reg.scala 16:23]
-  assign _GEN_756 = 9'h182 == _T_1689 ? 8'h6 : _GEN_755; // @[Reg.scala 16:23]
-  assign _GEN_757 = 9'h183 == _T_1689 ? 8'h9 : _GEN_756; // @[Reg.scala 16:23]
-  assign _GEN_758 = 9'h184 == _T_1689 ? 8'hc : _GEN_757; // @[Reg.scala 16:23]
-  assign _GEN_759 = 9'h185 == _T_1689 ? 8'hf : _GEN_758; // @[Reg.scala 16:23]
-  assign _GEN_760 = 9'h186 == _T_1689 ? 8'h12 : _GEN_759; // @[Reg.scala 16:23]
-  assign _GEN_761 = 9'h187 == _T_1689 ? 8'h15 : _GEN_760; // @[Reg.scala 16:23]
-  assign _GEN_762 = 9'h188 == _T_1689 ? 8'h18 : _GEN_761; // @[Reg.scala 16:23]
-  assign _GEN_763 = 9'h189 == _T_1689 ? 8'h1b : _GEN_762; // @[Reg.scala 16:23]
-  assign _GEN_764 = 9'h18a == _T_1689 ? 8'h1e : _GEN_763; // @[Reg.scala 16:23]
-  assign _GEN_765 = 9'h18b == _T_1689 ? 8'h21 : _GEN_764; // @[Reg.scala 16:23]
-  assign _GEN_766 = 9'h18c == _T_1689 ? 8'h24 : _GEN_765; // @[Reg.scala 16:23]
-  assign _GEN_767 = 9'h18d == _T_1689 ? 8'h27 : _GEN_766; // @[Reg.scala 16:23]
-  assign _GEN_768 = 9'h18e == _T_1689 ? 8'h2a : _GEN_767; // @[Reg.scala 16:23]
-  assign _GEN_769 = 9'h18f == _T_1689 ? 8'h2d : _GEN_768; // @[Reg.scala 16:23]
-  assign _GEN_770 = 9'h190 == _T_1689 ? 8'h30 : _GEN_769; // @[Reg.scala 16:23]
-  assign _GEN_771 = 9'h191 == _T_1689 ? 8'h33 : _GEN_770; // @[Reg.scala 16:23]
-  assign _GEN_772 = 9'h192 == _T_1689 ? 8'h36 : _GEN_771; // @[Reg.scala 16:23]
-  assign _GEN_773 = 9'h193 == _T_1689 ? 8'h39 : _GEN_772; // @[Reg.scala 16:23]
-  assign _GEN_774 = 9'h194 == _T_1689 ? 8'h3c : _GEN_773; // @[Reg.scala 16:23]
-  assign _GEN_775 = 9'h195 == _T_1689 ? 8'h3f : _GEN_774; // @[Reg.scala 16:23]
-  assign _GEN_776 = 9'h196 == _T_1689 ? 8'h42 : _GEN_775; // @[Reg.scala 16:23]
-  assign _GEN_777 = 9'h197 == _T_1689 ? 8'h45 : _GEN_776; // @[Reg.scala 16:23]
-  assign _GEN_778 = 9'h198 == _T_1689 ? 8'h48 : _GEN_777; // @[Reg.scala 16:23]
-  assign _GEN_779 = 9'h199 == _T_1689 ? 8'h4b : _GEN_778; // @[Reg.scala 16:23]
-  assign _GEN_780 = 9'h19a == _T_1689 ? 8'h4e : _GEN_779; // @[Reg.scala 16:23]
-  assign _GEN_781 = 9'h19b == _T_1689 ? 8'h51 : _GEN_780; // @[Reg.scala 16:23]
-  assign _GEN_782 = 9'h19c == _T_1689 ? 8'h54 : _GEN_781; // @[Reg.scala 16:23]
-  assign _GEN_783 = 9'h19d == _T_1689 ? 8'h57 : _GEN_782; // @[Reg.scala 16:23]
-  assign _GEN_784 = 9'h19e == _T_1689 ? 8'h5a : _GEN_783; // @[Reg.scala 16:23]
-  assign _GEN_785 = 9'h19f == _T_1689 ? 8'h5d : _GEN_784; // @[Reg.scala 16:23]
-  assign _GEN_786 = 9'h1a0 == _T_1689 ? 8'h60 : _GEN_785; // @[Reg.scala 16:23]
-  assign _GEN_787 = 9'h1a1 == _T_1689 ? 8'h63 : _GEN_786; // @[Reg.scala 16:23]
-  assign _GEN_788 = 9'h1a2 == _T_1689 ? 8'h66 : _GEN_787; // @[Reg.scala 16:23]
-  assign _GEN_789 = 9'h1a3 == _T_1689 ? 8'h69 : _GEN_788; // @[Reg.scala 16:23]
-  assign _GEN_790 = 9'h1a4 == _T_1689 ? 8'h6c : _GEN_789; // @[Reg.scala 16:23]
-  assign _GEN_791 = 9'h1a5 == _T_1689 ? 8'h6f : _GEN_790; // @[Reg.scala 16:23]
-  assign _GEN_792 = 9'h1a6 == _T_1689 ? 8'h72 : _GEN_791; // @[Reg.scala 16:23]
-  assign _GEN_793 = 9'h1a7 == _T_1689 ? 8'h75 : _GEN_792; // @[Reg.scala 16:23]
-  assign _GEN_794 = 9'h1a8 == _T_1689 ? 8'h78 : _GEN_793; // @[Reg.scala 16:23]
-  assign _GEN_795 = 9'h1a9 == _T_1689 ? 8'h7b : _GEN_794; // @[Reg.scala 16:23]
-  assign _GEN_796 = 9'h1aa == _T_1689 ? 8'h7e : _GEN_795; // @[Reg.scala 16:23]
-  assign _GEN_797 = 9'h1ab == _T_1689 ? 8'h81 : _GEN_796; // @[Reg.scala 16:23]
-  assign _GEN_798 = 9'h1ac == _T_1689 ? 8'h83 : _GEN_797; // @[Reg.scala 16:23]
-  assign _GEN_799 = 9'h1ad == _T_1689 ? 8'h85 : _GEN_798; // @[Reg.scala 16:23]
-  assign _GEN_800 = 9'h1ae == _T_1689 ? 8'h87 : _GEN_799; // @[Reg.scala 16:23]
-  assign _GEN_801 = 9'h1af == _T_1689 ? 8'h89 : _GEN_800; // @[Reg.scala 16:23]
-  assign _GEN_802 = 9'h1b0 == _T_1689 ? 8'h8b : _GEN_801; // @[Reg.scala 16:23]
-  assign _GEN_803 = 9'h1b1 == _T_1689 ? 8'h8d : _GEN_802; // @[Reg.scala 16:23]
-  assign _GEN_804 = 9'h1b2 == _T_1689 ? 8'h8f : _GEN_803; // @[Reg.scala 16:23]
-  assign _GEN_805 = 9'h1b3 == _T_1689 ? 8'h91 : _GEN_804; // @[Reg.scala 16:23]
-  assign _GEN_806 = 9'h1b4 == _T_1689 ? 8'h93 : _GEN_805; // @[Reg.scala 16:23]
-  assign _GEN_807 = 9'h1b5 == _T_1689 ? 8'h95 : _GEN_806; // @[Reg.scala 16:23]
-  assign _GEN_808 = 9'h1b6 == _T_1689 ? 8'h97 : _GEN_807; // @[Reg.scala 16:23]
-  assign _GEN_809 = 9'h1b7 == _T_1689 ? 8'h99 : _GEN_808; // @[Reg.scala 16:23]
-  assign _GEN_810 = 9'h1b8 == _T_1689 ? 8'h9b : _GEN_809; // @[Reg.scala 16:23]
-  assign _GEN_811 = 9'h1b9 == _T_1689 ? 8'h9d : _GEN_810; // @[Reg.scala 16:23]
-  assign _GEN_812 = 9'h1ba == _T_1689 ? 8'h9f : _GEN_811; // @[Reg.scala 16:23]
-  assign _GEN_813 = 9'h1bb == _T_1689 ? 8'ha1 : _GEN_812; // @[Reg.scala 16:23]
-  assign _GEN_814 = 9'h1bc == _T_1689 ? 8'ha3 : _GEN_813; // @[Reg.scala 16:23]
-  assign _GEN_815 = 9'h1bd == _T_1689 ? 8'ha5 : _GEN_814; // @[Reg.scala 16:23]
-  assign _GEN_816 = 9'h1be == _T_1689 ? 8'ha7 : _GEN_815; // @[Reg.scala 16:23]
-  assign _GEN_817 = 9'h1bf == _T_1689 ? 8'ha9 : _GEN_816; // @[Reg.scala 16:23]
-  assign _GEN_818 = 9'h1c0 == _T_1689 ? 8'hab : _GEN_817; // @[Reg.scala 16:23]
-  assign _GEN_819 = 9'h1c1 == _T_1689 ? 8'had : _GEN_818; // @[Reg.scala 16:23]
-  assign _GEN_820 = 9'h1c2 == _T_1689 ? 8'haf : _GEN_819; // @[Reg.scala 16:23]
-  assign _GEN_821 = 9'h1c3 == _T_1689 ? 8'hb1 : _GEN_820; // @[Reg.scala 16:23]
-  assign _GEN_822 = 9'h1c4 == _T_1689 ? 8'hb3 : _GEN_821; // @[Reg.scala 16:23]
-  assign _GEN_823 = 9'h1c5 == _T_1689 ? 8'hb5 : _GEN_822; // @[Reg.scala 16:23]
-  assign _GEN_824 = 9'h1c6 == _T_1689 ? 8'hb7 : _GEN_823; // @[Reg.scala 16:23]
-  assign _GEN_825 = 9'h1c7 == _T_1689 ? 8'hb9 : _GEN_824; // @[Reg.scala 16:23]
-  assign _GEN_826 = 9'h1c8 == _T_1689 ? 8'hbb : _GEN_825; // @[Reg.scala 16:23]
-  assign _GEN_827 = 9'h1c9 == _T_1689 ? 8'hbd : _GEN_826; // @[Reg.scala 16:23]
-  assign _GEN_828 = 9'h1ca == _T_1689 ? 8'hbf : _GEN_827; // @[Reg.scala 16:23]
-  assign _GEN_829 = 9'h1cb == _T_1689 ? 8'hc1 : _GEN_828; // @[Reg.scala 16:23]
-  assign _GEN_830 = 9'h1cc == _T_1689 ? 8'hc3 : _GEN_829; // @[Reg.scala 16:23]
-  assign _GEN_831 = 9'h1cd == _T_1689 ? 8'hc5 : _GEN_830; // @[Reg.scala 16:23]
-  assign _GEN_832 = 9'h1ce == _T_1689 ? 8'hc7 : _GEN_831; // @[Reg.scala 16:23]
-  assign _GEN_833 = 9'h1cf == _T_1689 ? 8'hc9 : _GEN_832; // @[Reg.scala 16:23]
-  assign _GEN_834 = 9'h1d0 == _T_1689 ? 8'hcb : _GEN_833; // @[Reg.scala 16:23]
-  assign _GEN_835 = 9'h1d1 == _T_1689 ? 8'hcd : _GEN_834; // @[Reg.scala 16:23]
-  assign _GEN_836 = 9'h1d2 == _T_1689 ? 8'hcf : _GEN_835; // @[Reg.scala 16:23]
-  assign _GEN_837 = 9'h1d3 == _T_1689 ? 8'hd1 : _GEN_836; // @[Reg.scala 16:23]
-  assign _GEN_838 = 9'h1d4 == _T_1689 ? 8'hd3 : _GEN_837; // @[Reg.scala 16:23]
-  assign _GEN_839 = 9'h1d5 == _T_1689 ? 8'hd5 : _GEN_838; // @[Reg.scala 16:23]
-  assign _GEN_840 = 9'h1d6 == _T_1689 ? 8'hd6 : _GEN_839; // @[Reg.scala 16:23]
-  assign _GEN_841 = 9'h1d7 == _T_1689 ? 8'hd7 : _GEN_840; // @[Reg.scala 16:23]
-  assign _GEN_842 = 9'h1d8 == _T_1689 ? 8'hd8 : _GEN_841; // @[Reg.scala 16:23]
-  assign _GEN_843 = 9'h1d9 == _T_1689 ? 8'hd9 : _GEN_842; // @[Reg.scala 16:23]
-  assign _GEN_844 = 9'h1da == _T_1689 ? 8'hda : _GEN_843; // @[Reg.scala 16:23]
-  assign _GEN_845 = 9'h1db == _T_1689 ? 8'hdb : _GEN_844; // @[Reg.scala 16:23]
-  assign _GEN_846 = 9'h1dc == _T_1689 ? 8'hdc : _GEN_845; // @[Reg.scala 16:23]
-  assign _GEN_847 = 9'h1dd == _T_1689 ? 8'hdd : _GEN_846; // @[Reg.scala 16:23]
-  assign _GEN_848 = 9'h1de == _T_1689 ? 8'hde : _GEN_847; // @[Reg.scala 16:23]
-  assign _GEN_849 = 9'h1df == _T_1689 ? 8'hdf : _GEN_848; // @[Reg.scala 16:23]
-  assign _GEN_850 = 9'h1e0 == _T_1689 ? 8'he0 : _GEN_849; // @[Reg.scala 16:23]
-  assign _GEN_851 = 9'h1e1 == _T_1689 ? 8'he1 : _GEN_850; // @[Reg.scala 16:23]
-  assign _GEN_852 = 9'h1e2 == _T_1689 ? 8'he2 : _GEN_851; // @[Reg.scala 16:23]
-  assign _GEN_853 = 9'h1e3 == _T_1689 ? 8'he3 : _GEN_852; // @[Reg.scala 16:23]
-  assign _GEN_854 = 9'h1e4 == _T_1689 ? 8'he4 : _GEN_853; // @[Reg.scala 16:23]
-  assign _GEN_855 = 9'h1e5 == _T_1689 ? 8'he5 : _GEN_854; // @[Reg.scala 16:23]
-  assign _GEN_856 = 9'h1e6 == _T_1689 ? 8'he6 : _GEN_855; // @[Reg.scala 16:23]
-  assign _GEN_857 = 9'h1e7 == _T_1689 ? 8'he7 : _GEN_856; // @[Reg.scala 16:23]
-  assign _GEN_858 = 9'h1e8 == _T_1689 ? 8'he8 : _GEN_857; // @[Reg.scala 16:23]
-  assign _GEN_859 = 9'h1e9 == _T_1689 ? 8'he9 : _GEN_858; // @[Reg.scala 16:23]
-  assign _GEN_860 = 9'h1ea == _T_1689 ? 8'hea : _GEN_859; // @[Reg.scala 16:23]
-  assign _GEN_861 = 9'h1eb == _T_1689 ? 8'heb : _GEN_860; // @[Reg.scala 16:23]
-  assign _GEN_862 = 9'h1ec == _T_1689 ? 8'hec : _GEN_861; // @[Reg.scala 16:23]
-  assign _GEN_863 = 9'h1ed == _T_1689 ? 8'hed : _GEN_862; // @[Reg.scala 16:23]
-  assign _GEN_864 = 9'h1ee == _T_1689 ? 8'hee : _GEN_863; // @[Reg.scala 16:23]
-  assign _GEN_865 = 9'h1ef == _T_1689 ? 8'hef : _GEN_864; // @[Reg.scala 16:23]
-  assign _GEN_866 = 9'h1f0 == _T_1689 ? 8'hf0 : _GEN_865; // @[Reg.scala 16:23]
-  assign _GEN_867 = 9'h1f1 == _T_1689 ? 8'hf1 : _GEN_866; // @[Reg.scala 16:23]
-  assign _GEN_868 = 9'h1f2 == _T_1689 ? 8'hf2 : _GEN_867; // @[Reg.scala 16:23]
-  assign _GEN_869 = 9'h1f3 == _T_1689 ? 8'hf3 : _GEN_868; // @[Reg.scala 16:23]
-  assign _GEN_870 = 9'h1f4 == _T_1689 ? 8'hf4 : _GEN_869; // @[Reg.scala 16:23]
-  assign _GEN_871 = 9'h1f5 == _T_1689 ? 8'hf5 : _GEN_870; // @[Reg.scala 16:23]
-  assign _GEN_872 = 9'h1f6 == _T_1689 ? 8'hf6 : _GEN_871; // @[Reg.scala 16:23]
-  assign _GEN_873 = 9'h1f7 == _T_1689 ? 8'hf7 : _GEN_872; // @[Reg.scala 16:23]
-  assign _GEN_874 = 9'h1f8 == _T_1689 ? 8'hf8 : _GEN_873; // @[Reg.scala 16:23]
-  assign _GEN_875 = 9'h1f9 == _T_1689 ? 8'hf9 : _GEN_874; // @[Reg.scala 16:23]
-  assign _GEN_876 = 9'h1fa == _T_1689 ? 8'hfa : _GEN_875; // @[Reg.scala 16:23]
-  assign _GEN_877 = 9'h1fb == _T_1689 ? 8'hfb : _GEN_876; // @[Reg.scala 16:23]
-  assign _GEN_878 = 9'h1fc == _T_1689 ? 8'hfc : _GEN_877; // @[Reg.scala 16:23]
-  assign _GEN_879 = 9'h1fd == _T_1689 ? 8'hfd : _GEN_878; // @[Reg.scala 16:23]
-  assign _GEN_880 = 9'h1fe == _T_1689 ? 8'hfe : _GEN_879; // @[Reg.scala 16:23]
-  assign _GEN_881 = 9'h1ff == _T_1689 ? 8'hff : _GEN_880; // @[Reg.scala 16:23]
-  assign _T_1715 = $signed(_T_1703) + 33'sh2000; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_1716 = _T_1715[32:14]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_1719 = $signed(_T_1709) + 33'sh2000; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_1720 = _T_1719[32:14]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_1729 = 9'h2 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign outputWires_1_imag = _T_1720[15:0]; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  assign _GEN_1914 = _T_1729 ? $signed(io_in_bits_imag) : $signed(outputWires_1_imag); // @[SDFChainRadix22.scala 241:55]
-  assign outputWires_1_real = _T_1716[15:0]; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  assign _GEN_1915 = _T_1729 ? $signed(io_in_bits_real) : $signed(outputWires_1_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_1730 = sdf_stages_2_io_cntr < 9'h40; // @[SDFChainRadix22.scala 327:98]
-  assign _T_1732 = sdf_stages_2_io_cntr < 9'h20; // @[SDFChainRadix22.scala 327:135]
-  assign _T_1733 = _T_1732 ? 1'h0 : 1'h1; // @[SDFChainRadix22.scala 327:122]
-  assign _T_1741 = 16'sh0 - $signed(sdf_stages_2_io_out_real); // @[FixedPointTypeClass.scala 39:43]
-  assign _T_1738_real = sdf_stages_2_io_out_imag; // @[SDFChainRadix22.scala 329:32 SDFChainRadix22.scala 332:29]
-  assign _T_1756 = 9'h3 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign _GEN_1923 = _T_1756 ? $signed(io_in_bits_imag) : $signed(outputWires_2_imag); // @[SDFChainRadix22.scala 241:55]
-  assign _GEN_1924 = _T_1756 ? $signed(io_in_bits_real) : $signed(outputWires_2_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_2089 = _GEN_238 + 9'h1; // @[SDFChainRadix22.scala 283:83]
-  assign _T_2093 = _T_2089 - _T_294; // @[SDFChainRadix22.scala 283:89]
-  assign _GEN_1988 = 7'h21 == _T_2095[6:0] ? 6'h2 : 6'h0; // @[Reg.scala 16:23]
-  assign _GEN_1989 = 7'h22 == _T_2095[6:0] ? 6'h4 : _GEN_1988; // @[Reg.scala 16:23]
-  assign _GEN_1990 = 7'h23 == _T_2095[6:0] ? 6'h6 : _GEN_1989; // @[Reg.scala 16:23]
-  assign _GEN_1991 = 7'h24 == _T_2095[6:0] ? 6'h8 : _GEN_1990; // @[Reg.scala 16:23]
-  assign _GEN_1992 = 7'h25 == _T_2095[6:0] ? 6'ha : _GEN_1991; // @[Reg.scala 16:23]
-  assign _GEN_1993 = 7'h26 == _T_2095[6:0] ? 6'hc : _GEN_1992; // @[Reg.scala 16:23]
-  assign _GEN_1994 = 7'h27 == _T_2095[6:0] ? 6'he : _GEN_1993; // @[Reg.scala 16:23]
-  assign _GEN_1995 = 7'h28 == _T_2095[6:0] ? 6'h10 : _GEN_1994; // @[Reg.scala 16:23]
-  assign _GEN_1996 = 7'h29 == _T_2095[6:0] ? 6'h12 : _GEN_1995; // @[Reg.scala 16:23]
-  assign _GEN_1997 = 7'h2a == _T_2095[6:0] ? 6'h14 : _GEN_1996; // @[Reg.scala 16:23]
-  assign _GEN_1998 = 7'h2b == _T_2095[6:0] ? 6'h16 : _GEN_1997; // @[Reg.scala 16:23]
-  assign _GEN_1999 = 7'h2c == _T_2095[6:0] ? 6'h18 : _GEN_1998; // @[Reg.scala 16:23]
-  assign _GEN_2000 = 7'h2d == _T_2095[6:0] ? 6'h1a : _GEN_1999; // @[Reg.scala 16:23]
-  assign _GEN_2001 = 7'h2e == _T_2095[6:0] ? 6'h1c : _GEN_2000; // @[Reg.scala 16:23]
-  assign _GEN_2002 = 7'h2f == _T_2095[6:0] ? 6'h1e : _GEN_2001; // @[Reg.scala 16:23]
-  assign _GEN_2003 = 7'h30 == _T_2095[6:0] ? 6'h20 : _GEN_2002; // @[Reg.scala 16:23]
-  assign _GEN_2004 = 7'h31 == _T_2095[6:0] ? 6'h22 : _GEN_2003; // @[Reg.scala 16:23]
-  assign _GEN_2005 = 7'h32 == _T_2095[6:0] ? 6'h23 : _GEN_2004; // @[Reg.scala 16:23]
-  assign _GEN_2006 = 7'h33 == _T_2095[6:0] ? 6'h24 : _GEN_2005; // @[Reg.scala 16:23]
-  assign _GEN_2007 = 7'h34 == _T_2095[6:0] ? 6'h26 : _GEN_2006; // @[Reg.scala 16:23]
-  assign _GEN_2008 = 7'h35 == _T_2095[6:0] ? 6'h27 : _GEN_2007; // @[Reg.scala 16:23]
-  assign _GEN_2009 = 7'h36 == _T_2095[6:0] ? 6'h28 : _GEN_2008; // @[Reg.scala 16:23]
-  assign _GEN_2010 = 7'h37 == _T_2095[6:0] ? 6'h2a : _GEN_2009; // @[Reg.scala 16:23]
-  assign _GEN_2011 = 7'h38 == _T_2095[6:0] ? 6'h2b : _GEN_2010; // @[Reg.scala 16:23]
-  assign _GEN_2012 = 7'h39 == _T_2095[6:0] ? 6'h2c : _GEN_2011; // @[Reg.scala 16:23]
-  assign _GEN_2013 = 7'h3a == _T_2095[6:0] ? 6'h2e : _GEN_2012; // @[Reg.scala 16:23]
-  assign _GEN_2014 = 7'h3b == _T_2095[6:0] ? 6'h2f : _GEN_2013; // @[Reg.scala 16:23]
-  assign _GEN_2015 = 7'h3c == _T_2095[6:0] ? 6'h30 : _GEN_2014; // @[Reg.scala 16:23]
-  assign _GEN_2016 = 7'h3d == _T_2095[6:0] ? 6'h32 : _GEN_2015; // @[Reg.scala 16:23]
-  assign _GEN_2017 = 7'h3e == _T_2095[6:0] ? 6'h33 : _GEN_2016; // @[Reg.scala 16:23]
-  assign _GEN_2018 = 7'h3f == _T_2095[6:0] ? 6'h34 : _GEN_2017; // @[Reg.scala 16:23]
-  assign _GEN_2019 = 7'h40 == _T_2095[6:0] ? 6'h0 : _GEN_2018; // @[Reg.scala 16:23]
-  assign _GEN_2020 = 7'h41 == _T_2095[6:0] ? 6'h1 : _GEN_2019; // @[Reg.scala 16:23]
-  assign _GEN_2021 = 7'h42 == _T_2095[6:0] ? 6'h2 : _GEN_2020; // @[Reg.scala 16:23]
-  assign _GEN_2022 = 7'h43 == _T_2095[6:0] ? 6'h3 : _GEN_2021; // @[Reg.scala 16:23]
-  assign _GEN_2023 = 7'h44 == _T_2095[6:0] ? 6'h4 : _GEN_2022; // @[Reg.scala 16:23]
-  assign _GEN_2024 = 7'h45 == _T_2095[6:0] ? 6'h5 : _GEN_2023; // @[Reg.scala 16:23]
-  assign _GEN_2025 = 7'h46 == _T_2095[6:0] ? 6'h6 : _GEN_2024; // @[Reg.scala 16:23]
-  assign _GEN_2026 = 7'h47 == _T_2095[6:0] ? 6'h7 : _GEN_2025; // @[Reg.scala 16:23]
-  assign _GEN_2027 = 7'h48 == _T_2095[6:0] ? 6'h8 : _GEN_2026; // @[Reg.scala 16:23]
-  assign _GEN_2028 = 7'h49 == _T_2095[6:0] ? 6'h9 : _GEN_2027; // @[Reg.scala 16:23]
-  assign _GEN_2029 = 7'h4a == _T_2095[6:0] ? 6'ha : _GEN_2028; // @[Reg.scala 16:23]
-  assign _GEN_2030 = 7'h4b == _T_2095[6:0] ? 6'hb : _GEN_2029; // @[Reg.scala 16:23]
-  assign _GEN_2031 = 7'h4c == _T_2095[6:0] ? 6'hc : _GEN_2030; // @[Reg.scala 16:23]
-  assign _GEN_2032 = 7'h4d == _T_2095[6:0] ? 6'hd : _GEN_2031; // @[Reg.scala 16:23]
-  assign _GEN_2033 = 7'h4e == _T_2095[6:0] ? 6'he : _GEN_2032; // @[Reg.scala 16:23]
-  assign _GEN_2034 = 7'h4f == _T_2095[6:0] ? 6'hf : _GEN_2033; // @[Reg.scala 16:23]
-  assign _GEN_2035 = 7'h50 == _T_2095[6:0] ? 6'h10 : _GEN_2034; // @[Reg.scala 16:23]
-  assign _GEN_2036 = 7'h51 == _T_2095[6:0] ? 6'h11 : _GEN_2035; // @[Reg.scala 16:23]
-  assign _GEN_2037 = 7'h52 == _T_2095[6:0] ? 6'h12 : _GEN_2036; // @[Reg.scala 16:23]
-  assign _GEN_2038 = 7'h53 == _T_2095[6:0] ? 6'h13 : _GEN_2037; // @[Reg.scala 16:23]
-  assign _GEN_2039 = 7'h54 == _T_2095[6:0] ? 6'h14 : _GEN_2038; // @[Reg.scala 16:23]
-  assign _GEN_2040 = 7'h55 == _T_2095[6:0] ? 6'h15 : _GEN_2039; // @[Reg.scala 16:23]
-  assign _GEN_2041 = 7'h56 == _T_2095[6:0] ? 6'h16 : _GEN_2040; // @[Reg.scala 16:23]
-  assign _GEN_2042 = 7'h57 == _T_2095[6:0] ? 6'h17 : _GEN_2041; // @[Reg.scala 16:23]
-  assign _GEN_2043 = 7'h58 == _T_2095[6:0] ? 6'h18 : _GEN_2042; // @[Reg.scala 16:23]
-  assign _GEN_2044 = 7'h59 == _T_2095[6:0] ? 6'h19 : _GEN_2043; // @[Reg.scala 16:23]
-  assign _GEN_2045 = 7'h5a == _T_2095[6:0] ? 6'h1a : _GEN_2044; // @[Reg.scala 16:23]
-  assign _GEN_2046 = 7'h5b == _T_2095[6:0] ? 6'h1b : _GEN_2045; // @[Reg.scala 16:23]
-  assign _GEN_2047 = 7'h5c == _T_2095[6:0] ? 6'h1c : _GEN_2046; // @[Reg.scala 16:23]
-  assign _GEN_2048 = 7'h5d == _T_2095[6:0] ? 6'h1d : _GEN_2047; // @[Reg.scala 16:23]
-  assign _GEN_2049 = 7'h5e == _T_2095[6:0] ? 6'h1e : _GEN_2048; // @[Reg.scala 16:23]
-  assign _GEN_2050 = 7'h5f == _T_2095[6:0] ? 6'h1f : _GEN_2049; // @[Reg.scala 16:23]
-  assign _GEN_2051 = 7'h60 == _T_2095[6:0] ? 6'h0 : _GEN_2050; // @[Reg.scala 16:23]
-  assign _GEN_2052 = 7'h61 == _T_2095[6:0] ? 6'h3 : _GEN_2051; // @[Reg.scala 16:23]
-  assign _GEN_2053 = 7'h62 == _T_2095[6:0] ? 6'h6 : _GEN_2052; // @[Reg.scala 16:23]
-  assign _GEN_2054 = 7'h63 == _T_2095[6:0] ? 6'h9 : _GEN_2053; // @[Reg.scala 16:23]
-  assign _GEN_2055 = 7'h64 == _T_2095[6:0] ? 6'hc : _GEN_2054; // @[Reg.scala 16:23]
-  assign _GEN_2056 = 7'h65 == _T_2095[6:0] ? 6'hf : _GEN_2055; // @[Reg.scala 16:23]
-  assign _GEN_2057 = 7'h66 == _T_2095[6:0] ? 6'h12 : _GEN_2056; // @[Reg.scala 16:23]
-  assign _GEN_2058 = 7'h67 == _T_2095[6:0] ? 6'h15 : _GEN_2057; // @[Reg.scala 16:23]
-  assign _GEN_2059 = 7'h68 == _T_2095[6:0] ? 6'h18 : _GEN_2058; // @[Reg.scala 16:23]
-  assign _GEN_2060 = 7'h69 == _T_2095[6:0] ? 6'h1b : _GEN_2059; // @[Reg.scala 16:23]
-  assign _GEN_2061 = 7'h6a == _T_2095[6:0] ? 6'h1e : _GEN_2060; // @[Reg.scala 16:23]
-  assign _GEN_2062 = 7'h6b == _T_2095[6:0] ? 6'h21 : _GEN_2061; // @[Reg.scala 16:23]
-  assign _GEN_2063 = 7'h6c == _T_2095[6:0] ? 6'h23 : _GEN_2062; // @[Reg.scala 16:23]
-  assign _GEN_2064 = 7'h6d == _T_2095[6:0] ? 6'h25 : _GEN_2063; // @[Reg.scala 16:23]
-  assign _GEN_2065 = 7'h6e == _T_2095[6:0] ? 6'h27 : _GEN_2064; // @[Reg.scala 16:23]
-  assign _GEN_2066 = 7'h6f == _T_2095[6:0] ? 6'h29 : _GEN_2065; // @[Reg.scala 16:23]
-  assign _GEN_2067 = 7'h70 == _T_2095[6:0] ? 6'h2b : _GEN_2066; // @[Reg.scala 16:23]
-  assign _GEN_2068 = 7'h71 == _T_2095[6:0] ? 6'h2d : _GEN_2067; // @[Reg.scala 16:23]
-  assign _GEN_2069 = 7'h72 == _T_2095[6:0] ? 6'h2f : _GEN_2068; // @[Reg.scala 16:23]
-  assign _GEN_2070 = 7'h73 == _T_2095[6:0] ? 6'h31 : _GEN_2069; // @[Reg.scala 16:23]
-  assign _GEN_2071 = 7'h74 == _T_2095[6:0] ? 6'h33 : _GEN_2070; // @[Reg.scala 16:23]
-  assign _GEN_2072 = 7'h75 == _T_2095[6:0] ? 6'h35 : _GEN_2071; // @[Reg.scala 16:23]
-  assign _GEN_2073 = 7'h76 == _T_2095[6:0] ? 6'h36 : _GEN_2072; // @[Reg.scala 16:23]
-  assign _GEN_2074 = 7'h77 == _T_2095[6:0] ? 6'h37 : _GEN_2073; // @[Reg.scala 16:23]
-  assign _GEN_2075 = 7'h78 == _T_2095[6:0] ? 6'h38 : _GEN_2074; // @[Reg.scala 16:23]
-  assign _GEN_2076 = 7'h79 == _T_2095[6:0] ? 6'h39 : _GEN_2075; // @[Reg.scala 16:23]
-  assign _GEN_2077 = 7'h7a == _T_2095[6:0] ? 6'h3a : _GEN_2076; // @[Reg.scala 16:23]
-  assign _GEN_2078 = 7'h7b == _T_2095[6:0] ? 6'h3b : _GEN_2077; // @[Reg.scala 16:23]
-  assign _GEN_2079 = 7'h7c == _T_2095[6:0] ? 6'h3c : _GEN_2078; // @[Reg.scala 16:23]
-  assign _GEN_2080 = 7'h7d == _T_2095[6:0] ? 6'h3d : _GEN_2079; // @[Reg.scala 16:23]
-  assign _GEN_2081 = 7'h7e == _T_2095[6:0] ? 6'h3e : _GEN_2080; // @[Reg.scala 16:23]
-  assign _GEN_2082 = 7'h7f == _T_2095[6:0] ? 6'h3f : _GEN_2081; // @[Reg.scala 16:23]
-  assign _T_2122 = $signed(_T_2110) + 33'sh2000; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_2123 = _T_2122[32:14]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_2126 = $signed(_T_2116) + 33'sh2000; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_2127 = _T_2126[32:14]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_2136 = 9'h4 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign outputWires_3_imag = _T_2127[15:0]; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  assign _GEN_2347 = _T_2136 ? $signed(io_in_bits_imag) : $signed(outputWires_3_imag); // @[SDFChainRadix22.scala 241:55]
-  assign outputWires_3_real = _T_2123[15:0]; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  assign _GEN_2348 = _T_2136 ? $signed(io_in_bits_real) : $signed(outputWires_3_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_2137 = sdf_stages_4_io_cntr < 9'h10; // @[SDFChainRadix22.scala 327:98]
-  assign _T_2139 = sdf_stages_4_io_cntr < 9'h8; // @[SDFChainRadix22.scala 327:135]
-  assign _T_2140 = _T_2139 ? 1'h0 : 1'h1; // @[SDFChainRadix22.scala 327:122]
-  assign _T_2148 = 16'sh0 - $signed(sdf_stages_4_io_out_real); // @[FixedPointTypeClass.scala 39:43]
-  assign _T_2145_real = sdf_stages_4_io_out_imag; // @[SDFChainRadix22.scala 329:32 SDFChainRadix22.scala 332:29]
-  assign _T_2163 = 9'h5 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign _GEN_2356 = _T_2163 ? $signed(io_in_bits_imag) : $signed(outputWires_4_imag); // @[SDFChainRadix22.scala 241:55]
-  assign _GEN_2357 = _T_2163 ? $signed(io_in_bits_real) : $signed(outputWires_4_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_2256 = _GEN_274 + 9'h1; // @[SDFChainRadix22.scala 283:83]
-  assign _T_2260 = _T_2256 - _T_324; // @[SDFChainRadix22.scala 283:89]
-  assign _GEN_2397 = 5'h9 == _T_2262[4:0] ? 4'h2 : 4'h0; // @[Reg.scala 16:23]
-  assign _GEN_2398 = 5'ha == _T_2262[4:0] ? 4'h4 : _GEN_2397; // @[Reg.scala 16:23]
-  assign _GEN_2399 = 5'hb == _T_2262[4:0] ? 4'h6 : _GEN_2398; // @[Reg.scala 16:23]
-  assign _GEN_2400 = 5'hc == _T_2262[4:0] ? 4'h8 : _GEN_2399; // @[Reg.scala 16:23]
-  assign _GEN_2401 = 5'hd == _T_2262[4:0] ? 4'ha : _GEN_2400; // @[Reg.scala 16:23]
-  assign _GEN_2402 = 5'he == _T_2262[4:0] ? 4'hb : _GEN_2401; // @[Reg.scala 16:23]
-  assign _GEN_2403 = 5'hf == _T_2262[4:0] ? 4'hc : _GEN_2402; // @[Reg.scala 16:23]
-  assign _GEN_2404 = 5'h10 == _T_2262[4:0] ? 4'h0 : _GEN_2403; // @[Reg.scala 16:23]
-  assign _GEN_2405 = 5'h11 == _T_2262[4:0] ? 4'h1 : _GEN_2404; // @[Reg.scala 16:23]
-  assign _GEN_2406 = 5'h12 == _T_2262[4:0] ? 4'h2 : _GEN_2405; // @[Reg.scala 16:23]
-  assign _GEN_2407 = 5'h13 == _T_2262[4:0] ? 4'h3 : _GEN_2406; // @[Reg.scala 16:23]
-  assign _GEN_2408 = 5'h14 == _T_2262[4:0] ? 4'h4 : _GEN_2407; // @[Reg.scala 16:23]
-  assign _GEN_2409 = 5'h15 == _T_2262[4:0] ? 4'h5 : _GEN_2408; // @[Reg.scala 16:23]
-  assign _GEN_2410 = 5'h16 == _T_2262[4:0] ? 4'h6 : _GEN_2409; // @[Reg.scala 16:23]
-  assign _GEN_2411 = 5'h17 == _T_2262[4:0] ? 4'h7 : _GEN_2410; // @[Reg.scala 16:23]
-  assign _GEN_2412 = 5'h18 == _T_2262[4:0] ? 4'h0 : _GEN_2411; // @[Reg.scala 16:23]
-  assign _GEN_2413 = 5'h19 == _T_2262[4:0] ? 4'h3 : _GEN_2412; // @[Reg.scala 16:23]
-  assign _GEN_2414 = 5'h1a == _T_2262[4:0] ? 4'h6 : _GEN_2413; // @[Reg.scala 16:23]
-  assign _GEN_2415 = 5'h1b == _T_2262[4:0] ? 4'h9 : _GEN_2414; // @[Reg.scala 16:23]
-  assign _GEN_2416 = 5'h1c == _T_2262[4:0] ? 4'hb : _GEN_2415; // @[Reg.scala 16:23]
-  assign _GEN_2417 = 5'h1d == _T_2262[4:0] ? 4'hd : _GEN_2416; // @[Reg.scala 16:23]
-  assign _GEN_2418 = 5'h1e == _T_2262[4:0] ? 4'he : _GEN_2417; // @[Reg.scala 16:23]
-  assign _GEN_2419 = 5'h1f == _T_2262[4:0] ? 4'hf : _GEN_2418; // @[Reg.scala 16:23]
-  assign _T_2289 = $signed(_T_2277) + 33'sh2000; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_2290 = _T_2289[32:14]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_2293 = $signed(_T_2283) + 33'sh2000; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_2294 = _T_2293[32:14]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_2303 = 9'h6 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign outputWires_5_imag = _T_2294[15:0]; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  assign _GEN_2492 = _T_2303 ? $signed(io_in_bits_imag) : $signed(outputWires_5_imag); // @[SDFChainRadix22.scala 241:55]
-  assign outputWires_5_real = _T_2290[15:0]; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  assign _GEN_2493 = _T_2303 ? $signed(io_in_bits_real) : $signed(outputWires_5_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_2304 = sdf_stages_6_io_cntr < 9'h4; // @[SDFChainRadix22.scala 327:98]
-  assign _T_2306 = sdf_stages_6_io_cntr < 9'h2; // @[SDFChainRadix22.scala 327:135]
-  assign _T_2307 = _T_2306 ? 1'h0 : 1'h1; // @[SDFChainRadix22.scala 327:122]
-  assign _T_2315 = 16'sh0 - $signed(sdf_stages_6_io_out_real); // @[FixedPointTypeClass.scala 39:43]
-  assign _T_2312_real = sdf_stages_6_io_out_imag; // @[SDFChainRadix22.scala 329:32 SDFChainRadix22.scala 332:29]
-  assign _T_2330 = 9'h7 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign _GEN_2501 = _T_2330 ? $signed(io_in_bits_imag) : $signed(outputWires_6_imag); // @[SDFChainRadix22.scala 241:55]
-  assign _GEN_2502 = _T_2330 ? $signed(io_in_bits_real) : $signed(outputWires_6_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_2363 = _GEN_310 + 9'h1; // @[SDFChainRadix22.scala 283:83]
-  assign _T_2367 = _T_2363 - _T_354; // @[SDFChainRadix22.scala 283:89]
-  assign _GEN_2536 = 3'h3 == _T_2369[2:0] ? 2'h2 : 2'h0; // @[Reg.scala 16:23]
-  assign _GEN_2537 = 3'h4 == _T_2369[2:0] ? 2'h0 : _GEN_2536; // @[Reg.scala 16:23]
-  assign _GEN_2538 = 3'h5 == _T_2369[2:0] ? 2'h1 : _GEN_2537; // @[Reg.scala 16:23]
-  assign _GEN_2539 = 3'h6 == _T_2369[2:0] ? 2'h0 : _GEN_2538; // @[Reg.scala 16:23]
-  assign _GEN_2540 = 3'h7 == _T_2369[2:0] ? 2'h3 : _GEN_2539; // @[Reg.scala 16:23]
-  assign _T_2396 = $signed(_T_2384) + 33'sh2000; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_2397 = _T_2396[32:14]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_2400 = $signed(_T_2390) + 33'sh2000; // @[FixedPointTypeClass.scala 20:58]
-  assign _T_2401 = _T_2400[32:14]; // @[FixedPointTypeClass.scala 176:41]
-  assign _T_2410 = 9'h8 == _T_90; // @[SDFChainRadix22.scala 241:23]
-  assign outputWires_7_imag = _T_2401[15:0]; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  assign _GEN_2565 = _T_2410 ? $signed(io_in_bits_imag) : $signed(outputWires_7_imag); // @[SDFChainRadix22.scala 241:55]
-  assign outputWires_7_real = _T_2397[15:0]; // @[SDFChainRadix22.scala 293:27 SDFChainRadix22.scala 313:19]
-  assign _GEN_2566 = _T_2410 ? $signed(io_in_bits_real) : $signed(outputWires_7_real); // @[SDFChainRadix22.scala 241:55]
-  assign _T_2420 = ~initialOutDone; // @[SDFChainRadix22.scala 368:33]
-  assign _T_2424 = state != 2'h2; // @[SDFChainRadix22.scala 368:127]
-  assign _T_2425 = io_out_ready & _T_2424; // @[SDFChainRadix22.scala 368:117]
-  assign _GEN_2595 = {$signed(outQueue_io_deq_bits_imag), 14'h0}; // @[SDFChainRadix22.scala 404:33]
-  assign _GEN_2582 = {{2{_GEN_2595[29]}},_GEN_2595}; // @[SDFChainRadix22.scala 404:33]
-  assign _GEN_2596 = {$signed(outQueue_io_deq_bits_real), 14'h0}; // @[SDFChainRadix22.scala 404:33]
-  assign _GEN_2583 = {{2{_GEN_2596[29]}},_GEN_2596}; // @[SDFChainRadix22.scala 404:33]
-  assign _GEN_2597 = _GEN_2583[31:14]; // @[SDFChainRadix22.scala 63:26 SDFChainRadix22.scala 413:22 SDFChainRadix22.scala 418:25]
-  assign _GEN_2599 = _GEN_2582[31:14]; // @[SDFChainRadix22.scala 63:26 SDFChainRadix22.scala 413:22 SDFChainRadix22.scala 419:25]
-  assign io_in_ready = _T_2423 | _T_2425; // @[SDFChainRadix22.scala 368:15]
-  assign io_out_valid = outQueue_io_deq_valid; // @[SDFChainRadix22.scala 422:18]
-  assign io_out_bits_real = _GEN_2597[15:0]; // @[SDFChainRadix22.scala 421:17]
-  assign io_out_bits_imag = _GEN_2599[15:0]; // @[SDFChainRadix22.scala 421:17]
-  assign io_lastOut = lastWait ? _T_86 : _T_88; // @[SDFChainRadix22.scala 428:14]
+  assign _GEN_20 = 4'h1 == _T_48[3:0] ? cntr_wires_0 : cntr_wires_0; // @[SDFChainRadix22.scala 126:79]
+  assign _GEN_21 = 4'h2 == _T_48[3:0] ? cntr_wires_0 : _GEN_20; // @[SDFChainRadix22.scala 126:79]
+  assign _GEN_22 = 4'h3 == _T_48[3:0] ? cntr_wires_0 : _GEN_21; // @[SDFChainRadix22.scala 126:79]
+  assign _GEN_23 = 4'h4 == _T_48[3:0] ? cntr_wires_0 : _GEN_22; // @[SDFChainRadix22.scala 126:79]
+  assign _GEN_24 = 4'h5 == _T_48[3:0] ? cntr_wires_0 : _GEN_23; // @[SDFChainRadix22.scala 126:79]
+  assign _GEN_25 = 4'h6 == _T_48[3:0] ? cntr_wires_0 : _GEN_24; // @[SDFChainRadix22.scala 126:79]
+  assign _GEN_26 = 4'h7 == _T_48[3:0] ? cntr_wires_0 : _GEN_25; // @[SDFChainRadix22.scala 126:79]
+  assign _GEN_27 = 4'h8 == _T_48[3:0] ? cntr_wires_0 : _GEN_26; // @[SDFChainRadix22.scala 126:79]
+  assign _GEN_2110 = {{1'd0}, _GEN_27}; // @[SDFChainRadix22.scala 126:79]
+  assign _T_76 = _T_62 & pktEnd; // @[SDFChainRadix22.scala 130:31]
+  assign _T_77 = _T_76 | pktEnd; // @[SDFChainRadix22.scala 130:42]
+  assign _T_80 = cntValidOut + 9'h1; // @[SDFChainRadix22.scala 134:32]
+  assign _T_83 = state == 2'h2; // @[SDFChainRadix22.scala 144:90]
+  assign _T_122 = _T_83 & io_out_ready; // @[SDFChainRadix22.scala 173:54]
+  assign enableInit = _T_46 | _T_122; // @[SDFChainRadix22.scala 173:33]
+  assign _T_125 = cnt + 10'h1; // @[SDFChainRadix22.scala 179:16]
+  assign _T_145 = 10'h200 - 10'h2; // @[SDFChainRadix22.scala 193:37]
+  assign _T_146 = _GEN_2110 == _T_145; // @[SDFChainRadix22.scala 193:22]
+  assign _T_147 = _T_146 & enableInit; // @[SDFChainRadix22.scala 193:44]
+  assign _GEN_45 = _T_62 ? 1'h0 : initialOutDone; // @[SDFChainRadix22.scala 196:36]
+  assign _GEN_46 = _T_147 | _GEN_45; // @[SDFChainRadix22.scala 193:60]
+  assign _T_166 = cntr_wires_0 - 9'h0; // @[SDFChainRadix22.scala 224:38]
+  assign _T_171 = 9'h1 - 9'h0; // @[SDFChainRadix22.scala 224:68]
+  assign _T_173 = cntr_wires_0 - _T_171; // @[SDFChainRadix22.scala 224:38]
+  assign _T_178 = 9'h3 - 9'h0; // @[SDFChainRadix22.scala 224:68]
+  assign _T_180 = cntr_wires_0 - _T_178; // @[SDFChainRadix22.scala 224:38]
+  assign _T_185 = 9'h7 - 9'h0; // @[SDFChainRadix22.scala 224:68]
+  assign _T_187 = cntr_wires_0 - _T_185; // @[SDFChainRadix22.scala 224:38]
+  assign _T_192 = 9'hf - 9'h0; // @[SDFChainRadix22.scala 224:68]
+  assign _T_194 = cntr_wires_0 - _T_192; // @[SDFChainRadix22.scala 224:38]
+  assign _T_199 = 9'h1f - 9'h0; // @[SDFChainRadix22.scala 224:68]
+  assign _T_201 = cntr_wires_0 - _T_199; // @[SDFChainRadix22.scala 224:38]
+  assign _T_206 = 9'h3f - 9'h0; // @[SDFChainRadix22.scala 224:68]
+  assign _T_208 = cntr_wires_0 - _T_206; // @[SDFChainRadix22.scala 224:38]
+  assign _T_213 = 9'h7f - 9'h0; // @[SDFChainRadix22.scala 224:68]
+  assign _T_215 = cntr_wires_0 - _T_213; // @[SDFChainRadix22.scala 224:38]
+  assign _T_220 = 9'hff - 9'h0; // @[SDFChainRadix22.scala 224:68]
+  assign _GEN_52 = 3'h3 == _T_173[2:0] ? 2'h2 : 2'h0; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_53 = 3'h4 == _T_173[2:0] ? 2'h0 : _GEN_52; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_54 = 3'h5 == _T_173[2:0] ? 2'h1 : _GEN_53; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_55 = 3'h6 == _T_173[2:0] ? 2'h0 : _GEN_54; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_56 = 3'h7 == _T_173[2:0] ? 2'h3 : _GEN_55; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_59 = 2'h1 == _GEN_56 ? $signed(16'sh2d41) : $signed(16'sh4000); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_60 = 2'h1 == _GEN_56 ? $signed(-16'sh2d41) : $signed(16'sh0); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_61 = 2'h2 == _GEN_56 ? $signed(16'sh0) : $signed(_GEN_59); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_62 = 2'h2 == _GEN_56 ? $signed(-16'sh4000) : $signed(_GEN_60); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_63 = 2'h3 == _GEN_56 ? $signed(-16'sh2d41) : $signed(_GEN_61); // @[SDFChainRadix22.scala 291:27]
+  assign twiddles_1_imag = 2'h3 == _GEN_56 ? $signed(-16'sh2d41) : $signed(_GEN_62); // @[SDFChainRadix22.scala 291:27]
+  assign _T_261 = $signed(_GEN_63) + $signed(twiddles_1_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign outputWires_0_real = sdf_stages_0_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 348:32]
+  assign outputWires_0_imag = sdf_stages_0_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 348:32]
+  assign _T_262 = $signed(outputWires_0_real) + $signed(outputWires_0_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_263 = $signed(outputWires_0_imag) - $signed(outputWires_0_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _GEN_2112 = {{1{outputWires_0_real[15]}},outputWires_0_real}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_264 = $signed(_GEN_2112) * $signed(_T_261); // @[FixedPointTypeClass.scala 211:35]
+  assign _GEN_2113 = {{1{twiddles_1_imag[15]}},twiddles_1_imag}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_265 = $signed(_T_262) * $signed(_GEN_2113); // @[FixedPointTypeClass.scala 211:35]
+  assign _GEN_2114 = {{1{_GEN_63[15]}},_GEN_63}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_266 = $signed(_T_263) * $signed(_GEN_2114); // @[FixedPointTypeClass.scala 211:35]
+  assign _T_267 = $signed(_T_264) - $signed(_T_265); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_268 = $signed(_T_264) + $signed(_T_266); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_274 = $signed(_T_267) + 34'sh2000; // @[FixedPointTypeClass.scala 20:58]
+  assign _T_275 = _T_274[33:14]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_278 = $signed(_T_268) + 34'sh2000; // @[FixedPointTypeClass.scala 20:58]
+  assign _T_279 = _T_278[33:14]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_286 = sdf_stages_2_io_cntr < 9'h4; // @[SDFChainRadix22.scala 328:32]
+  assign _T_287 = sdf_stages_2_io_cntr < 9'h6; // @[SDFChainRadix22.scala 328:78]
+  assign _T_288 = _T_287 ? 1'h0 : 1'h1; // @[SDFChainRadix22.scala 328:65]
+  assign _T_289 = _T_286 ? 1'h0 : _T_288; // @[SDFChainRadix22.scala 328:19]
+  assign outputWires_1_real = sdf_stages_1_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  assign _T_295 = 16'sh0 - $signed(outputWires_1_real); // @[FixedPointTypeClass.scala 39:43]
+  assign outputWires_1_imag = sdf_stages_1_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  assign _GEN_82 = 5'h9 == _T_187[4:0] ? 4'h2 : 4'h0; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_83 = 5'ha == _T_187[4:0] ? 4'h4 : _GEN_82; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_84 = 5'hb == _T_187[4:0] ? 4'h6 : _GEN_83; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_85 = 5'hc == _T_187[4:0] ? 4'h8 : _GEN_84; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_86 = 5'hd == _T_187[4:0] ? 4'ha : _GEN_85; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_87 = 5'he == _T_187[4:0] ? 4'hb : _GEN_86; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_88 = 5'hf == _T_187[4:0] ? 4'hc : _GEN_87; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_89 = 5'h10 == _T_187[4:0] ? 4'h0 : _GEN_88; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_90 = 5'h11 == _T_187[4:0] ? 4'h1 : _GEN_89; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_91 = 5'h12 == _T_187[4:0] ? 4'h2 : _GEN_90; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_92 = 5'h13 == _T_187[4:0] ? 4'h3 : _GEN_91; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_93 = 5'h14 == _T_187[4:0] ? 4'h4 : _GEN_92; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_94 = 5'h15 == _T_187[4:0] ? 4'h5 : _GEN_93; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_95 = 5'h16 == _T_187[4:0] ? 4'h6 : _GEN_94; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_96 = 5'h17 == _T_187[4:0] ? 4'h7 : _GEN_95; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_97 = 5'h18 == _T_187[4:0] ? 4'h0 : _GEN_96; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_98 = 5'h19 == _T_187[4:0] ? 4'h3 : _GEN_97; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_99 = 5'h1a == _T_187[4:0] ? 4'h6 : _GEN_98; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_100 = 5'h1b == _T_187[4:0] ? 4'h9 : _GEN_99; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_101 = 5'h1c == _T_187[4:0] ? 4'hb : _GEN_100; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_102 = 5'h1d == _T_187[4:0] ? 4'hd : _GEN_101; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_103 = 5'h1e == _T_187[4:0] ? 4'he : _GEN_102; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_104 = 5'h1f == _T_187[4:0] ? 4'hf : _GEN_103; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_107 = 4'h1 == _GEN_104 ? $signed(16'sh3ec5) : $signed(16'sh4000); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_108 = 4'h1 == _GEN_104 ? $signed(-16'shc7c) : $signed(16'sh0); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_109 = 4'h2 == _GEN_104 ? $signed(16'sh3b21) : $signed(_GEN_107); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_110 = 4'h2 == _GEN_104 ? $signed(-16'sh187e) : $signed(_GEN_108); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_111 = 4'h3 == _GEN_104 ? $signed(16'sh3537) : $signed(_GEN_109); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_112 = 4'h3 == _GEN_104 ? $signed(-16'sh238e) : $signed(_GEN_110); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_113 = 4'h4 == _GEN_104 ? $signed(16'sh2d41) : $signed(_GEN_111); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_114 = 4'h4 == _GEN_104 ? $signed(-16'sh2d41) : $signed(_GEN_112); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_115 = 4'h5 == _GEN_104 ? $signed(16'sh238e) : $signed(_GEN_113); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_116 = 4'h5 == _GEN_104 ? $signed(-16'sh3537) : $signed(_GEN_114); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_117 = 4'h6 == _GEN_104 ? $signed(16'sh187e) : $signed(_GEN_115); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_118 = 4'h6 == _GEN_104 ? $signed(-16'sh3b21) : $signed(_GEN_116); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_119 = 4'h7 == _GEN_104 ? $signed(16'shc7c) : $signed(_GEN_117); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_120 = 4'h7 == _GEN_104 ? $signed(-16'sh3ec5) : $signed(_GEN_118); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_121 = 4'h8 == _GEN_104 ? $signed(16'sh0) : $signed(_GEN_119); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_122 = 4'h8 == _GEN_104 ? $signed(-16'sh4000) : $signed(_GEN_120); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_123 = 4'h9 == _GEN_104 ? $signed(-16'shc7c) : $signed(_GEN_121); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_124 = 4'h9 == _GEN_104 ? $signed(-16'sh3ec5) : $signed(_GEN_122); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_125 = 4'ha == _GEN_104 ? $signed(-16'sh187e) : $signed(_GEN_123); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_126 = 4'ha == _GEN_104 ? $signed(-16'sh3b21) : $signed(_GEN_124); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_127 = 4'hb == _GEN_104 ? $signed(-16'sh2d41) : $signed(_GEN_125); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_128 = 4'hb == _GEN_104 ? $signed(-16'sh2d41) : $signed(_GEN_126); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_129 = 4'hc == _GEN_104 ? $signed(-16'sh3b21) : $signed(_GEN_127); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_130 = 4'hc == _GEN_104 ? $signed(-16'sh187e) : $signed(_GEN_128); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_131 = 4'hd == _GEN_104 ? $signed(-16'sh3ec5) : $signed(_GEN_129); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_132 = 4'hd == _GEN_104 ? $signed(-16'shc7c) : $signed(_GEN_130); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_133 = 4'he == _GEN_104 ? $signed(-16'sh3b21) : $signed(_GEN_131); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_134 = 4'he == _GEN_104 ? $signed(16'sh187e) : $signed(_GEN_132); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_135 = 4'hf == _GEN_104 ? $signed(-16'sh238e) : $signed(_GEN_133); // @[SDFChainRadix22.scala 291:27]
+  assign twiddles_3_imag = 4'hf == _GEN_104 ? $signed(16'sh3537) : $signed(_GEN_134); // @[SDFChainRadix22.scala 291:27]
+  assign _T_393 = $signed(_GEN_135) + $signed(twiddles_3_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign outputWires_2_real = sdf_stages_2_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  assign outputWires_2_imag = sdf_stages_2_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  assign _T_394 = $signed(outputWires_2_real) + $signed(outputWires_2_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_395 = $signed(outputWires_2_imag) - $signed(outputWires_2_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _GEN_2115 = {{1{outputWires_2_real[15]}},outputWires_2_real}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_396 = $signed(_GEN_2115) * $signed(_T_393); // @[FixedPointTypeClass.scala 211:35]
+  assign _GEN_2116 = {{1{twiddles_3_imag[15]}},twiddles_3_imag}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_397 = $signed(_T_394) * $signed(_GEN_2116); // @[FixedPointTypeClass.scala 211:35]
+  assign _GEN_2117 = {{1{_GEN_135[15]}},_GEN_135}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_398 = $signed(_T_395) * $signed(_GEN_2117); // @[FixedPointTypeClass.scala 211:35]
+  assign _T_399 = $signed(_T_396) - $signed(_T_397); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_400 = $signed(_T_396) + $signed(_T_398); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_406 = $signed(_T_399) + 34'sh2000; // @[FixedPointTypeClass.scala 20:58]
+  assign _T_407 = _T_406[33:14]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_410 = $signed(_T_400) + 34'sh2000; // @[FixedPointTypeClass.scala 20:58]
+  assign _T_411 = _T_410[33:14]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_418 = sdf_stages_4_io_cntr < 9'h10; // @[SDFChainRadix22.scala 328:32]
+  assign _T_419 = sdf_stages_4_io_cntr < 9'h18; // @[SDFChainRadix22.scala 328:78]
+  assign _T_420 = _T_419 ? 1'h0 : 1'h1; // @[SDFChainRadix22.scala 328:65]
+  assign _T_421 = _T_418 ? 1'h0 : _T_420; // @[SDFChainRadix22.scala 328:19]
+  assign outputWires_3_real = sdf_stages_3_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  assign _T_427 = 16'sh0 - $signed(outputWires_3_real); // @[FixedPointTypeClass.scala 39:43]
+  assign outputWires_3_imag = sdf_stages_3_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  assign _GEN_202 = 7'h21 == _T_201[6:0] ? 6'h2 : 6'h0; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_203 = 7'h22 == _T_201[6:0] ? 6'h4 : _GEN_202; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_204 = 7'h23 == _T_201[6:0] ? 6'h6 : _GEN_203; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_205 = 7'h24 == _T_201[6:0] ? 6'h8 : _GEN_204; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_206 = 7'h25 == _T_201[6:0] ? 6'ha : _GEN_205; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_207 = 7'h26 == _T_201[6:0] ? 6'hc : _GEN_206; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_208 = 7'h27 == _T_201[6:0] ? 6'he : _GEN_207; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_209 = 7'h28 == _T_201[6:0] ? 6'h10 : _GEN_208; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_210 = 7'h29 == _T_201[6:0] ? 6'h12 : _GEN_209; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_211 = 7'h2a == _T_201[6:0] ? 6'h14 : _GEN_210; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_212 = 7'h2b == _T_201[6:0] ? 6'h16 : _GEN_211; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_213 = 7'h2c == _T_201[6:0] ? 6'h18 : _GEN_212; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_214 = 7'h2d == _T_201[6:0] ? 6'h1a : _GEN_213; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_215 = 7'h2e == _T_201[6:0] ? 6'h1c : _GEN_214; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_216 = 7'h2f == _T_201[6:0] ? 6'h1e : _GEN_215; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_217 = 7'h30 == _T_201[6:0] ? 6'h20 : _GEN_216; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_218 = 7'h31 == _T_201[6:0] ? 6'h22 : _GEN_217; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_219 = 7'h32 == _T_201[6:0] ? 6'h23 : _GEN_218; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_220 = 7'h33 == _T_201[6:0] ? 6'h24 : _GEN_219; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_221 = 7'h34 == _T_201[6:0] ? 6'h26 : _GEN_220; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_222 = 7'h35 == _T_201[6:0] ? 6'h27 : _GEN_221; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_223 = 7'h36 == _T_201[6:0] ? 6'h28 : _GEN_222; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_224 = 7'h37 == _T_201[6:0] ? 6'h2a : _GEN_223; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_225 = 7'h38 == _T_201[6:0] ? 6'h2b : _GEN_224; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_226 = 7'h39 == _T_201[6:0] ? 6'h2c : _GEN_225; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_227 = 7'h3a == _T_201[6:0] ? 6'h2e : _GEN_226; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_228 = 7'h3b == _T_201[6:0] ? 6'h2f : _GEN_227; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_229 = 7'h3c == _T_201[6:0] ? 6'h30 : _GEN_228; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_230 = 7'h3d == _T_201[6:0] ? 6'h32 : _GEN_229; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_231 = 7'h3e == _T_201[6:0] ? 6'h33 : _GEN_230; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_232 = 7'h3f == _T_201[6:0] ? 6'h34 : _GEN_231; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_233 = 7'h40 == _T_201[6:0] ? 6'h0 : _GEN_232; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_234 = 7'h41 == _T_201[6:0] ? 6'h1 : _GEN_233; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_235 = 7'h42 == _T_201[6:0] ? 6'h2 : _GEN_234; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_236 = 7'h43 == _T_201[6:0] ? 6'h3 : _GEN_235; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_237 = 7'h44 == _T_201[6:0] ? 6'h4 : _GEN_236; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_238 = 7'h45 == _T_201[6:0] ? 6'h5 : _GEN_237; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_239 = 7'h46 == _T_201[6:0] ? 6'h6 : _GEN_238; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_240 = 7'h47 == _T_201[6:0] ? 6'h7 : _GEN_239; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_241 = 7'h48 == _T_201[6:0] ? 6'h8 : _GEN_240; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_242 = 7'h49 == _T_201[6:0] ? 6'h9 : _GEN_241; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_243 = 7'h4a == _T_201[6:0] ? 6'ha : _GEN_242; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_244 = 7'h4b == _T_201[6:0] ? 6'hb : _GEN_243; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_245 = 7'h4c == _T_201[6:0] ? 6'hc : _GEN_244; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_246 = 7'h4d == _T_201[6:0] ? 6'hd : _GEN_245; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_247 = 7'h4e == _T_201[6:0] ? 6'he : _GEN_246; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_248 = 7'h4f == _T_201[6:0] ? 6'hf : _GEN_247; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_249 = 7'h50 == _T_201[6:0] ? 6'h10 : _GEN_248; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_250 = 7'h51 == _T_201[6:0] ? 6'h11 : _GEN_249; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_251 = 7'h52 == _T_201[6:0] ? 6'h12 : _GEN_250; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_252 = 7'h53 == _T_201[6:0] ? 6'h13 : _GEN_251; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_253 = 7'h54 == _T_201[6:0] ? 6'h14 : _GEN_252; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_254 = 7'h55 == _T_201[6:0] ? 6'h15 : _GEN_253; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_255 = 7'h56 == _T_201[6:0] ? 6'h16 : _GEN_254; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_256 = 7'h57 == _T_201[6:0] ? 6'h17 : _GEN_255; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_257 = 7'h58 == _T_201[6:0] ? 6'h18 : _GEN_256; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_258 = 7'h59 == _T_201[6:0] ? 6'h19 : _GEN_257; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_259 = 7'h5a == _T_201[6:0] ? 6'h1a : _GEN_258; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_260 = 7'h5b == _T_201[6:0] ? 6'h1b : _GEN_259; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_261 = 7'h5c == _T_201[6:0] ? 6'h1c : _GEN_260; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_262 = 7'h5d == _T_201[6:0] ? 6'h1d : _GEN_261; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_263 = 7'h5e == _T_201[6:0] ? 6'h1e : _GEN_262; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_264 = 7'h5f == _T_201[6:0] ? 6'h1f : _GEN_263; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_265 = 7'h60 == _T_201[6:0] ? 6'h0 : _GEN_264; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_266 = 7'h61 == _T_201[6:0] ? 6'h3 : _GEN_265; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_267 = 7'h62 == _T_201[6:0] ? 6'h6 : _GEN_266; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_268 = 7'h63 == _T_201[6:0] ? 6'h9 : _GEN_267; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_269 = 7'h64 == _T_201[6:0] ? 6'hc : _GEN_268; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_270 = 7'h65 == _T_201[6:0] ? 6'hf : _GEN_269; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_271 = 7'h66 == _T_201[6:0] ? 6'h12 : _GEN_270; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_272 = 7'h67 == _T_201[6:0] ? 6'h15 : _GEN_271; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_273 = 7'h68 == _T_201[6:0] ? 6'h18 : _GEN_272; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_274 = 7'h69 == _T_201[6:0] ? 6'h1b : _GEN_273; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_275 = 7'h6a == _T_201[6:0] ? 6'h1e : _GEN_274; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_276 = 7'h6b == _T_201[6:0] ? 6'h21 : _GEN_275; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_277 = 7'h6c == _T_201[6:0] ? 6'h23 : _GEN_276; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_278 = 7'h6d == _T_201[6:0] ? 6'h25 : _GEN_277; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_279 = 7'h6e == _T_201[6:0] ? 6'h27 : _GEN_278; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_280 = 7'h6f == _T_201[6:0] ? 6'h29 : _GEN_279; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_281 = 7'h70 == _T_201[6:0] ? 6'h2b : _GEN_280; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_282 = 7'h71 == _T_201[6:0] ? 6'h2d : _GEN_281; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_283 = 7'h72 == _T_201[6:0] ? 6'h2f : _GEN_282; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_284 = 7'h73 == _T_201[6:0] ? 6'h31 : _GEN_283; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_285 = 7'h74 == _T_201[6:0] ? 6'h33 : _GEN_284; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_286 = 7'h75 == _T_201[6:0] ? 6'h35 : _GEN_285; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_287 = 7'h76 == _T_201[6:0] ? 6'h36 : _GEN_286; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_288 = 7'h77 == _T_201[6:0] ? 6'h37 : _GEN_287; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_289 = 7'h78 == _T_201[6:0] ? 6'h38 : _GEN_288; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_290 = 7'h79 == _T_201[6:0] ? 6'h39 : _GEN_289; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_291 = 7'h7a == _T_201[6:0] ? 6'h3a : _GEN_290; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_292 = 7'h7b == _T_201[6:0] ? 6'h3b : _GEN_291; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_293 = 7'h7c == _T_201[6:0] ? 6'h3c : _GEN_292; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_294 = 7'h7d == _T_201[6:0] ? 6'h3d : _GEN_293; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_295 = 7'h7e == _T_201[6:0] ? 6'h3e : _GEN_294; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_296 = 7'h7f == _T_201[6:0] ? 6'h3f : _GEN_295; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_299 = 6'h1 == _GEN_296 ? $signed(16'sh3fec) : $signed(16'sh4000); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_300 = 6'h1 == _GEN_296 ? $signed(-16'sh324) : $signed(16'sh0); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_301 = 6'h2 == _GEN_296 ? $signed(16'sh3fb1) : $signed(_GEN_299); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_302 = 6'h2 == _GEN_296 ? $signed(-16'sh646) : $signed(_GEN_300); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_303 = 6'h3 == _GEN_296 ? $signed(16'sh3f4f) : $signed(_GEN_301); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_304 = 6'h3 == _GEN_296 ? $signed(-16'sh964) : $signed(_GEN_302); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_305 = 6'h4 == _GEN_296 ? $signed(16'sh3ec5) : $signed(_GEN_303); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_306 = 6'h4 == _GEN_296 ? $signed(-16'shc7c) : $signed(_GEN_304); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_307 = 6'h5 == _GEN_296 ? $signed(16'sh3e15) : $signed(_GEN_305); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_308 = 6'h5 == _GEN_296 ? $signed(-16'shf8d) : $signed(_GEN_306); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_309 = 6'h6 == _GEN_296 ? $signed(16'sh3d3f) : $signed(_GEN_307); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_310 = 6'h6 == _GEN_296 ? $signed(-16'sh1294) : $signed(_GEN_308); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_311 = 6'h7 == _GEN_296 ? $signed(16'sh3c42) : $signed(_GEN_309); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_312 = 6'h7 == _GEN_296 ? $signed(-16'sh1590) : $signed(_GEN_310); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_313 = 6'h8 == _GEN_296 ? $signed(16'sh3b21) : $signed(_GEN_311); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_314 = 6'h8 == _GEN_296 ? $signed(-16'sh187e) : $signed(_GEN_312); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_315 = 6'h9 == _GEN_296 ? $signed(16'sh39db) : $signed(_GEN_313); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_316 = 6'h9 == _GEN_296 ? $signed(-16'sh1b5d) : $signed(_GEN_314); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_317 = 6'ha == _GEN_296 ? $signed(16'sh3871) : $signed(_GEN_315); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_318 = 6'ha == _GEN_296 ? $signed(-16'sh1e2b) : $signed(_GEN_316); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_319 = 6'hb == _GEN_296 ? $signed(16'sh36e5) : $signed(_GEN_317); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_320 = 6'hb == _GEN_296 ? $signed(-16'sh20e7) : $signed(_GEN_318); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_321 = 6'hc == _GEN_296 ? $signed(16'sh3537) : $signed(_GEN_319); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_322 = 6'hc == _GEN_296 ? $signed(-16'sh238e) : $signed(_GEN_320); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_323 = 6'hd == _GEN_296 ? $signed(16'sh3368) : $signed(_GEN_321); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_324 = 6'hd == _GEN_296 ? $signed(-16'sh2620) : $signed(_GEN_322); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_325 = 6'he == _GEN_296 ? $signed(16'sh3179) : $signed(_GEN_323); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_326 = 6'he == _GEN_296 ? $signed(-16'sh289a) : $signed(_GEN_324); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_327 = 6'hf == _GEN_296 ? $signed(16'sh2f6c) : $signed(_GEN_325); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_328 = 6'hf == _GEN_296 ? $signed(-16'sh2afb) : $signed(_GEN_326); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_329 = 6'h10 == _GEN_296 ? $signed(16'sh2d41) : $signed(_GEN_327); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_330 = 6'h10 == _GEN_296 ? $signed(-16'sh2d41) : $signed(_GEN_328); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_331 = 6'h11 == _GEN_296 ? $signed(16'sh2afb) : $signed(_GEN_329); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_332 = 6'h11 == _GEN_296 ? $signed(-16'sh2f6c) : $signed(_GEN_330); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_333 = 6'h12 == _GEN_296 ? $signed(16'sh289a) : $signed(_GEN_331); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_334 = 6'h12 == _GEN_296 ? $signed(-16'sh3179) : $signed(_GEN_332); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_335 = 6'h13 == _GEN_296 ? $signed(16'sh2620) : $signed(_GEN_333); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_336 = 6'h13 == _GEN_296 ? $signed(-16'sh3368) : $signed(_GEN_334); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_337 = 6'h14 == _GEN_296 ? $signed(16'sh238e) : $signed(_GEN_335); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_338 = 6'h14 == _GEN_296 ? $signed(-16'sh3537) : $signed(_GEN_336); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_339 = 6'h15 == _GEN_296 ? $signed(16'sh20e7) : $signed(_GEN_337); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_340 = 6'h15 == _GEN_296 ? $signed(-16'sh36e5) : $signed(_GEN_338); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_341 = 6'h16 == _GEN_296 ? $signed(16'sh1e2b) : $signed(_GEN_339); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_342 = 6'h16 == _GEN_296 ? $signed(-16'sh3871) : $signed(_GEN_340); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_343 = 6'h17 == _GEN_296 ? $signed(16'sh1b5d) : $signed(_GEN_341); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_344 = 6'h17 == _GEN_296 ? $signed(-16'sh39db) : $signed(_GEN_342); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_345 = 6'h18 == _GEN_296 ? $signed(16'sh187e) : $signed(_GEN_343); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_346 = 6'h18 == _GEN_296 ? $signed(-16'sh3b21) : $signed(_GEN_344); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_347 = 6'h19 == _GEN_296 ? $signed(16'sh1590) : $signed(_GEN_345); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_348 = 6'h19 == _GEN_296 ? $signed(-16'sh3c42) : $signed(_GEN_346); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_349 = 6'h1a == _GEN_296 ? $signed(16'sh1294) : $signed(_GEN_347); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_350 = 6'h1a == _GEN_296 ? $signed(-16'sh3d3f) : $signed(_GEN_348); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_351 = 6'h1b == _GEN_296 ? $signed(16'shf8d) : $signed(_GEN_349); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_352 = 6'h1b == _GEN_296 ? $signed(-16'sh3e15) : $signed(_GEN_350); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_353 = 6'h1c == _GEN_296 ? $signed(16'shc7c) : $signed(_GEN_351); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_354 = 6'h1c == _GEN_296 ? $signed(-16'sh3ec5) : $signed(_GEN_352); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_355 = 6'h1d == _GEN_296 ? $signed(16'sh964) : $signed(_GEN_353); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_356 = 6'h1d == _GEN_296 ? $signed(-16'sh3f4f) : $signed(_GEN_354); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_357 = 6'h1e == _GEN_296 ? $signed(16'sh646) : $signed(_GEN_355); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_358 = 6'h1e == _GEN_296 ? $signed(-16'sh3fb1) : $signed(_GEN_356); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_359 = 6'h1f == _GEN_296 ? $signed(16'sh324) : $signed(_GEN_357); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_360 = 6'h1f == _GEN_296 ? $signed(-16'sh3fec) : $signed(_GEN_358); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_361 = 6'h20 == _GEN_296 ? $signed(16'sh0) : $signed(_GEN_359); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_362 = 6'h20 == _GEN_296 ? $signed(-16'sh4000) : $signed(_GEN_360); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_363 = 6'h21 == _GEN_296 ? $signed(-16'sh324) : $signed(_GEN_361); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_364 = 6'h21 == _GEN_296 ? $signed(-16'sh3fec) : $signed(_GEN_362); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_365 = 6'h22 == _GEN_296 ? $signed(-16'sh646) : $signed(_GEN_363); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_366 = 6'h22 == _GEN_296 ? $signed(-16'sh3fb1) : $signed(_GEN_364); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_367 = 6'h23 == _GEN_296 ? $signed(-16'shc7c) : $signed(_GEN_365); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_368 = 6'h23 == _GEN_296 ? $signed(-16'sh3ec5) : $signed(_GEN_366); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_369 = 6'h24 == _GEN_296 ? $signed(-16'sh1294) : $signed(_GEN_367); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_370 = 6'h24 == _GEN_296 ? $signed(-16'sh3d3f) : $signed(_GEN_368); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_371 = 6'h25 == _GEN_296 ? $signed(-16'sh1590) : $signed(_GEN_369); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_372 = 6'h25 == _GEN_296 ? $signed(-16'sh3c42) : $signed(_GEN_370); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_373 = 6'h26 == _GEN_296 ? $signed(-16'sh187e) : $signed(_GEN_371); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_374 = 6'h26 == _GEN_296 ? $signed(-16'sh3b21) : $signed(_GEN_372); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_375 = 6'h27 == _GEN_296 ? $signed(-16'sh1e2b) : $signed(_GEN_373); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_376 = 6'h27 == _GEN_296 ? $signed(-16'sh3871) : $signed(_GEN_374); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_377 = 6'h28 == _GEN_296 ? $signed(-16'sh238e) : $signed(_GEN_375); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_378 = 6'h28 == _GEN_296 ? $signed(-16'sh3537) : $signed(_GEN_376); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_379 = 6'h29 == _GEN_296 ? $signed(-16'sh2620) : $signed(_GEN_377); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_380 = 6'h29 == _GEN_296 ? $signed(-16'sh3368) : $signed(_GEN_378); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_381 = 6'h2a == _GEN_296 ? $signed(-16'sh289a) : $signed(_GEN_379); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_382 = 6'h2a == _GEN_296 ? $signed(-16'sh3179) : $signed(_GEN_380); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_383 = 6'h2b == _GEN_296 ? $signed(-16'sh2d41) : $signed(_GEN_381); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_384 = 6'h2b == _GEN_296 ? $signed(-16'sh2d41) : $signed(_GEN_382); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_385 = 6'h2c == _GEN_296 ? $signed(-16'sh3179) : $signed(_GEN_383); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_386 = 6'h2c == _GEN_296 ? $signed(-16'sh289a) : $signed(_GEN_384); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_387 = 6'h2d == _GEN_296 ? $signed(-16'sh3368) : $signed(_GEN_385); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_388 = 6'h2d == _GEN_296 ? $signed(-16'sh2620) : $signed(_GEN_386); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_389 = 6'h2e == _GEN_296 ? $signed(-16'sh3537) : $signed(_GEN_387); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_390 = 6'h2e == _GEN_296 ? $signed(-16'sh238e) : $signed(_GEN_388); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_391 = 6'h2f == _GEN_296 ? $signed(-16'sh3871) : $signed(_GEN_389); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_392 = 6'h2f == _GEN_296 ? $signed(-16'sh1e2b) : $signed(_GEN_390); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_393 = 6'h30 == _GEN_296 ? $signed(-16'sh3b21) : $signed(_GEN_391); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_394 = 6'h30 == _GEN_296 ? $signed(-16'sh187e) : $signed(_GEN_392); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_395 = 6'h31 == _GEN_296 ? $signed(-16'sh3c42) : $signed(_GEN_393); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_396 = 6'h31 == _GEN_296 ? $signed(-16'sh1590) : $signed(_GEN_394); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_397 = 6'h32 == _GEN_296 ? $signed(-16'sh3d3f) : $signed(_GEN_395); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_398 = 6'h32 == _GEN_296 ? $signed(-16'sh1294) : $signed(_GEN_396); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_399 = 6'h33 == _GEN_296 ? $signed(-16'sh3ec5) : $signed(_GEN_397); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_400 = 6'h33 == _GEN_296 ? $signed(-16'shc7c) : $signed(_GEN_398); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_401 = 6'h34 == _GEN_296 ? $signed(-16'sh3fb1) : $signed(_GEN_399); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_402 = 6'h34 == _GEN_296 ? $signed(-16'sh646) : $signed(_GEN_400); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_403 = 6'h35 == _GEN_296 ? $signed(-16'sh3fec) : $signed(_GEN_401); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_404 = 6'h35 == _GEN_296 ? $signed(-16'sh324) : $signed(_GEN_402); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_405 = 6'h36 == _GEN_296 ? $signed(-16'sh3fb1) : $signed(_GEN_403); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_406 = 6'h36 == _GEN_296 ? $signed(16'sh646) : $signed(_GEN_404); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_407 = 6'h37 == _GEN_296 ? $signed(-16'sh3e15) : $signed(_GEN_405); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_408 = 6'h37 == _GEN_296 ? $signed(16'shf8d) : $signed(_GEN_406); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_409 = 6'h38 == _GEN_296 ? $signed(-16'sh3b21) : $signed(_GEN_407); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_410 = 6'h38 == _GEN_296 ? $signed(16'sh187e) : $signed(_GEN_408); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_411 = 6'h39 == _GEN_296 ? $signed(-16'sh36e5) : $signed(_GEN_409); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_412 = 6'h39 == _GEN_296 ? $signed(16'sh20e7) : $signed(_GEN_410); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_413 = 6'h3a == _GEN_296 ? $signed(-16'sh3179) : $signed(_GEN_411); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_414 = 6'h3a == _GEN_296 ? $signed(16'sh289a) : $signed(_GEN_412); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_415 = 6'h3b == _GEN_296 ? $signed(-16'sh2afb) : $signed(_GEN_413); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_416 = 6'h3b == _GEN_296 ? $signed(16'sh2f6c) : $signed(_GEN_414); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_417 = 6'h3c == _GEN_296 ? $signed(-16'sh238e) : $signed(_GEN_415); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_418 = 6'h3c == _GEN_296 ? $signed(16'sh3537) : $signed(_GEN_416); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_419 = 6'h3d == _GEN_296 ? $signed(-16'sh1b5d) : $signed(_GEN_417); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_420 = 6'h3d == _GEN_296 ? $signed(16'sh39db) : $signed(_GEN_418); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_421 = 6'h3e == _GEN_296 ? $signed(-16'sh1294) : $signed(_GEN_419); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_422 = 6'h3e == _GEN_296 ? $signed(16'sh3d3f) : $signed(_GEN_420); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_423 = 6'h3f == _GEN_296 ? $signed(-16'sh964) : $signed(_GEN_421); // @[SDFChainRadix22.scala 291:27]
+  assign twiddles_5_imag = 6'h3f == _GEN_296 ? $signed(16'sh3f4f) : $signed(_GEN_422); // @[SDFChainRadix22.scala 291:27]
+  assign _T_765 = $signed(_GEN_423) + $signed(twiddles_5_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign outputWires_4_real = sdf_stages_4_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  assign outputWires_4_imag = sdf_stages_4_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  assign _T_766 = $signed(outputWires_4_real) + $signed(outputWires_4_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_767 = $signed(outputWires_4_imag) - $signed(outputWires_4_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _GEN_2118 = {{1{outputWires_4_real[15]}},outputWires_4_real}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_768 = $signed(_GEN_2118) * $signed(_T_765); // @[FixedPointTypeClass.scala 211:35]
+  assign _GEN_2119 = {{1{twiddles_5_imag[15]}},twiddles_5_imag}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_769 = $signed(_T_766) * $signed(_GEN_2119); // @[FixedPointTypeClass.scala 211:35]
+  assign _GEN_2120 = {{1{_GEN_423[15]}},_GEN_423}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_770 = $signed(_T_767) * $signed(_GEN_2120); // @[FixedPointTypeClass.scala 211:35]
+  assign _T_771 = $signed(_T_768) - $signed(_T_769); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_772 = $signed(_T_768) + $signed(_T_770); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_778 = $signed(_T_771) + 34'sh2000; // @[FixedPointTypeClass.scala 20:58]
+  assign _T_779 = _T_778[33:14]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_782 = $signed(_T_772) + 34'sh2000; // @[FixedPointTypeClass.scala 20:58]
+  assign _T_783 = _T_782[33:14]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_790 = sdf_stages_6_io_cntr < 9'h40; // @[SDFChainRadix22.scala 328:32]
+  assign _T_791 = sdf_stages_6_io_cntr < 9'h60; // @[SDFChainRadix22.scala 328:78]
+  assign _T_792 = _T_791 ? 1'h0 : 1'h1; // @[SDFChainRadix22.scala 328:65]
+  assign _T_793 = _T_790 ? 1'h0 : _T_792; // @[SDFChainRadix22.scala 328:19]
+  assign outputWires_5_real = sdf_stages_5_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  assign _T_799 = 16'sh0 - $signed(outputWires_5_real); // @[FixedPointTypeClass.scala 39:43]
+  assign outputWires_5_imag = sdf_stages_5_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  assign _GEN_682 = 9'h81 == _T_215 ? 8'h2 : 8'h0; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_683 = 9'h82 == _T_215 ? 8'h4 : _GEN_682; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_684 = 9'h83 == _T_215 ? 8'h6 : _GEN_683; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_685 = 9'h84 == _T_215 ? 8'h8 : _GEN_684; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_686 = 9'h85 == _T_215 ? 8'ha : _GEN_685; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_687 = 9'h86 == _T_215 ? 8'hc : _GEN_686; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_688 = 9'h87 == _T_215 ? 8'he : _GEN_687; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_689 = 9'h88 == _T_215 ? 8'h10 : _GEN_688; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_690 = 9'h89 == _T_215 ? 8'h12 : _GEN_689; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_691 = 9'h8a == _T_215 ? 8'h14 : _GEN_690; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_692 = 9'h8b == _T_215 ? 8'h16 : _GEN_691; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_693 = 9'h8c == _T_215 ? 8'h18 : _GEN_692; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_694 = 9'h8d == _T_215 ? 8'h1a : _GEN_693; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_695 = 9'h8e == _T_215 ? 8'h1c : _GEN_694; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_696 = 9'h8f == _T_215 ? 8'h1e : _GEN_695; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_697 = 9'h90 == _T_215 ? 8'h20 : _GEN_696; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_698 = 9'h91 == _T_215 ? 8'h22 : _GEN_697; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_699 = 9'h92 == _T_215 ? 8'h24 : _GEN_698; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_700 = 9'h93 == _T_215 ? 8'h26 : _GEN_699; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_701 = 9'h94 == _T_215 ? 8'h28 : _GEN_700; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_702 = 9'h95 == _T_215 ? 8'h2a : _GEN_701; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_703 = 9'h96 == _T_215 ? 8'h2c : _GEN_702; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_704 = 9'h97 == _T_215 ? 8'h2e : _GEN_703; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_705 = 9'h98 == _T_215 ? 8'h30 : _GEN_704; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_706 = 9'h99 == _T_215 ? 8'h32 : _GEN_705; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_707 = 9'h9a == _T_215 ? 8'h34 : _GEN_706; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_708 = 9'h9b == _T_215 ? 8'h36 : _GEN_707; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_709 = 9'h9c == _T_215 ? 8'h38 : _GEN_708; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_710 = 9'h9d == _T_215 ? 8'h3a : _GEN_709; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_711 = 9'h9e == _T_215 ? 8'h3c : _GEN_710; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_712 = 9'h9f == _T_215 ? 8'h3e : _GEN_711; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_713 = 9'ha0 == _T_215 ? 8'h40 : _GEN_712; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_714 = 9'ha1 == _T_215 ? 8'h42 : _GEN_713; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_715 = 9'ha2 == _T_215 ? 8'h44 : _GEN_714; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_716 = 9'ha3 == _T_215 ? 8'h46 : _GEN_715; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_717 = 9'ha4 == _T_215 ? 8'h48 : _GEN_716; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_718 = 9'ha5 == _T_215 ? 8'h4a : _GEN_717; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_719 = 9'ha6 == _T_215 ? 8'h4c : _GEN_718; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_720 = 9'ha7 == _T_215 ? 8'h4e : _GEN_719; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_721 = 9'ha8 == _T_215 ? 8'h50 : _GEN_720; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_722 = 9'ha9 == _T_215 ? 8'h52 : _GEN_721; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_723 = 9'haa == _T_215 ? 8'h54 : _GEN_722; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_724 = 9'hab == _T_215 ? 8'h56 : _GEN_723; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_725 = 9'hac == _T_215 ? 8'h58 : _GEN_724; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_726 = 9'had == _T_215 ? 8'h5a : _GEN_725; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_727 = 9'hae == _T_215 ? 8'h5c : _GEN_726; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_728 = 9'haf == _T_215 ? 8'h5e : _GEN_727; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_729 = 9'hb0 == _T_215 ? 8'h60 : _GEN_728; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_730 = 9'hb1 == _T_215 ? 8'h62 : _GEN_729; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_731 = 9'hb2 == _T_215 ? 8'h64 : _GEN_730; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_732 = 9'hb3 == _T_215 ? 8'h66 : _GEN_731; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_733 = 9'hb4 == _T_215 ? 8'h68 : _GEN_732; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_734 = 9'hb5 == _T_215 ? 8'h6a : _GEN_733; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_735 = 9'hb6 == _T_215 ? 8'h6c : _GEN_734; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_736 = 9'hb7 == _T_215 ? 8'h6e : _GEN_735; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_737 = 9'hb8 == _T_215 ? 8'h70 : _GEN_736; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_738 = 9'hb9 == _T_215 ? 8'h72 : _GEN_737; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_739 = 9'hba == _T_215 ? 8'h74 : _GEN_738; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_740 = 9'hbb == _T_215 ? 8'h76 : _GEN_739; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_741 = 9'hbc == _T_215 ? 8'h78 : _GEN_740; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_742 = 9'hbd == _T_215 ? 8'h7a : _GEN_741; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_743 = 9'hbe == _T_215 ? 8'h7c : _GEN_742; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_744 = 9'hbf == _T_215 ? 8'h7e : _GEN_743; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_745 = 9'hc0 == _T_215 ? 8'h80 : _GEN_744; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_746 = 9'hc1 == _T_215 ? 8'h82 : _GEN_745; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_747 = 9'hc2 == _T_215 ? 8'h83 : _GEN_746; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_748 = 9'hc3 == _T_215 ? 8'h84 : _GEN_747; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_749 = 9'hc4 == _T_215 ? 8'h86 : _GEN_748; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_750 = 9'hc5 == _T_215 ? 8'h87 : _GEN_749; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_751 = 9'hc6 == _T_215 ? 8'h88 : _GEN_750; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_752 = 9'hc7 == _T_215 ? 8'h8a : _GEN_751; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_753 = 9'hc8 == _T_215 ? 8'h8b : _GEN_752; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_754 = 9'hc9 == _T_215 ? 8'h8c : _GEN_753; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_755 = 9'hca == _T_215 ? 8'h8e : _GEN_754; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_756 = 9'hcb == _T_215 ? 8'h8f : _GEN_755; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_757 = 9'hcc == _T_215 ? 8'h90 : _GEN_756; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_758 = 9'hcd == _T_215 ? 8'h92 : _GEN_757; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_759 = 9'hce == _T_215 ? 8'h93 : _GEN_758; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_760 = 9'hcf == _T_215 ? 8'h94 : _GEN_759; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_761 = 9'hd0 == _T_215 ? 8'h96 : _GEN_760; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_762 = 9'hd1 == _T_215 ? 8'h97 : _GEN_761; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_763 = 9'hd2 == _T_215 ? 8'h98 : _GEN_762; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_764 = 9'hd3 == _T_215 ? 8'h9a : _GEN_763; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_765 = 9'hd4 == _T_215 ? 8'h9b : _GEN_764; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_766 = 9'hd5 == _T_215 ? 8'h9c : _GEN_765; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_767 = 9'hd6 == _T_215 ? 8'h9e : _GEN_766; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_768 = 9'hd7 == _T_215 ? 8'h9f : _GEN_767; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_769 = 9'hd8 == _T_215 ? 8'ha0 : _GEN_768; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_770 = 9'hd9 == _T_215 ? 8'ha2 : _GEN_769; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_771 = 9'hda == _T_215 ? 8'ha3 : _GEN_770; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_772 = 9'hdb == _T_215 ? 8'ha4 : _GEN_771; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_773 = 9'hdc == _T_215 ? 8'ha6 : _GEN_772; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_774 = 9'hdd == _T_215 ? 8'ha7 : _GEN_773; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_775 = 9'hde == _T_215 ? 8'ha8 : _GEN_774; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_776 = 9'hdf == _T_215 ? 8'haa : _GEN_775; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_777 = 9'he0 == _T_215 ? 8'hab : _GEN_776; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_778 = 9'he1 == _T_215 ? 8'hac : _GEN_777; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_779 = 9'he2 == _T_215 ? 8'hae : _GEN_778; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_780 = 9'he3 == _T_215 ? 8'haf : _GEN_779; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_781 = 9'he4 == _T_215 ? 8'hb0 : _GEN_780; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_782 = 9'he5 == _T_215 ? 8'hb2 : _GEN_781; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_783 = 9'he6 == _T_215 ? 8'hb3 : _GEN_782; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_784 = 9'he7 == _T_215 ? 8'hb4 : _GEN_783; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_785 = 9'he8 == _T_215 ? 8'hb6 : _GEN_784; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_786 = 9'he9 == _T_215 ? 8'hb7 : _GEN_785; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_787 = 9'hea == _T_215 ? 8'hb8 : _GEN_786; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_788 = 9'heb == _T_215 ? 8'hba : _GEN_787; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_789 = 9'hec == _T_215 ? 8'hbb : _GEN_788; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_790 = 9'hed == _T_215 ? 8'hbc : _GEN_789; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_791 = 9'hee == _T_215 ? 8'hbe : _GEN_790; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_792 = 9'hef == _T_215 ? 8'hbf : _GEN_791; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_793 = 9'hf0 == _T_215 ? 8'hc0 : _GEN_792; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_794 = 9'hf1 == _T_215 ? 8'hc2 : _GEN_793; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_795 = 9'hf2 == _T_215 ? 8'hc3 : _GEN_794; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_796 = 9'hf3 == _T_215 ? 8'hc4 : _GEN_795; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_797 = 9'hf4 == _T_215 ? 8'hc6 : _GEN_796; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_798 = 9'hf5 == _T_215 ? 8'hc7 : _GEN_797; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_799 = 9'hf6 == _T_215 ? 8'hc8 : _GEN_798; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_800 = 9'hf7 == _T_215 ? 8'hca : _GEN_799; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_801 = 9'hf8 == _T_215 ? 8'hcb : _GEN_800; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_802 = 9'hf9 == _T_215 ? 8'hcc : _GEN_801; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_803 = 9'hfa == _T_215 ? 8'hce : _GEN_802; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_804 = 9'hfb == _T_215 ? 8'hcf : _GEN_803; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_805 = 9'hfc == _T_215 ? 8'hd0 : _GEN_804; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_806 = 9'hfd == _T_215 ? 8'hd2 : _GEN_805; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_807 = 9'hfe == _T_215 ? 8'hd3 : _GEN_806; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_808 = 9'hff == _T_215 ? 8'hd4 : _GEN_807; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_809 = 9'h100 == _T_215 ? 8'h0 : _GEN_808; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_810 = 9'h101 == _T_215 ? 8'h1 : _GEN_809; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_811 = 9'h102 == _T_215 ? 8'h2 : _GEN_810; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_812 = 9'h103 == _T_215 ? 8'h3 : _GEN_811; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_813 = 9'h104 == _T_215 ? 8'h4 : _GEN_812; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_814 = 9'h105 == _T_215 ? 8'h5 : _GEN_813; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_815 = 9'h106 == _T_215 ? 8'h6 : _GEN_814; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_816 = 9'h107 == _T_215 ? 8'h7 : _GEN_815; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_817 = 9'h108 == _T_215 ? 8'h8 : _GEN_816; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_818 = 9'h109 == _T_215 ? 8'h9 : _GEN_817; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_819 = 9'h10a == _T_215 ? 8'ha : _GEN_818; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_820 = 9'h10b == _T_215 ? 8'hb : _GEN_819; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_821 = 9'h10c == _T_215 ? 8'hc : _GEN_820; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_822 = 9'h10d == _T_215 ? 8'hd : _GEN_821; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_823 = 9'h10e == _T_215 ? 8'he : _GEN_822; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_824 = 9'h10f == _T_215 ? 8'hf : _GEN_823; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_825 = 9'h110 == _T_215 ? 8'h10 : _GEN_824; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_826 = 9'h111 == _T_215 ? 8'h11 : _GEN_825; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_827 = 9'h112 == _T_215 ? 8'h12 : _GEN_826; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_828 = 9'h113 == _T_215 ? 8'h13 : _GEN_827; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_829 = 9'h114 == _T_215 ? 8'h14 : _GEN_828; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_830 = 9'h115 == _T_215 ? 8'h15 : _GEN_829; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_831 = 9'h116 == _T_215 ? 8'h16 : _GEN_830; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_832 = 9'h117 == _T_215 ? 8'h17 : _GEN_831; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_833 = 9'h118 == _T_215 ? 8'h18 : _GEN_832; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_834 = 9'h119 == _T_215 ? 8'h19 : _GEN_833; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_835 = 9'h11a == _T_215 ? 8'h1a : _GEN_834; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_836 = 9'h11b == _T_215 ? 8'h1b : _GEN_835; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_837 = 9'h11c == _T_215 ? 8'h1c : _GEN_836; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_838 = 9'h11d == _T_215 ? 8'h1d : _GEN_837; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_839 = 9'h11e == _T_215 ? 8'h1e : _GEN_838; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_840 = 9'h11f == _T_215 ? 8'h1f : _GEN_839; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_841 = 9'h120 == _T_215 ? 8'h20 : _GEN_840; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_842 = 9'h121 == _T_215 ? 8'h21 : _GEN_841; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_843 = 9'h122 == _T_215 ? 8'h22 : _GEN_842; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_844 = 9'h123 == _T_215 ? 8'h23 : _GEN_843; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_845 = 9'h124 == _T_215 ? 8'h24 : _GEN_844; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_846 = 9'h125 == _T_215 ? 8'h25 : _GEN_845; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_847 = 9'h126 == _T_215 ? 8'h26 : _GEN_846; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_848 = 9'h127 == _T_215 ? 8'h27 : _GEN_847; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_849 = 9'h128 == _T_215 ? 8'h28 : _GEN_848; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_850 = 9'h129 == _T_215 ? 8'h29 : _GEN_849; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_851 = 9'h12a == _T_215 ? 8'h2a : _GEN_850; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_852 = 9'h12b == _T_215 ? 8'h2b : _GEN_851; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_853 = 9'h12c == _T_215 ? 8'h2c : _GEN_852; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_854 = 9'h12d == _T_215 ? 8'h2d : _GEN_853; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_855 = 9'h12e == _T_215 ? 8'h2e : _GEN_854; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_856 = 9'h12f == _T_215 ? 8'h2f : _GEN_855; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_857 = 9'h130 == _T_215 ? 8'h30 : _GEN_856; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_858 = 9'h131 == _T_215 ? 8'h31 : _GEN_857; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_859 = 9'h132 == _T_215 ? 8'h32 : _GEN_858; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_860 = 9'h133 == _T_215 ? 8'h33 : _GEN_859; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_861 = 9'h134 == _T_215 ? 8'h34 : _GEN_860; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_862 = 9'h135 == _T_215 ? 8'h35 : _GEN_861; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_863 = 9'h136 == _T_215 ? 8'h36 : _GEN_862; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_864 = 9'h137 == _T_215 ? 8'h37 : _GEN_863; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_865 = 9'h138 == _T_215 ? 8'h38 : _GEN_864; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_866 = 9'h139 == _T_215 ? 8'h39 : _GEN_865; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_867 = 9'h13a == _T_215 ? 8'h3a : _GEN_866; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_868 = 9'h13b == _T_215 ? 8'h3b : _GEN_867; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_869 = 9'h13c == _T_215 ? 8'h3c : _GEN_868; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_870 = 9'h13d == _T_215 ? 8'h3d : _GEN_869; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_871 = 9'h13e == _T_215 ? 8'h3e : _GEN_870; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_872 = 9'h13f == _T_215 ? 8'h3f : _GEN_871; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_873 = 9'h140 == _T_215 ? 8'h40 : _GEN_872; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_874 = 9'h141 == _T_215 ? 8'h41 : _GEN_873; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_875 = 9'h142 == _T_215 ? 8'h42 : _GEN_874; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_876 = 9'h143 == _T_215 ? 8'h43 : _GEN_875; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_877 = 9'h144 == _T_215 ? 8'h44 : _GEN_876; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_878 = 9'h145 == _T_215 ? 8'h45 : _GEN_877; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_879 = 9'h146 == _T_215 ? 8'h46 : _GEN_878; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_880 = 9'h147 == _T_215 ? 8'h47 : _GEN_879; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_881 = 9'h148 == _T_215 ? 8'h48 : _GEN_880; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_882 = 9'h149 == _T_215 ? 8'h49 : _GEN_881; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_883 = 9'h14a == _T_215 ? 8'h4a : _GEN_882; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_884 = 9'h14b == _T_215 ? 8'h4b : _GEN_883; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_885 = 9'h14c == _T_215 ? 8'h4c : _GEN_884; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_886 = 9'h14d == _T_215 ? 8'h4d : _GEN_885; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_887 = 9'h14e == _T_215 ? 8'h4e : _GEN_886; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_888 = 9'h14f == _T_215 ? 8'h4f : _GEN_887; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_889 = 9'h150 == _T_215 ? 8'h50 : _GEN_888; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_890 = 9'h151 == _T_215 ? 8'h51 : _GEN_889; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_891 = 9'h152 == _T_215 ? 8'h52 : _GEN_890; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_892 = 9'h153 == _T_215 ? 8'h53 : _GEN_891; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_893 = 9'h154 == _T_215 ? 8'h54 : _GEN_892; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_894 = 9'h155 == _T_215 ? 8'h55 : _GEN_893; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_895 = 9'h156 == _T_215 ? 8'h56 : _GEN_894; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_896 = 9'h157 == _T_215 ? 8'h57 : _GEN_895; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_897 = 9'h158 == _T_215 ? 8'h58 : _GEN_896; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_898 = 9'h159 == _T_215 ? 8'h59 : _GEN_897; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_899 = 9'h15a == _T_215 ? 8'h5a : _GEN_898; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_900 = 9'h15b == _T_215 ? 8'h5b : _GEN_899; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_901 = 9'h15c == _T_215 ? 8'h5c : _GEN_900; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_902 = 9'h15d == _T_215 ? 8'h5d : _GEN_901; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_903 = 9'h15e == _T_215 ? 8'h5e : _GEN_902; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_904 = 9'h15f == _T_215 ? 8'h5f : _GEN_903; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_905 = 9'h160 == _T_215 ? 8'h60 : _GEN_904; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_906 = 9'h161 == _T_215 ? 8'h61 : _GEN_905; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_907 = 9'h162 == _T_215 ? 8'h62 : _GEN_906; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_908 = 9'h163 == _T_215 ? 8'h63 : _GEN_907; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_909 = 9'h164 == _T_215 ? 8'h64 : _GEN_908; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_910 = 9'h165 == _T_215 ? 8'h65 : _GEN_909; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_911 = 9'h166 == _T_215 ? 8'h66 : _GEN_910; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_912 = 9'h167 == _T_215 ? 8'h67 : _GEN_911; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_913 = 9'h168 == _T_215 ? 8'h68 : _GEN_912; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_914 = 9'h169 == _T_215 ? 8'h69 : _GEN_913; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_915 = 9'h16a == _T_215 ? 8'h6a : _GEN_914; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_916 = 9'h16b == _T_215 ? 8'h6b : _GEN_915; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_917 = 9'h16c == _T_215 ? 8'h6c : _GEN_916; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_918 = 9'h16d == _T_215 ? 8'h6d : _GEN_917; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_919 = 9'h16e == _T_215 ? 8'h6e : _GEN_918; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_920 = 9'h16f == _T_215 ? 8'h6f : _GEN_919; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_921 = 9'h170 == _T_215 ? 8'h70 : _GEN_920; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_922 = 9'h171 == _T_215 ? 8'h71 : _GEN_921; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_923 = 9'h172 == _T_215 ? 8'h72 : _GEN_922; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_924 = 9'h173 == _T_215 ? 8'h73 : _GEN_923; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_925 = 9'h174 == _T_215 ? 8'h74 : _GEN_924; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_926 = 9'h175 == _T_215 ? 8'h75 : _GEN_925; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_927 = 9'h176 == _T_215 ? 8'h76 : _GEN_926; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_928 = 9'h177 == _T_215 ? 8'h77 : _GEN_927; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_929 = 9'h178 == _T_215 ? 8'h78 : _GEN_928; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_930 = 9'h179 == _T_215 ? 8'h79 : _GEN_929; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_931 = 9'h17a == _T_215 ? 8'h7a : _GEN_930; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_932 = 9'h17b == _T_215 ? 8'h7b : _GEN_931; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_933 = 9'h17c == _T_215 ? 8'h7c : _GEN_932; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_934 = 9'h17d == _T_215 ? 8'h7d : _GEN_933; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_935 = 9'h17e == _T_215 ? 8'h7e : _GEN_934; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_936 = 9'h17f == _T_215 ? 8'h7f : _GEN_935; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_937 = 9'h180 == _T_215 ? 8'h0 : _GEN_936; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_938 = 9'h181 == _T_215 ? 8'h3 : _GEN_937; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_939 = 9'h182 == _T_215 ? 8'h6 : _GEN_938; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_940 = 9'h183 == _T_215 ? 8'h9 : _GEN_939; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_941 = 9'h184 == _T_215 ? 8'hc : _GEN_940; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_942 = 9'h185 == _T_215 ? 8'hf : _GEN_941; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_943 = 9'h186 == _T_215 ? 8'h12 : _GEN_942; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_944 = 9'h187 == _T_215 ? 8'h15 : _GEN_943; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_945 = 9'h188 == _T_215 ? 8'h18 : _GEN_944; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_946 = 9'h189 == _T_215 ? 8'h1b : _GEN_945; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_947 = 9'h18a == _T_215 ? 8'h1e : _GEN_946; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_948 = 9'h18b == _T_215 ? 8'h21 : _GEN_947; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_949 = 9'h18c == _T_215 ? 8'h24 : _GEN_948; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_950 = 9'h18d == _T_215 ? 8'h27 : _GEN_949; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_951 = 9'h18e == _T_215 ? 8'h2a : _GEN_950; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_952 = 9'h18f == _T_215 ? 8'h2d : _GEN_951; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_953 = 9'h190 == _T_215 ? 8'h30 : _GEN_952; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_954 = 9'h191 == _T_215 ? 8'h33 : _GEN_953; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_955 = 9'h192 == _T_215 ? 8'h36 : _GEN_954; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_956 = 9'h193 == _T_215 ? 8'h39 : _GEN_955; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_957 = 9'h194 == _T_215 ? 8'h3c : _GEN_956; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_958 = 9'h195 == _T_215 ? 8'h3f : _GEN_957; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_959 = 9'h196 == _T_215 ? 8'h42 : _GEN_958; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_960 = 9'h197 == _T_215 ? 8'h45 : _GEN_959; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_961 = 9'h198 == _T_215 ? 8'h48 : _GEN_960; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_962 = 9'h199 == _T_215 ? 8'h4b : _GEN_961; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_963 = 9'h19a == _T_215 ? 8'h4e : _GEN_962; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_964 = 9'h19b == _T_215 ? 8'h51 : _GEN_963; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_965 = 9'h19c == _T_215 ? 8'h54 : _GEN_964; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_966 = 9'h19d == _T_215 ? 8'h57 : _GEN_965; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_967 = 9'h19e == _T_215 ? 8'h5a : _GEN_966; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_968 = 9'h19f == _T_215 ? 8'h5d : _GEN_967; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_969 = 9'h1a0 == _T_215 ? 8'h60 : _GEN_968; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_970 = 9'h1a1 == _T_215 ? 8'h63 : _GEN_969; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_971 = 9'h1a2 == _T_215 ? 8'h66 : _GEN_970; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_972 = 9'h1a3 == _T_215 ? 8'h69 : _GEN_971; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_973 = 9'h1a4 == _T_215 ? 8'h6c : _GEN_972; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_974 = 9'h1a5 == _T_215 ? 8'h6f : _GEN_973; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_975 = 9'h1a6 == _T_215 ? 8'h72 : _GEN_974; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_976 = 9'h1a7 == _T_215 ? 8'h75 : _GEN_975; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_977 = 9'h1a8 == _T_215 ? 8'h78 : _GEN_976; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_978 = 9'h1a9 == _T_215 ? 8'h7b : _GEN_977; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_979 = 9'h1aa == _T_215 ? 8'h7e : _GEN_978; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_980 = 9'h1ab == _T_215 ? 8'h81 : _GEN_979; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_981 = 9'h1ac == _T_215 ? 8'h83 : _GEN_980; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_982 = 9'h1ad == _T_215 ? 8'h85 : _GEN_981; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_983 = 9'h1ae == _T_215 ? 8'h87 : _GEN_982; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_984 = 9'h1af == _T_215 ? 8'h89 : _GEN_983; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_985 = 9'h1b0 == _T_215 ? 8'h8b : _GEN_984; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_986 = 9'h1b1 == _T_215 ? 8'h8d : _GEN_985; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_987 = 9'h1b2 == _T_215 ? 8'h8f : _GEN_986; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_988 = 9'h1b3 == _T_215 ? 8'h91 : _GEN_987; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_989 = 9'h1b4 == _T_215 ? 8'h93 : _GEN_988; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_990 = 9'h1b5 == _T_215 ? 8'h95 : _GEN_989; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_991 = 9'h1b6 == _T_215 ? 8'h97 : _GEN_990; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_992 = 9'h1b7 == _T_215 ? 8'h99 : _GEN_991; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_993 = 9'h1b8 == _T_215 ? 8'h9b : _GEN_992; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_994 = 9'h1b9 == _T_215 ? 8'h9d : _GEN_993; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_995 = 9'h1ba == _T_215 ? 8'h9f : _GEN_994; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_996 = 9'h1bb == _T_215 ? 8'ha1 : _GEN_995; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_997 = 9'h1bc == _T_215 ? 8'ha3 : _GEN_996; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_998 = 9'h1bd == _T_215 ? 8'ha5 : _GEN_997; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_999 = 9'h1be == _T_215 ? 8'ha7 : _GEN_998; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1000 = 9'h1bf == _T_215 ? 8'ha9 : _GEN_999; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1001 = 9'h1c0 == _T_215 ? 8'hab : _GEN_1000; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1002 = 9'h1c1 == _T_215 ? 8'had : _GEN_1001; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1003 = 9'h1c2 == _T_215 ? 8'haf : _GEN_1002; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1004 = 9'h1c3 == _T_215 ? 8'hb1 : _GEN_1003; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1005 = 9'h1c4 == _T_215 ? 8'hb3 : _GEN_1004; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1006 = 9'h1c5 == _T_215 ? 8'hb5 : _GEN_1005; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1007 = 9'h1c6 == _T_215 ? 8'hb7 : _GEN_1006; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1008 = 9'h1c7 == _T_215 ? 8'hb9 : _GEN_1007; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1009 = 9'h1c8 == _T_215 ? 8'hbb : _GEN_1008; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1010 = 9'h1c9 == _T_215 ? 8'hbd : _GEN_1009; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1011 = 9'h1ca == _T_215 ? 8'hbf : _GEN_1010; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1012 = 9'h1cb == _T_215 ? 8'hc1 : _GEN_1011; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1013 = 9'h1cc == _T_215 ? 8'hc3 : _GEN_1012; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1014 = 9'h1cd == _T_215 ? 8'hc5 : _GEN_1013; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1015 = 9'h1ce == _T_215 ? 8'hc7 : _GEN_1014; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1016 = 9'h1cf == _T_215 ? 8'hc9 : _GEN_1015; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1017 = 9'h1d0 == _T_215 ? 8'hcb : _GEN_1016; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1018 = 9'h1d1 == _T_215 ? 8'hcd : _GEN_1017; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1019 = 9'h1d2 == _T_215 ? 8'hcf : _GEN_1018; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1020 = 9'h1d3 == _T_215 ? 8'hd1 : _GEN_1019; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1021 = 9'h1d4 == _T_215 ? 8'hd3 : _GEN_1020; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1022 = 9'h1d5 == _T_215 ? 8'hd5 : _GEN_1021; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1023 = 9'h1d6 == _T_215 ? 8'hd6 : _GEN_1022; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1024 = 9'h1d7 == _T_215 ? 8'hd7 : _GEN_1023; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1025 = 9'h1d8 == _T_215 ? 8'hd8 : _GEN_1024; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1026 = 9'h1d9 == _T_215 ? 8'hd9 : _GEN_1025; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1027 = 9'h1da == _T_215 ? 8'hda : _GEN_1026; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1028 = 9'h1db == _T_215 ? 8'hdb : _GEN_1027; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1029 = 9'h1dc == _T_215 ? 8'hdc : _GEN_1028; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1030 = 9'h1dd == _T_215 ? 8'hdd : _GEN_1029; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1031 = 9'h1de == _T_215 ? 8'hde : _GEN_1030; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1032 = 9'h1df == _T_215 ? 8'hdf : _GEN_1031; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1033 = 9'h1e0 == _T_215 ? 8'he0 : _GEN_1032; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1034 = 9'h1e1 == _T_215 ? 8'he1 : _GEN_1033; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1035 = 9'h1e2 == _T_215 ? 8'he2 : _GEN_1034; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1036 = 9'h1e3 == _T_215 ? 8'he3 : _GEN_1035; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1037 = 9'h1e4 == _T_215 ? 8'he4 : _GEN_1036; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1038 = 9'h1e5 == _T_215 ? 8'he5 : _GEN_1037; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1039 = 9'h1e6 == _T_215 ? 8'he6 : _GEN_1038; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1040 = 9'h1e7 == _T_215 ? 8'he7 : _GEN_1039; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1041 = 9'h1e8 == _T_215 ? 8'he8 : _GEN_1040; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1042 = 9'h1e9 == _T_215 ? 8'he9 : _GEN_1041; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1043 = 9'h1ea == _T_215 ? 8'hea : _GEN_1042; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1044 = 9'h1eb == _T_215 ? 8'heb : _GEN_1043; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1045 = 9'h1ec == _T_215 ? 8'hec : _GEN_1044; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1046 = 9'h1ed == _T_215 ? 8'hed : _GEN_1045; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1047 = 9'h1ee == _T_215 ? 8'hee : _GEN_1046; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1048 = 9'h1ef == _T_215 ? 8'hef : _GEN_1047; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1049 = 9'h1f0 == _T_215 ? 8'hf0 : _GEN_1048; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1050 = 9'h1f1 == _T_215 ? 8'hf1 : _GEN_1049; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1051 = 9'h1f2 == _T_215 ? 8'hf2 : _GEN_1050; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1052 = 9'h1f3 == _T_215 ? 8'hf3 : _GEN_1051; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1053 = 9'h1f4 == _T_215 ? 8'hf4 : _GEN_1052; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1054 = 9'h1f5 == _T_215 ? 8'hf5 : _GEN_1053; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1055 = 9'h1f6 == _T_215 ? 8'hf6 : _GEN_1054; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1056 = 9'h1f7 == _T_215 ? 8'hf7 : _GEN_1055; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1057 = 9'h1f8 == _T_215 ? 8'hf8 : _GEN_1056; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1058 = 9'h1f9 == _T_215 ? 8'hf9 : _GEN_1057; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1059 = 9'h1fa == _T_215 ? 8'hfa : _GEN_1058; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1060 = 9'h1fb == _T_215 ? 8'hfb : _GEN_1059; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1061 = 9'h1fc == _T_215 ? 8'hfc : _GEN_1060; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1062 = 9'h1fd == _T_215 ? 8'hfd : _GEN_1061; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1063 = 9'h1fe == _T_215 ? 8'hfe : _GEN_1062; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1064 = 9'h1ff == _T_215 ? 8'hff : _GEN_1063; // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1067 = 8'h1 == _GEN_1064 ? $signed(16'sh3fff) : $signed(16'sh4000); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1068 = 8'h1 == _GEN_1064 ? $signed(-16'shc9) : $signed(16'sh0); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1069 = 8'h2 == _GEN_1064 ? $signed(16'sh3ffb) : $signed(_GEN_1067); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1070 = 8'h2 == _GEN_1064 ? $signed(-16'sh192) : $signed(_GEN_1068); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1071 = 8'h3 == _GEN_1064 ? $signed(16'sh3ff5) : $signed(_GEN_1069); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1072 = 8'h3 == _GEN_1064 ? $signed(-16'sh25b) : $signed(_GEN_1070); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1073 = 8'h4 == _GEN_1064 ? $signed(16'sh3fec) : $signed(_GEN_1071); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1074 = 8'h4 == _GEN_1064 ? $signed(-16'sh324) : $signed(_GEN_1072); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1075 = 8'h5 == _GEN_1064 ? $signed(16'sh3fe1) : $signed(_GEN_1073); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1076 = 8'h5 == _GEN_1064 ? $signed(-16'sh3ed) : $signed(_GEN_1074); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1077 = 8'h6 == _GEN_1064 ? $signed(16'sh3fd4) : $signed(_GEN_1075); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1078 = 8'h6 == _GEN_1064 ? $signed(-16'sh4b5) : $signed(_GEN_1076); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1079 = 8'h7 == _GEN_1064 ? $signed(16'sh3fc4) : $signed(_GEN_1077); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1080 = 8'h7 == _GEN_1064 ? $signed(-16'sh57e) : $signed(_GEN_1078); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1081 = 8'h8 == _GEN_1064 ? $signed(16'sh3fb1) : $signed(_GEN_1079); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1082 = 8'h8 == _GEN_1064 ? $signed(-16'sh646) : $signed(_GEN_1080); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1083 = 8'h9 == _GEN_1064 ? $signed(16'sh3f9c) : $signed(_GEN_1081); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1084 = 8'h9 == _GEN_1064 ? $signed(-16'sh70e) : $signed(_GEN_1082); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1085 = 8'ha == _GEN_1064 ? $signed(16'sh3f85) : $signed(_GEN_1083); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1086 = 8'ha == _GEN_1064 ? $signed(-16'sh7d6) : $signed(_GEN_1084); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1087 = 8'hb == _GEN_1064 ? $signed(16'sh3f6b) : $signed(_GEN_1085); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1088 = 8'hb == _GEN_1064 ? $signed(-16'sh89d) : $signed(_GEN_1086); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1089 = 8'hc == _GEN_1064 ? $signed(16'sh3f4f) : $signed(_GEN_1087); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1090 = 8'hc == _GEN_1064 ? $signed(-16'sh964) : $signed(_GEN_1088); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1091 = 8'hd == _GEN_1064 ? $signed(16'sh3f30) : $signed(_GEN_1089); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1092 = 8'hd == _GEN_1064 ? $signed(-16'sha2b) : $signed(_GEN_1090); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1093 = 8'he == _GEN_1064 ? $signed(16'sh3f0f) : $signed(_GEN_1091); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1094 = 8'he == _GEN_1064 ? $signed(-16'shaf1) : $signed(_GEN_1092); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1095 = 8'hf == _GEN_1064 ? $signed(16'sh3eeb) : $signed(_GEN_1093); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1096 = 8'hf == _GEN_1064 ? $signed(-16'shbb7) : $signed(_GEN_1094); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1097 = 8'h10 == _GEN_1064 ? $signed(16'sh3ec5) : $signed(_GEN_1095); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1098 = 8'h10 == _GEN_1064 ? $signed(-16'shc7c) : $signed(_GEN_1096); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1099 = 8'h11 == _GEN_1064 ? $signed(16'sh3e9d) : $signed(_GEN_1097); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1100 = 8'h11 == _GEN_1064 ? $signed(-16'shd41) : $signed(_GEN_1098); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1101 = 8'h12 == _GEN_1064 ? $signed(16'sh3e72) : $signed(_GEN_1099); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1102 = 8'h12 == _GEN_1064 ? $signed(-16'she06) : $signed(_GEN_1100); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1103 = 8'h13 == _GEN_1064 ? $signed(16'sh3e45) : $signed(_GEN_1101); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1104 = 8'h13 == _GEN_1064 ? $signed(-16'sheca) : $signed(_GEN_1102); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1105 = 8'h14 == _GEN_1064 ? $signed(16'sh3e15) : $signed(_GEN_1103); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1106 = 8'h14 == _GEN_1064 ? $signed(-16'shf8d) : $signed(_GEN_1104); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1107 = 8'h15 == _GEN_1064 ? $signed(16'sh3de3) : $signed(_GEN_1105); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1108 = 8'h15 == _GEN_1064 ? $signed(-16'sh1050) : $signed(_GEN_1106); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1109 = 8'h16 == _GEN_1064 ? $signed(16'sh3daf) : $signed(_GEN_1107); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1110 = 8'h16 == _GEN_1064 ? $signed(-16'sh1112) : $signed(_GEN_1108); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1111 = 8'h17 == _GEN_1064 ? $signed(16'sh3d78) : $signed(_GEN_1109); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1112 = 8'h17 == _GEN_1064 ? $signed(-16'sh11d3) : $signed(_GEN_1110); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1113 = 8'h18 == _GEN_1064 ? $signed(16'sh3d3f) : $signed(_GEN_1111); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1114 = 8'h18 == _GEN_1064 ? $signed(-16'sh1294) : $signed(_GEN_1112); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1115 = 8'h19 == _GEN_1064 ? $signed(16'sh3d03) : $signed(_GEN_1113); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1116 = 8'h19 == _GEN_1064 ? $signed(-16'sh1354) : $signed(_GEN_1114); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1117 = 8'h1a == _GEN_1064 ? $signed(16'sh3cc5) : $signed(_GEN_1115); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1118 = 8'h1a == _GEN_1064 ? $signed(-16'sh1413) : $signed(_GEN_1116); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1119 = 8'h1b == _GEN_1064 ? $signed(16'sh3c85) : $signed(_GEN_1117); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1120 = 8'h1b == _GEN_1064 ? $signed(-16'sh14d2) : $signed(_GEN_1118); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1121 = 8'h1c == _GEN_1064 ? $signed(16'sh3c42) : $signed(_GEN_1119); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1122 = 8'h1c == _GEN_1064 ? $signed(-16'sh1590) : $signed(_GEN_1120); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1123 = 8'h1d == _GEN_1064 ? $signed(16'sh3bfd) : $signed(_GEN_1121); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1124 = 8'h1d == _GEN_1064 ? $signed(-16'sh164c) : $signed(_GEN_1122); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1125 = 8'h1e == _GEN_1064 ? $signed(16'sh3bb6) : $signed(_GEN_1123); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1126 = 8'h1e == _GEN_1064 ? $signed(-16'sh1709) : $signed(_GEN_1124); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1127 = 8'h1f == _GEN_1064 ? $signed(16'sh3b6d) : $signed(_GEN_1125); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1128 = 8'h1f == _GEN_1064 ? $signed(-16'sh17c4) : $signed(_GEN_1126); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1129 = 8'h20 == _GEN_1064 ? $signed(16'sh3b21) : $signed(_GEN_1127); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1130 = 8'h20 == _GEN_1064 ? $signed(-16'sh187e) : $signed(_GEN_1128); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1131 = 8'h21 == _GEN_1064 ? $signed(16'sh3ad3) : $signed(_GEN_1129); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1132 = 8'h21 == _GEN_1064 ? $signed(-16'sh1937) : $signed(_GEN_1130); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1133 = 8'h22 == _GEN_1064 ? $signed(16'sh3a82) : $signed(_GEN_1131); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1134 = 8'h22 == _GEN_1064 ? $signed(-16'sh19ef) : $signed(_GEN_1132); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1135 = 8'h23 == _GEN_1064 ? $signed(16'sh3a30) : $signed(_GEN_1133); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1136 = 8'h23 == _GEN_1064 ? $signed(-16'sh1aa7) : $signed(_GEN_1134); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1137 = 8'h24 == _GEN_1064 ? $signed(16'sh39db) : $signed(_GEN_1135); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1138 = 8'h24 == _GEN_1064 ? $signed(-16'sh1b5d) : $signed(_GEN_1136); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1139 = 8'h25 == _GEN_1064 ? $signed(16'sh3984) : $signed(_GEN_1137); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1140 = 8'h25 == _GEN_1064 ? $signed(-16'sh1c12) : $signed(_GEN_1138); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1141 = 8'h26 == _GEN_1064 ? $signed(16'sh392b) : $signed(_GEN_1139); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1142 = 8'h26 == _GEN_1064 ? $signed(-16'sh1cc6) : $signed(_GEN_1140); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1143 = 8'h27 == _GEN_1064 ? $signed(16'sh38cf) : $signed(_GEN_1141); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1144 = 8'h27 == _GEN_1064 ? $signed(-16'sh1d79) : $signed(_GEN_1142); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1145 = 8'h28 == _GEN_1064 ? $signed(16'sh3871) : $signed(_GEN_1143); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1146 = 8'h28 == _GEN_1064 ? $signed(-16'sh1e2b) : $signed(_GEN_1144); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1147 = 8'h29 == _GEN_1064 ? $signed(16'sh3812) : $signed(_GEN_1145); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1148 = 8'h29 == _GEN_1064 ? $signed(-16'sh1edc) : $signed(_GEN_1146); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1149 = 8'h2a == _GEN_1064 ? $signed(16'sh37b0) : $signed(_GEN_1147); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1150 = 8'h2a == _GEN_1064 ? $signed(-16'sh1f8c) : $signed(_GEN_1148); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1151 = 8'h2b == _GEN_1064 ? $signed(16'sh374b) : $signed(_GEN_1149); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1152 = 8'h2b == _GEN_1064 ? $signed(-16'sh203a) : $signed(_GEN_1150); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1153 = 8'h2c == _GEN_1064 ? $signed(16'sh36e5) : $signed(_GEN_1151); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1154 = 8'h2c == _GEN_1064 ? $signed(-16'sh20e7) : $signed(_GEN_1152); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1155 = 8'h2d == _GEN_1064 ? $signed(16'sh367d) : $signed(_GEN_1153); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1156 = 8'h2d == _GEN_1064 ? $signed(-16'sh2193) : $signed(_GEN_1154); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1157 = 8'h2e == _GEN_1064 ? $signed(16'sh3612) : $signed(_GEN_1155); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1158 = 8'h2e == _GEN_1064 ? $signed(-16'sh223d) : $signed(_GEN_1156); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1159 = 8'h2f == _GEN_1064 ? $signed(16'sh35a5) : $signed(_GEN_1157); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1160 = 8'h2f == _GEN_1064 ? $signed(-16'sh22e7) : $signed(_GEN_1158); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1161 = 8'h30 == _GEN_1064 ? $signed(16'sh3537) : $signed(_GEN_1159); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1162 = 8'h30 == _GEN_1064 ? $signed(-16'sh238e) : $signed(_GEN_1160); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1163 = 8'h31 == _GEN_1064 ? $signed(16'sh34c6) : $signed(_GEN_1161); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1164 = 8'h31 == _GEN_1064 ? $signed(-16'sh2435) : $signed(_GEN_1162); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1165 = 8'h32 == _GEN_1064 ? $signed(16'sh3453) : $signed(_GEN_1163); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1166 = 8'h32 == _GEN_1064 ? $signed(-16'sh24da) : $signed(_GEN_1164); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1167 = 8'h33 == _GEN_1064 ? $signed(16'sh33df) : $signed(_GEN_1165); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1168 = 8'h33 == _GEN_1064 ? $signed(-16'sh257e) : $signed(_GEN_1166); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1169 = 8'h34 == _GEN_1064 ? $signed(16'sh3368) : $signed(_GEN_1167); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1170 = 8'h34 == _GEN_1064 ? $signed(-16'sh2620) : $signed(_GEN_1168); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1171 = 8'h35 == _GEN_1064 ? $signed(16'sh32ef) : $signed(_GEN_1169); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1172 = 8'h35 == _GEN_1064 ? $signed(-16'sh26c1) : $signed(_GEN_1170); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1173 = 8'h36 == _GEN_1064 ? $signed(16'sh3274) : $signed(_GEN_1171); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1174 = 8'h36 == _GEN_1064 ? $signed(-16'sh2760) : $signed(_GEN_1172); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1175 = 8'h37 == _GEN_1064 ? $signed(16'sh31f8) : $signed(_GEN_1173); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1176 = 8'h37 == _GEN_1064 ? $signed(-16'sh27fe) : $signed(_GEN_1174); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1177 = 8'h38 == _GEN_1064 ? $signed(16'sh3179) : $signed(_GEN_1175); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1178 = 8'h38 == _GEN_1064 ? $signed(-16'sh289a) : $signed(_GEN_1176); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1179 = 8'h39 == _GEN_1064 ? $signed(16'sh30f9) : $signed(_GEN_1177); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1180 = 8'h39 == _GEN_1064 ? $signed(-16'sh2935) : $signed(_GEN_1178); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1181 = 8'h3a == _GEN_1064 ? $signed(16'sh3076) : $signed(_GEN_1179); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1182 = 8'h3a == _GEN_1064 ? $signed(-16'sh29ce) : $signed(_GEN_1180); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1183 = 8'h3b == _GEN_1064 ? $signed(16'sh2ff2) : $signed(_GEN_1181); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1184 = 8'h3b == _GEN_1064 ? $signed(-16'sh2a65) : $signed(_GEN_1182); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1185 = 8'h3c == _GEN_1064 ? $signed(16'sh2f6c) : $signed(_GEN_1183); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1186 = 8'h3c == _GEN_1064 ? $signed(-16'sh2afb) : $signed(_GEN_1184); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1187 = 8'h3d == _GEN_1064 ? $signed(16'sh2ee4) : $signed(_GEN_1185); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1188 = 8'h3d == _GEN_1064 ? $signed(-16'sh2b8f) : $signed(_GEN_1186); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1189 = 8'h3e == _GEN_1064 ? $signed(16'sh2e5a) : $signed(_GEN_1187); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1190 = 8'h3e == _GEN_1064 ? $signed(-16'sh2c21) : $signed(_GEN_1188); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1191 = 8'h3f == _GEN_1064 ? $signed(16'sh2dcf) : $signed(_GEN_1189); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1192 = 8'h3f == _GEN_1064 ? $signed(-16'sh2cb2) : $signed(_GEN_1190); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1193 = 8'h40 == _GEN_1064 ? $signed(16'sh2d41) : $signed(_GEN_1191); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1194 = 8'h40 == _GEN_1064 ? $signed(-16'sh2d41) : $signed(_GEN_1192); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1195 = 8'h41 == _GEN_1064 ? $signed(16'sh2cb2) : $signed(_GEN_1193); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1196 = 8'h41 == _GEN_1064 ? $signed(-16'sh2dcf) : $signed(_GEN_1194); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1197 = 8'h42 == _GEN_1064 ? $signed(16'sh2c21) : $signed(_GEN_1195); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1198 = 8'h42 == _GEN_1064 ? $signed(-16'sh2e5a) : $signed(_GEN_1196); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1199 = 8'h43 == _GEN_1064 ? $signed(16'sh2b8f) : $signed(_GEN_1197); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1200 = 8'h43 == _GEN_1064 ? $signed(-16'sh2ee4) : $signed(_GEN_1198); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1201 = 8'h44 == _GEN_1064 ? $signed(16'sh2afb) : $signed(_GEN_1199); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1202 = 8'h44 == _GEN_1064 ? $signed(-16'sh2f6c) : $signed(_GEN_1200); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1203 = 8'h45 == _GEN_1064 ? $signed(16'sh2a65) : $signed(_GEN_1201); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1204 = 8'h45 == _GEN_1064 ? $signed(-16'sh2ff2) : $signed(_GEN_1202); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1205 = 8'h46 == _GEN_1064 ? $signed(16'sh29ce) : $signed(_GEN_1203); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1206 = 8'h46 == _GEN_1064 ? $signed(-16'sh3076) : $signed(_GEN_1204); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1207 = 8'h47 == _GEN_1064 ? $signed(16'sh2935) : $signed(_GEN_1205); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1208 = 8'h47 == _GEN_1064 ? $signed(-16'sh30f9) : $signed(_GEN_1206); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1209 = 8'h48 == _GEN_1064 ? $signed(16'sh289a) : $signed(_GEN_1207); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1210 = 8'h48 == _GEN_1064 ? $signed(-16'sh3179) : $signed(_GEN_1208); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1211 = 8'h49 == _GEN_1064 ? $signed(16'sh27fe) : $signed(_GEN_1209); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1212 = 8'h49 == _GEN_1064 ? $signed(-16'sh31f8) : $signed(_GEN_1210); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1213 = 8'h4a == _GEN_1064 ? $signed(16'sh2760) : $signed(_GEN_1211); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1214 = 8'h4a == _GEN_1064 ? $signed(-16'sh3274) : $signed(_GEN_1212); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1215 = 8'h4b == _GEN_1064 ? $signed(16'sh26c1) : $signed(_GEN_1213); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1216 = 8'h4b == _GEN_1064 ? $signed(-16'sh32ef) : $signed(_GEN_1214); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1217 = 8'h4c == _GEN_1064 ? $signed(16'sh2620) : $signed(_GEN_1215); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1218 = 8'h4c == _GEN_1064 ? $signed(-16'sh3368) : $signed(_GEN_1216); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1219 = 8'h4d == _GEN_1064 ? $signed(16'sh257e) : $signed(_GEN_1217); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1220 = 8'h4d == _GEN_1064 ? $signed(-16'sh33df) : $signed(_GEN_1218); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1221 = 8'h4e == _GEN_1064 ? $signed(16'sh24da) : $signed(_GEN_1219); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1222 = 8'h4e == _GEN_1064 ? $signed(-16'sh3453) : $signed(_GEN_1220); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1223 = 8'h4f == _GEN_1064 ? $signed(16'sh2435) : $signed(_GEN_1221); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1224 = 8'h4f == _GEN_1064 ? $signed(-16'sh34c6) : $signed(_GEN_1222); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1225 = 8'h50 == _GEN_1064 ? $signed(16'sh238e) : $signed(_GEN_1223); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1226 = 8'h50 == _GEN_1064 ? $signed(-16'sh3537) : $signed(_GEN_1224); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1227 = 8'h51 == _GEN_1064 ? $signed(16'sh22e7) : $signed(_GEN_1225); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1228 = 8'h51 == _GEN_1064 ? $signed(-16'sh35a5) : $signed(_GEN_1226); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1229 = 8'h52 == _GEN_1064 ? $signed(16'sh223d) : $signed(_GEN_1227); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1230 = 8'h52 == _GEN_1064 ? $signed(-16'sh3612) : $signed(_GEN_1228); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1231 = 8'h53 == _GEN_1064 ? $signed(16'sh2193) : $signed(_GEN_1229); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1232 = 8'h53 == _GEN_1064 ? $signed(-16'sh367d) : $signed(_GEN_1230); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1233 = 8'h54 == _GEN_1064 ? $signed(16'sh20e7) : $signed(_GEN_1231); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1234 = 8'h54 == _GEN_1064 ? $signed(-16'sh36e5) : $signed(_GEN_1232); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1235 = 8'h55 == _GEN_1064 ? $signed(16'sh203a) : $signed(_GEN_1233); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1236 = 8'h55 == _GEN_1064 ? $signed(-16'sh374b) : $signed(_GEN_1234); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1237 = 8'h56 == _GEN_1064 ? $signed(16'sh1f8c) : $signed(_GEN_1235); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1238 = 8'h56 == _GEN_1064 ? $signed(-16'sh37b0) : $signed(_GEN_1236); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1239 = 8'h57 == _GEN_1064 ? $signed(16'sh1edc) : $signed(_GEN_1237); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1240 = 8'h57 == _GEN_1064 ? $signed(-16'sh3812) : $signed(_GEN_1238); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1241 = 8'h58 == _GEN_1064 ? $signed(16'sh1e2b) : $signed(_GEN_1239); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1242 = 8'h58 == _GEN_1064 ? $signed(-16'sh3871) : $signed(_GEN_1240); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1243 = 8'h59 == _GEN_1064 ? $signed(16'sh1d79) : $signed(_GEN_1241); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1244 = 8'h59 == _GEN_1064 ? $signed(-16'sh38cf) : $signed(_GEN_1242); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1245 = 8'h5a == _GEN_1064 ? $signed(16'sh1cc6) : $signed(_GEN_1243); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1246 = 8'h5a == _GEN_1064 ? $signed(-16'sh392b) : $signed(_GEN_1244); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1247 = 8'h5b == _GEN_1064 ? $signed(16'sh1c12) : $signed(_GEN_1245); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1248 = 8'h5b == _GEN_1064 ? $signed(-16'sh3984) : $signed(_GEN_1246); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1249 = 8'h5c == _GEN_1064 ? $signed(16'sh1b5d) : $signed(_GEN_1247); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1250 = 8'h5c == _GEN_1064 ? $signed(-16'sh39db) : $signed(_GEN_1248); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1251 = 8'h5d == _GEN_1064 ? $signed(16'sh1aa7) : $signed(_GEN_1249); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1252 = 8'h5d == _GEN_1064 ? $signed(-16'sh3a30) : $signed(_GEN_1250); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1253 = 8'h5e == _GEN_1064 ? $signed(16'sh19ef) : $signed(_GEN_1251); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1254 = 8'h5e == _GEN_1064 ? $signed(-16'sh3a82) : $signed(_GEN_1252); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1255 = 8'h5f == _GEN_1064 ? $signed(16'sh1937) : $signed(_GEN_1253); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1256 = 8'h5f == _GEN_1064 ? $signed(-16'sh3ad3) : $signed(_GEN_1254); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1257 = 8'h60 == _GEN_1064 ? $signed(16'sh187e) : $signed(_GEN_1255); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1258 = 8'h60 == _GEN_1064 ? $signed(-16'sh3b21) : $signed(_GEN_1256); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1259 = 8'h61 == _GEN_1064 ? $signed(16'sh17c4) : $signed(_GEN_1257); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1260 = 8'h61 == _GEN_1064 ? $signed(-16'sh3b6d) : $signed(_GEN_1258); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1261 = 8'h62 == _GEN_1064 ? $signed(16'sh1709) : $signed(_GEN_1259); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1262 = 8'h62 == _GEN_1064 ? $signed(-16'sh3bb6) : $signed(_GEN_1260); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1263 = 8'h63 == _GEN_1064 ? $signed(16'sh164c) : $signed(_GEN_1261); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1264 = 8'h63 == _GEN_1064 ? $signed(-16'sh3bfd) : $signed(_GEN_1262); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1265 = 8'h64 == _GEN_1064 ? $signed(16'sh1590) : $signed(_GEN_1263); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1266 = 8'h64 == _GEN_1064 ? $signed(-16'sh3c42) : $signed(_GEN_1264); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1267 = 8'h65 == _GEN_1064 ? $signed(16'sh14d2) : $signed(_GEN_1265); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1268 = 8'h65 == _GEN_1064 ? $signed(-16'sh3c85) : $signed(_GEN_1266); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1269 = 8'h66 == _GEN_1064 ? $signed(16'sh1413) : $signed(_GEN_1267); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1270 = 8'h66 == _GEN_1064 ? $signed(-16'sh3cc5) : $signed(_GEN_1268); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1271 = 8'h67 == _GEN_1064 ? $signed(16'sh1354) : $signed(_GEN_1269); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1272 = 8'h67 == _GEN_1064 ? $signed(-16'sh3d03) : $signed(_GEN_1270); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1273 = 8'h68 == _GEN_1064 ? $signed(16'sh1294) : $signed(_GEN_1271); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1274 = 8'h68 == _GEN_1064 ? $signed(-16'sh3d3f) : $signed(_GEN_1272); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1275 = 8'h69 == _GEN_1064 ? $signed(16'sh11d3) : $signed(_GEN_1273); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1276 = 8'h69 == _GEN_1064 ? $signed(-16'sh3d78) : $signed(_GEN_1274); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1277 = 8'h6a == _GEN_1064 ? $signed(16'sh1112) : $signed(_GEN_1275); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1278 = 8'h6a == _GEN_1064 ? $signed(-16'sh3daf) : $signed(_GEN_1276); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1279 = 8'h6b == _GEN_1064 ? $signed(16'sh1050) : $signed(_GEN_1277); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1280 = 8'h6b == _GEN_1064 ? $signed(-16'sh3de3) : $signed(_GEN_1278); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1281 = 8'h6c == _GEN_1064 ? $signed(16'shf8d) : $signed(_GEN_1279); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1282 = 8'h6c == _GEN_1064 ? $signed(-16'sh3e15) : $signed(_GEN_1280); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1283 = 8'h6d == _GEN_1064 ? $signed(16'sheca) : $signed(_GEN_1281); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1284 = 8'h6d == _GEN_1064 ? $signed(-16'sh3e45) : $signed(_GEN_1282); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1285 = 8'h6e == _GEN_1064 ? $signed(16'she06) : $signed(_GEN_1283); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1286 = 8'h6e == _GEN_1064 ? $signed(-16'sh3e72) : $signed(_GEN_1284); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1287 = 8'h6f == _GEN_1064 ? $signed(16'shd41) : $signed(_GEN_1285); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1288 = 8'h6f == _GEN_1064 ? $signed(-16'sh3e9d) : $signed(_GEN_1286); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1289 = 8'h70 == _GEN_1064 ? $signed(16'shc7c) : $signed(_GEN_1287); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1290 = 8'h70 == _GEN_1064 ? $signed(-16'sh3ec5) : $signed(_GEN_1288); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1291 = 8'h71 == _GEN_1064 ? $signed(16'shbb7) : $signed(_GEN_1289); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1292 = 8'h71 == _GEN_1064 ? $signed(-16'sh3eeb) : $signed(_GEN_1290); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1293 = 8'h72 == _GEN_1064 ? $signed(16'shaf1) : $signed(_GEN_1291); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1294 = 8'h72 == _GEN_1064 ? $signed(-16'sh3f0f) : $signed(_GEN_1292); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1295 = 8'h73 == _GEN_1064 ? $signed(16'sha2b) : $signed(_GEN_1293); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1296 = 8'h73 == _GEN_1064 ? $signed(-16'sh3f30) : $signed(_GEN_1294); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1297 = 8'h74 == _GEN_1064 ? $signed(16'sh964) : $signed(_GEN_1295); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1298 = 8'h74 == _GEN_1064 ? $signed(-16'sh3f4f) : $signed(_GEN_1296); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1299 = 8'h75 == _GEN_1064 ? $signed(16'sh89d) : $signed(_GEN_1297); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1300 = 8'h75 == _GEN_1064 ? $signed(-16'sh3f6b) : $signed(_GEN_1298); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1301 = 8'h76 == _GEN_1064 ? $signed(16'sh7d6) : $signed(_GEN_1299); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1302 = 8'h76 == _GEN_1064 ? $signed(-16'sh3f85) : $signed(_GEN_1300); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1303 = 8'h77 == _GEN_1064 ? $signed(16'sh70e) : $signed(_GEN_1301); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1304 = 8'h77 == _GEN_1064 ? $signed(-16'sh3f9c) : $signed(_GEN_1302); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1305 = 8'h78 == _GEN_1064 ? $signed(16'sh646) : $signed(_GEN_1303); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1306 = 8'h78 == _GEN_1064 ? $signed(-16'sh3fb1) : $signed(_GEN_1304); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1307 = 8'h79 == _GEN_1064 ? $signed(16'sh57e) : $signed(_GEN_1305); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1308 = 8'h79 == _GEN_1064 ? $signed(-16'sh3fc4) : $signed(_GEN_1306); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1309 = 8'h7a == _GEN_1064 ? $signed(16'sh4b5) : $signed(_GEN_1307); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1310 = 8'h7a == _GEN_1064 ? $signed(-16'sh3fd4) : $signed(_GEN_1308); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1311 = 8'h7b == _GEN_1064 ? $signed(16'sh3ed) : $signed(_GEN_1309); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1312 = 8'h7b == _GEN_1064 ? $signed(-16'sh3fe1) : $signed(_GEN_1310); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1313 = 8'h7c == _GEN_1064 ? $signed(16'sh324) : $signed(_GEN_1311); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1314 = 8'h7c == _GEN_1064 ? $signed(-16'sh3fec) : $signed(_GEN_1312); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1315 = 8'h7d == _GEN_1064 ? $signed(16'sh25b) : $signed(_GEN_1313); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1316 = 8'h7d == _GEN_1064 ? $signed(-16'sh3ff5) : $signed(_GEN_1314); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1317 = 8'h7e == _GEN_1064 ? $signed(16'sh192) : $signed(_GEN_1315); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1318 = 8'h7e == _GEN_1064 ? $signed(-16'sh3ffb) : $signed(_GEN_1316); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1319 = 8'h7f == _GEN_1064 ? $signed(16'shc9) : $signed(_GEN_1317); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1320 = 8'h7f == _GEN_1064 ? $signed(-16'sh3fff) : $signed(_GEN_1318); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1321 = 8'h80 == _GEN_1064 ? $signed(16'sh0) : $signed(_GEN_1319); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1322 = 8'h80 == _GEN_1064 ? $signed(-16'sh4000) : $signed(_GEN_1320); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1323 = 8'h81 == _GEN_1064 ? $signed(-16'shc9) : $signed(_GEN_1321); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1324 = 8'h81 == _GEN_1064 ? $signed(-16'sh3fff) : $signed(_GEN_1322); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1325 = 8'h82 == _GEN_1064 ? $signed(-16'sh192) : $signed(_GEN_1323); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1326 = 8'h82 == _GEN_1064 ? $signed(-16'sh3ffb) : $signed(_GEN_1324); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1327 = 8'h83 == _GEN_1064 ? $signed(-16'sh324) : $signed(_GEN_1325); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1328 = 8'h83 == _GEN_1064 ? $signed(-16'sh3fec) : $signed(_GEN_1326); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1329 = 8'h84 == _GEN_1064 ? $signed(-16'sh4b5) : $signed(_GEN_1327); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1330 = 8'h84 == _GEN_1064 ? $signed(-16'sh3fd4) : $signed(_GEN_1328); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1331 = 8'h85 == _GEN_1064 ? $signed(-16'sh57e) : $signed(_GEN_1329); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1332 = 8'h85 == _GEN_1064 ? $signed(-16'sh3fc4) : $signed(_GEN_1330); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1333 = 8'h86 == _GEN_1064 ? $signed(-16'sh646) : $signed(_GEN_1331); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1334 = 8'h86 == _GEN_1064 ? $signed(-16'sh3fb1) : $signed(_GEN_1332); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1335 = 8'h87 == _GEN_1064 ? $signed(-16'sh7d6) : $signed(_GEN_1333); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1336 = 8'h87 == _GEN_1064 ? $signed(-16'sh3f85) : $signed(_GEN_1334); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1337 = 8'h88 == _GEN_1064 ? $signed(-16'sh964) : $signed(_GEN_1335); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1338 = 8'h88 == _GEN_1064 ? $signed(-16'sh3f4f) : $signed(_GEN_1336); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1339 = 8'h89 == _GEN_1064 ? $signed(-16'sha2b) : $signed(_GEN_1337); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1340 = 8'h89 == _GEN_1064 ? $signed(-16'sh3f30) : $signed(_GEN_1338); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1341 = 8'h8a == _GEN_1064 ? $signed(-16'shaf1) : $signed(_GEN_1339); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1342 = 8'h8a == _GEN_1064 ? $signed(-16'sh3f0f) : $signed(_GEN_1340); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1343 = 8'h8b == _GEN_1064 ? $signed(-16'shc7c) : $signed(_GEN_1341); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1344 = 8'h8b == _GEN_1064 ? $signed(-16'sh3ec5) : $signed(_GEN_1342); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1345 = 8'h8c == _GEN_1064 ? $signed(-16'she06) : $signed(_GEN_1343); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1346 = 8'h8c == _GEN_1064 ? $signed(-16'sh3e72) : $signed(_GEN_1344); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1347 = 8'h8d == _GEN_1064 ? $signed(-16'sheca) : $signed(_GEN_1345); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1348 = 8'h8d == _GEN_1064 ? $signed(-16'sh3e45) : $signed(_GEN_1346); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1349 = 8'h8e == _GEN_1064 ? $signed(-16'shf8d) : $signed(_GEN_1347); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1350 = 8'h8e == _GEN_1064 ? $signed(-16'sh3e15) : $signed(_GEN_1348); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1351 = 8'h8f == _GEN_1064 ? $signed(-16'sh1112) : $signed(_GEN_1349); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1352 = 8'h8f == _GEN_1064 ? $signed(-16'sh3daf) : $signed(_GEN_1350); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1353 = 8'h90 == _GEN_1064 ? $signed(-16'sh1294) : $signed(_GEN_1351); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1354 = 8'h90 == _GEN_1064 ? $signed(-16'sh3d3f) : $signed(_GEN_1352); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1355 = 8'h91 == _GEN_1064 ? $signed(-16'sh1354) : $signed(_GEN_1353); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1356 = 8'h91 == _GEN_1064 ? $signed(-16'sh3d03) : $signed(_GEN_1354); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1357 = 8'h92 == _GEN_1064 ? $signed(-16'sh1413) : $signed(_GEN_1355); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1358 = 8'h92 == _GEN_1064 ? $signed(-16'sh3cc5) : $signed(_GEN_1356); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1359 = 8'h93 == _GEN_1064 ? $signed(-16'sh1590) : $signed(_GEN_1357); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1360 = 8'h93 == _GEN_1064 ? $signed(-16'sh3c42) : $signed(_GEN_1358); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1361 = 8'h94 == _GEN_1064 ? $signed(-16'sh1709) : $signed(_GEN_1359); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1362 = 8'h94 == _GEN_1064 ? $signed(-16'sh3bb6) : $signed(_GEN_1360); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1363 = 8'h95 == _GEN_1064 ? $signed(-16'sh17c4) : $signed(_GEN_1361); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1364 = 8'h95 == _GEN_1064 ? $signed(-16'sh3b6d) : $signed(_GEN_1362); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1365 = 8'h96 == _GEN_1064 ? $signed(-16'sh187e) : $signed(_GEN_1363); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1366 = 8'h96 == _GEN_1064 ? $signed(-16'sh3b21) : $signed(_GEN_1364); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1367 = 8'h97 == _GEN_1064 ? $signed(-16'sh19ef) : $signed(_GEN_1365); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1368 = 8'h97 == _GEN_1064 ? $signed(-16'sh3a82) : $signed(_GEN_1366); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1369 = 8'h98 == _GEN_1064 ? $signed(-16'sh1b5d) : $signed(_GEN_1367); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1370 = 8'h98 == _GEN_1064 ? $signed(-16'sh39db) : $signed(_GEN_1368); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1371 = 8'h99 == _GEN_1064 ? $signed(-16'sh1c12) : $signed(_GEN_1369); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1372 = 8'h99 == _GEN_1064 ? $signed(-16'sh3984) : $signed(_GEN_1370); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1373 = 8'h9a == _GEN_1064 ? $signed(-16'sh1cc6) : $signed(_GEN_1371); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1374 = 8'h9a == _GEN_1064 ? $signed(-16'sh392b) : $signed(_GEN_1372); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1375 = 8'h9b == _GEN_1064 ? $signed(-16'sh1e2b) : $signed(_GEN_1373); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1376 = 8'h9b == _GEN_1064 ? $signed(-16'sh3871) : $signed(_GEN_1374); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1377 = 8'h9c == _GEN_1064 ? $signed(-16'sh1f8c) : $signed(_GEN_1375); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1378 = 8'h9c == _GEN_1064 ? $signed(-16'sh37b0) : $signed(_GEN_1376); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1379 = 8'h9d == _GEN_1064 ? $signed(-16'sh203a) : $signed(_GEN_1377); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1380 = 8'h9d == _GEN_1064 ? $signed(-16'sh374b) : $signed(_GEN_1378); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1381 = 8'h9e == _GEN_1064 ? $signed(-16'sh20e7) : $signed(_GEN_1379); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1382 = 8'h9e == _GEN_1064 ? $signed(-16'sh36e5) : $signed(_GEN_1380); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1383 = 8'h9f == _GEN_1064 ? $signed(-16'sh223d) : $signed(_GEN_1381); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1384 = 8'h9f == _GEN_1064 ? $signed(-16'sh3612) : $signed(_GEN_1382); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1385 = 8'ha0 == _GEN_1064 ? $signed(-16'sh238e) : $signed(_GEN_1383); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1386 = 8'ha0 == _GEN_1064 ? $signed(-16'sh3537) : $signed(_GEN_1384); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1387 = 8'ha1 == _GEN_1064 ? $signed(-16'sh2435) : $signed(_GEN_1385); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1388 = 8'ha1 == _GEN_1064 ? $signed(-16'sh34c6) : $signed(_GEN_1386); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1389 = 8'ha2 == _GEN_1064 ? $signed(-16'sh24da) : $signed(_GEN_1387); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1390 = 8'ha2 == _GEN_1064 ? $signed(-16'sh3453) : $signed(_GEN_1388); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1391 = 8'ha3 == _GEN_1064 ? $signed(-16'sh2620) : $signed(_GEN_1389); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1392 = 8'ha3 == _GEN_1064 ? $signed(-16'sh3368) : $signed(_GEN_1390); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1393 = 8'ha4 == _GEN_1064 ? $signed(-16'sh2760) : $signed(_GEN_1391); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1394 = 8'ha4 == _GEN_1064 ? $signed(-16'sh3274) : $signed(_GEN_1392); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1395 = 8'ha5 == _GEN_1064 ? $signed(-16'sh27fe) : $signed(_GEN_1393); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1396 = 8'ha5 == _GEN_1064 ? $signed(-16'sh31f8) : $signed(_GEN_1394); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1397 = 8'ha6 == _GEN_1064 ? $signed(-16'sh289a) : $signed(_GEN_1395); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1398 = 8'ha6 == _GEN_1064 ? $signed(-16'sh3179) : $signed(_GEN_1396); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1399 = 8'ha7 == _GEN_1064 ? $signed(-16'sh29ce) : $signed(_GEN_1397); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1400 = 8'ha7 == _GEN_1064 ? $signed(-16'sh3076) : $signed(_GEN_1398); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1401 = 8'ha8 == _GEN_1064 ? $signed(-16'sh2afb) : $signed(_GEN_1399); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1402 = 8'ha8 == _GEN_1064 ? $signed(-16'sh2f6c) : $signed(_GEN_1400); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1403 = 8'ha9 == _GEN_1064 ? $signed(-16'sh2b8f) : $signed(_GEN_1401); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1404 = 8'ha9 == _GEN_1064 ? $signed(-16'sh2ee4) : $signed(_GEN_1402); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1405 = 8'haa == _GEN_1064 ? $signed(-16'sh2c21) : $signed(_GEN_1403); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1406 = 8'haa == _GEN_1064 ? $signed(-16'sh2e5a) : $signed(_GEN_1404); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1407 = 8'hab == _GEN_1064 ? $signed(-16'sh2d41) : $signed(_GEN_1405); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1408 = 8'hab == _GEN_1064 ? $signed(-16'sh2d41) : $signed(_GEN_1406); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1409 = 8'hac == _GEN_1064 ? $signed(-16'sh2e5a) : $signed(_GEN_1407); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1410 = 8'hac == _GEN_1064 ? $signed(-16'sh2c21) : $signed(_GEN_1408); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1411 = 8'had == _GEN_1064 ? $signed(-16'sh2ee4) : $signed(_GEN_1409); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1412 = 8'had == _GEN_1064 ? $signed(-16'sh2b8f) : $signed(_GEN_1410); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1413 = 8'hae == _GEN_1064 ? $signed(-16'sh2f6c) : $signed(_GEN_1411); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1414 = 8'hae == _GEN_1064 ? $signed(-16'sh2afb) : $signed(_GEN_1412); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1415 = 8'haf == _GEN_1064 ? $signed(-16'sh3076) : $signed(_GEN_1413); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1416 = 8'haf == _GEN_1064 ? $signed(-16'sh29ce) : $signed(_GEN_1414); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1417 = 8'hb0 == _GEN_1064 ? $signed(-16'sh3179) : $signed(_GEN_1415); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1418 = 8'hb0 == _GEN_1064 ? $signed(-16'sh289a) : $signed(_GEN_1416); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1419 = 8'hb1 == _GEN_1064 ? $signed(-16'sh31f8) : $signed(_GEN_1417); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1420 = 8'hb1 == _GEN_1064 ? $signed(-16'sh27fe) : $signed(_GEN_1418); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1421 = 8'hb2 == _GEN_1064 ? $signed(-16'sh3274) : $signed(_GEN_1419); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1422 = 8'hb2 == _GEN_1064 ? $signed(-16'sh2760) : $signed(_GEN_1420); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1423 = 8'hb3 == _GEN_1064 ? $signed(-16'sh3368) : $signed(_GEN_1421); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1424 = 8'hb3 == _GEN_1064 ? $signed(-16'sh2620) : $signed(_GEN_1422); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1425 = 8'hb4 == _GEN_1064 ? $signed(-16'sh3453) : $signed(_GEN_1423); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1426 = 8'hb4 == _GEN_1064 ? $signed(-16'sh24da) : $signed(_GEN_1424); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1427 = 8'hb5 == _GEN_1064 ? $signed(-16'sh34c6) : $signed(_GEN_1425); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1428 = 8'hb5 == _GEN_1064 ? $signed(-16'sh2435) : $signed(_GEN_1426); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1429 = 8'hb6 == _GEN_1064 ? $signed(-16'sh3537) : $signed(_GEN_1427); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1430 = 8'hb6 == _GEN_1064 ? $signed(-16'sh238e) : $signed(_GEN_1428); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1431 = 8'hb7 == _GEN_1064 ? $signed(-16'sh3612) : $signed(_GEN_1429); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1432 = 8'hb7 == _GEN_1064 ? $signed(-16'sh223d) : $signed(_GEN_1430); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1433 = 8'hb8 == _GEN_1064 ? $signed(-16'sh36e5) : $signed(_GEN_1431); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1434 = 8'hb8 == _GEN_1064 ? $signed(-16'sh20e7) : $signed(_GEN_1432); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1435 = 8'hb9 == _GEN_1064 ? $signed(-16'sh374b) : $signed(_GEN_1433); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1436 = 8'hb9 == _GEN_1064 ? $signed(-16'sh203a) : $signed(_GEN_1434); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1437 = 8'hba == _GEN_1064 ? $signed(-16'sh37b0) : $signed(_GEN_1435); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1438 = 8'hba == _GEN_1064 ? $signed(-16'sh1f8c) : $signed(_GEN_1436); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1439 = 8'hbb == _GEN_1064 ? $signed(-16'sh3871) : $signed(_GEN_1437); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1440 = 8'hbb == _GEN_1064 ? $signed(-16'sh1e2b) : $signed(_GEN_1438); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1441 = 8'hbc == _GEN_1064 ? $signed(-16'sh392b) : $signed(_GEN_1439); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1442 = 8'hbc == _GEN_1064 ? $signed(-16'sh1cc6) : $signed(_GEN_1440); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1443 = 8'hbd == _GEN_1064 ? $signed(-16'sh3984) : $signed(_GEN_1441); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1444 = 8'hbd == _GEN_1064 ? $signed(-16'sh1c12) : $signed(_GEN_1442); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1445 = 8'hbe == _GEN_1064 ? $signed(-16'sh39db) : $signed(_GEN_1443); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1446 = 8'hbe == _GEN_1064 ? $signed(-16'sh1b5d) : $signed(_GEN_1444); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1447 = 8'hbf == _GEN_1064 ? $signed(-16'sh3a82) : $signed(_GEN_1445); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1448 = 8'hbf == _GEN_1064 ? $signed(-16'sh19ef) : $signed(_GEN_1446); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1449 = 8'hc0 == _GEN_1064 ? $signed(-16'sh3b21) : $signed(_GEN_1447); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1450 = 8'hc0 == _GEN_1064 ? $signed(-16'sh187e) : $signed(_GEN_1448); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1451 = 8'hc1 == _GEN_1064 ? $signed(-16'sh3b6d) : $signed(_GEN_1449); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1452 = 8'hc1 == _GEN_1064 ? $signed(-16'sh17c4) : $signed(_GEN_1450); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1453 = 8'hc2 == _GEN_1064 ? $signed(-16'sh3bb6) : $signed(_GEN_1451); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1454 = 8'hc2 == _GEN_1064 ? $signed(-16'sh1709) : $signed(_GEN_1452); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1455 = 8'hc3 == _GEN_1064 ? $signed(-16'sh3c42) : $signed(_GEN_1453); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1456 = 8'hc3 == _GEN_1064 ? $signed(-16'sh1590) : $signed(_GEN_1454); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1457 = 8'hc4 == _GEN_1064 ? $signed(-16'sh3cc5) : $signed(_GEN_1455); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1458 = 8'hc4 == _GEN_1064 ? $signed(-16'sh1413) : $signed(_GEN_1456); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1459 = 8'hc5 == _GEN_1064 ? $signed(-16'sh3d03) : $signed(_GEN_1457); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1460 = 8'hc5 == _GEN_1064 ? $signed(-16'sh1354) : $signed(_GEN_1458); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1461 = 8'hc6 == _GEN_1064 ? $signed(-16'sh3d3f) : $signed(_GEN_1459); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1462 = 8'hc6 == _GEN_1064 ? $signed(-16'sh1294) : $signed(_GEN_1460); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1463 = 8'hc7 == _GEN_1064 ? $signed(-16'sh3daf) : $signed(_GEN_1461); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1464 = 8'hc7 == _GEN_1064 ? $signed(-16'sh1112) : $signed(_GEN_1462); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1465 = 8'hc8 == _GEN_1064 ? $signed(-16'sh3e15) : $signed(_GEN_1463); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1466 = 8'hc8 == _GEN_1064 ? $signed(-16'shf8d) : $signed(_GEN_1464); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1467 = 8'hc9 == _GEN_1064 ? $signed(-16'sh3e45) : $signed(_GEN_1465); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1468 = 8'hc9 == _GEN_1064 ? $signed(-16'sheca) : $signed(_GEN_1466); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1469 = 8'hca == _GEN_1064 ? $signed(-16'sh3e72) : $signed(_GEN_1467); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1470 = 8'hca == _GEN_1064 ? $signed(-16'she06) : $signed(_GEN_1468); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1471 = 8'hcb == _GEN_1064 ? $signed(-16'sh3ec5) : $signed(_GEN_1469); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1472 = 8'hcb == _GEN_1064 ? $signed(-16'shc7c) : $signed(_GEN_1470); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1473 = 8'hcc == _GEN_1064 ? $signed(-16'sh3f0f) : $signed(_GEN_1471); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1474 = 8'hcc == _GEN_1064 ? $signed(-16'shaf1) : $signed(_GEN_1472); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1475 = 8'hcd == _GEN_1064 ? $signed(-16'sh3f30) : $signed(_GEN_1473); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1476 = 8'hcd == _GEN_1064 ? $signed(-16'sha2b) : $signed(_GEN_1474); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1477 = 8'hce == _GEN_1064 ? $signed(-16'sh3f4f) : $signed(_GEN_1475); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1478 = 8'hce == _GEN_1064 ? $signed(-16'sh964) : $signed(_GEN_1476); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1479 = 8'hcf == _GEN_1064 ? $signed(-16'sh3f85) : $signed(_GEN_1477); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1480 = 8'hcf == _GEN_1064 ? $signed(-16'sh7d6) : $signed(_GEN_1478); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1481 = 8'hd0 == _GEN_1064 ? $signed(-16'sh3fb1) : $signed(_GEN_1479); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1482 = 8'hd0 == _GEN_1064 ? $signed(-16'sh646) : $signed(_GEN_1480); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1483 = 8'hd1 == _GEN_1064 ? $signed(-16'sh3fc4) : $signed(_GEN_1481); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1484 = 8'hd1 == _GEN_1064 ? $signed(-16'sh57e) : $signed(_GEN_1482); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1485 = 8'hd2 == _GEN_1064 ? $signed(-16'sh3fd4) : $signed(_GEN_1483); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1486 = 8'hd2 == _GEN_1064 ? $signed(-16'sh4b5) : $signed(_GEN_1484); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1487 = 8'hd3 == _GEN_1064 ? $signed(-16'sh3fec) : $signed(_GEN_1485); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1488 = 8'hd3 == _GEN_1064 ? $signed(-16'sh324) : $signed(_GEN_1486); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1489 = 8'hd4 == _GEN_1064 ? $signed(-16'sh3ffb) : $signed(_GEN_1487); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1490 = 8'hd4 == _GEN_1064 ? $signed(-16'sh192) : $signed(_GEN_1488); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1491 = 8'hd5 == _GEN_1064 ? $signed(-16'sh3fff) : $signed(_GEN_1489); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1492 = 8'hd5 == _GEN_1064 ? $signed(-16'shc9) : $signed(_GEN_1490); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1493 = 8'hd6 == _GEN_1064 ? $signed(-16'sh3ffb) : $signed(_GEN_1491); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1494 = 8'hd6 == _GEN_1064 ? $signed(16'sh192) : $signed(_GEN_1492); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1495 = 8'hd7 == _GEN_1064 ? $signed(-16'sh3fe1) : $signed(_GEN_1493); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1496 = 8'hd7 == _GEN_1064 ? $signed(16'sh3ed) : $signed(_GEN_1494); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1497 = 8'hd8 == _GEN_1064 ? $signed(-16'sh3fb1) : $signed(_GEN_1495); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1498 = 8'hd8 == _GEN_1064 ? $signed(16'sh646) : $signed(_GEN_1496); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1499 = 8'hd9 == _GEN_1064 ? $signed(-16'sh3f6b) : $signed(_GEN_1497); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1500 = 8'hd9 == _GEN_1064 ? $signed(16'sh89d) : $signed(_GEN_1498); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1501 = 8'hda == _GEN_1064 ? $signed(-16'sh3f0f) : $signed(_GEN_1499); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1502 = 8'hda == _GEN_1064 ? $signed(16'shaf1) : $signed(_GEN_1500); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1503 = 8'hdb == _GEN_1064 ? $signed(-16'sh3e9d) : $signed(_GEN_1501); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1504 = 8'hdb == _GEN_1064 ? $signed(16'shd41) : $signed(_GEN_1502); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1505 = 8'hdc == _GEN_1064 ? $signed(-16'sh3e15) : $signed(_GEN_1503); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1506 = 8'hdc == _GEN_1064 ? $signed(16'shf8d) : $signed(_GEN_1504); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1507 = 8'hdd == _GEN_1064 ? $signed(-16'sh3d78) : $signed(_GEN_1505); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1508 = 8'hdd == _GEN_1064 ? $signed(16'sh11d3) : $signed(_GEN_1506); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1509 = 8'hde == _GEN_1064 ? $signed(-16'sh3cc5) : $signed(_GEN_1507); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1510 = 8'hde == _GEN_1064 ? $signed(16'sh1413) : $signed(_GEN_1508); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1511 = 8'hdf == _GEN_1064 ? $signed(-16'sh3bfd) : $signed(_GEN_1509); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1512 = 8'hdf == _GEN_1064 ? $signed(16'sh164c) : $signed(_GEN_1510); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1513 = 8'he0 == _GEN_1064 ? $signed(-16'sh3b21) : $signed(_GEN_1511); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1514 = 8'he0 == _GEN_1064 ? $signed(16'sh187e) : $signed(_GEN_1512); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1515 = 8'he1 == _GEN_1064 ? $signed(-16'sh3a30) : $signed(_GEN_1513); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1516 = 8'he1 == _GEN_1064 ? $signed(16'sh1aa7) : $signed(_GEN_1514); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1517 = 8'he2 == _GEN_1064 ? $signed(-16'sh392b) : $signed(_GEN_1515); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1518 = 8'he2 == _GEN_1064 ? $signed(16'sh1cc6) : $signed(_GEN_1516); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1519 = 8'he3 == _GEN_1064 ? $signed(-16'sh3812) : $signed(_GEN_1517); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1520 = 8'he3 == _GEN_1064 ? $signed(16'sh1edc) : $signed(_GEN_1518); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1521 = 8'he4 == _GEN_1064 ? $signed(-16'sh36e5) : $signed(_GEN_1519); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1522 = 8'he4 == _GEN_1064 ? $signed(16'sh20e7) : $signed(_GEN_1520); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1523 = 8'he5 == _GEN_1064 ? $signed(-16'sh35a5) : $signed(_GEN_1521); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1524 = 8'he5 == _GEN_1064 ? $signed(16'sh22e7) : $signed(_GEN_1522); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1525 = 8'he6 == _GEN_1064 ? $signed(-16'sh3453) : $signed(_GEN_1523); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1526 = 8'he6 == _GEN_1064 ? $signed(16'sh24da) : $signed(_GEN_1524); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1527 = 8'he7 == _GEN_1064 ? $signed(-16'sh32ef) : $signed(_GEN_1525); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1528 = 8'he7 == _GEN_1064 ? $signed(16'sh26c1) : $signed(_GEN_1526); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1529 = 8'he8 == _GEN_1064 ? $signed(-16'sh3179) : $signed(_GEN_1527); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1530 = 8'he8 == _GEN_1064 ? $signed(16'sh289a) : $signed(_GEN_1528); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1531 = 8'he9 == _GEN_1064 ? $signed(-16'sh2ff2) : $signed(_GEN_1529); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1532 = 8'he9 == _GEN_1064 ? $signed(16'sh2a65) : $signed(_GEN_1530); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1533 = 8'hea == _GEN_1064 ? $signed(-16'sh2e5a) : $signed(_GEN_1531); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1534 = 8'hea == _GEN_1064 ? $signed(16'sh2c21) : $signed(_GEN_1532); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1535 = 8'heb == _GEN_1064 ? $signed(-16'sh2cb2) : $signed(_GEN_1533); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1536 = 8'heb == _GEN_1064 ? $signed(16'sh2dcf) : $signed(_GEN_1534); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1537 = 8'hec == _GEN_1064 ? $signed(-16'sh2afb) : $signed(_GEN_1535); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1538 = 8'hec == _GEN_1064 ? $signed(16'sh2f6c) : $signed(_GEN_1536); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1539 = 8'hed == _GEN_1064 ? $signed(-16'sh2935) : $signed(_GEN_1537); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1540 = 8'hed == _GEN_1064 ? $signed(16'sh30f9) : $signed(_GEN_1538); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1541 = 8'hee == _GEN_1064 ? $signed(-16'sh2760) : $signed(_GEN_1539); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1542 = 8'hee == _GEN_1064 ? $signed(16'sh3274) : $signed(_GEN_1540); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1543 = 8'hef == _GEN_1064 ? $signed(-16'sh257e) : $signed(_GEN_1541); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1544 = 8'hef == _GEN_1064 ? $signed(16'sh33df) : $signed(_GEN_1542); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1545 = 8'hf0 == _GEN_1064 ? $signed(-16'sh238e) : $signed(_GEN_1543); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1546 = 8'hf0 == _GEN_1064 ? $signed(16'sh3537) : $signed(_GEN_1544); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1547 = 8'hf1 == _GEN_1064 ? $signed(-16'sh2193) : $signed(_GEN_1545); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1548 = 8'hf1 == _GEN_1064 ? $signed(16'sh367d) : $signed(_GEN_1546); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1549 = 8'hf2 == _GEN_1064 ? $signed(-16'sh1f8c) : $signed(_GEN_1547); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1550 = 8'hf2 == _GEN_1064 ? $signed(16'sh37b0) : $signed(_GEN_1548); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1551 = 8'hf3 == _GEN_1064 ? $signed(-16'sh1d79) : $signed(_GEN_1549); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1552 = 8'hf3 == _GEN_1064 ? $signed(16'sh38cf) : $signed(_GEN_1550); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1553 = 8'hf4 == _GEN_1064 ? $signed(-16'sh1b5d) : $signed(_GEN_1551); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1554 = 8'hf4 == _GEN_1064 ? $signed(16'sh39db) : $signed(_GEN_1552); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1555 = 8'hf5 == _GEN_1064 ? $signed(-16'sh1937) : $signed(_GEN_1553); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1556 = 8'hf5 == _GEN_1064 ? $signed(16'sh3ad3) : $signed(_GEN_1554); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1557 = 8'hf6 == _GEN_1064 ? $signed(-16'sh1709) : $signed(_GEN_1555); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1558 = 8'hf6 == _GEN_1064 ? $signed(16'sh3bb6) : $signed(_GEN_1556); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1559 = 8'hf7 == _GEN_1064 ? $signed(-16'sh14d2) : $signed(_GEN_1557); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1560 = 8'hf7 == _GEN_1064 ? $signed(16'sh3c85) : $signed(_GEN_1558); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1561 = 8'hf8 == _GEN_1064 ? $signed(-16'sh1294) : $signed(_GEN_1559); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1562 = 8'hf8 == _GEN_1064 ? $signed(16'sh3d3f) : $signed(_GEN_1560); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1563 = 8'hf9 == _GEN_1064 ? $signed(-16'sh1050) : $signed(_GEN_1561); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1564 = 8'hf9 == _GEN_1064 ? $signed(16'sh3de3) : $signed(_GEN_1562); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1565 = 8'hfa == _GEN_1064 ? $signed(-16'she06) : $signed(_GEN_1563); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1566 = 8'hfa == _GEN_1064 ? $signed(16'sh3e72) : $signed(_GEN_1564); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1567 = 8'hfb == _GEN_1064 ? $signed(-16'shbb7) : $signed(_GEN_1565); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1568 = 8'hfb == _GEN_1064 ? $signed(16'sh3eeb) : $signed(_GEN_1566); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1569 = 8'hfc == _GEN_1064 ? $signed(-16'sh964) : $signed(_GEN_1567); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1570 = 8'hfc == _GEN_1064 ? $signed(16'sh3f4f) : $signed(_GEN_1568); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1571 = 8'hfd == _GEN_1064 ? $signed(-16'sh70e) : $signed(_GEN_1569); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1572 = 8'hfd == _GEN_1064 ? $signed(16'sh3f9c) : $signed(_GEN_1570); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1573 = 8'hfe == _GEN_1064 ? $signed(-16'sh4b5) : $signed(_GEN_1571); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1574 = 8'hfe == _GEN_1064 ? $signed(16'sh3fd4) : $signed(_GEN_1572); // @[SDFChainRadix22.scala 291:27]
+  assign _GEN_1575 = 8'hff == _GEN_1064 ? $signed(-16'sh25b) : $signed(_GEN_1573); // @[SDFChainRadix22.scala 291:27]
+  assign twiddles_7_imag = 8'hff == _GEN_1064 ? $signed(16'sh3ff5) : $signed(_GEN_1574); // @[SDFChainRadix22.scala 291:27]
+  assign _T_2096 = $signed(_GEN_1575) + $signed(twiddles_7_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign outputWires_6_real = sdf_stages_6_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  assign outputWires_6_imag = sdf_stages_6_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  assign _T_2097 = $signed(outputWires_6_real) + $signed(outputWires_6_imag); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_2098 = $signed(outputWires_6_imag) - $signed(outputWires_6_real); // @[FixedPointTypeClass.scala 33:22]
+  assign _GEN_2121 = {{1{outputWires_6_real[15]}},outputWires_6_real}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_2099 = $signed(_GEN_2121) * $signed(_T_2096); // @[FixedPointTypeClass.scala 211:35]
+  assign _GEN_2122 = {{1{twiddles_7_imag[15]}},twiddles_7_imag}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_2100 = $signed(_T_2097) * $signed(_GEN_2122); // @[FixedPointTypeClass.scala 211:35]
+  assign _GEN_2123 = {{1{_GEN_1575[15]}},_GEN_1575}; // @[FixedPointTypeClass.scala 211:35]
+  assign _T_2101 = $signed(_T_2098) * $signed(_GEN_2123); // @[FixedPointTypeClass.scala 211:35]
+  assign _T_2102 = $signed(_T_2099) - $signed(_T_2100); // @[FixedPointTypeClass.scala 33:22]
+  assign _T_2103 = $signed(_T_2099) + $signed(_T_2101); // @[FixedPointTypeClass.scala 24:22]
+  assign _T_2109 = $signed(_T_2102) + 34'sh2000; // @[FixedPointTypeClass.scala 20:58]
+  assign _T_2110 = _T_2109[33:14]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_2113 = $signed(_T_2103) + 34'sh2000; // @[FixedPointTypeClass.scala 20:58]
+  assign _T_2114 = _T_2113[33:14]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_2121 = sdf_stages_8_io_cntr < 9'h100; // @[SDFChainRadix22.scala 328:32]
+  assign _T_2122 = sdf_stages_8_io_cntr < 9'h180; // @[SDFChainRadix22.scala 328:78]
+  assign _T_2123 = _T_2122 ? 1'h0 : 1'h1; // @[SDFChainRadix22.scala 328:65]
+  assign _T_2124 = _T_2121 ? 1'h0 : _T_2123; // @[SDFChainRadix22.scala 328:19]
+  assign outputWires_7_real = sdf_stages_7_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  assign _T_2130 = 16'sh0 - $signed(outputWires_7_real); // @[FixedPointTypeClass.scala 39:43]
+  assign outputWires_7_imag = sdf_stages_7_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 320:30]
+  assign _GEN_2091 = 4'h1 == _T_48[3:0] ? $signed(outputWires_1_real) : $signed(outputWires_0_real); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2092 = 4'h1 == _T_48[3:0] ? $signed(outputWires_1_imag) : $signed(outputWires_0_imag); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2093 = 4'h2 == _T_48[3:0] ? $signed(outputWires_2_real) : $signed(_GEN_2091); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2094 = 4'h2 == _T_48[3:0] ? $signed(outputWires_2_imag) : $signed(_GEN_2092); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2095 = 4'h3 == _T_48[3:0] ? $signed(outputWires_3_real) : $signed(_GEN_2093); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2096 = 4'h3 == _T_48[3:0] ? $signed(outputWires_3_imag) : $signed(_GEN_2094); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2097 = 4'h4 == _T_48[3:0] ? $signed(outputWires_4_real) : $signed(_GEN_2095); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2098 = 4'h4 == _T_48[3:0] ? $signed(outputWires_4_imag) : $signed(_GEN_2096); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2099 = 4'h5 == _T_48[3:0] ? $signed(outputWires_5_real) : $signed(_GEN_2097); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2100 = 4'h5 == _T_48[3:0] ? $signed(outputWires_5_imag) : $signed(_GEN_2098); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2101 = 4'h6 == _T_48[3:0] ? $signed(outputWires_6_real) : $signed(_GEN_2099); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2102 = 4'h6 == _T_48[3:0] ? $signed(outputWires_6_imag) : $signed(_GEN_2100); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2103 = 4'h7 == _T_48[3:0] ? $signed(outputWires_7_real) : $signed(_GEN_2101); // @[SDFChainRadix22.scala 364:24]
+  assign _GEN_2104 = 4'h7 == _T_48[3:0] ? $signed(outputWires_7_imag) : $signed(_GEN_2102); // @[SDFChainRadix22.scala 364:24]
+  assign outputWires_8_real = sdf_stages_8_io_out_real; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  assign _GEN_2105 = 4'h8 == _T_48[3:0] ? $signed(outputWires_8_real) : $signed(_GEN_2103); // @[SDFChainRadix22.scala 364:24]
+  assign outputWires_8_imag = sdf_stages_8_io_out_imag; // @[SDFChainRadix22.scala 43:111 SDFChainRadix22.scala 339:32]
+  assign _GEN_2106 = 4'h8 == _T_48[3:0] ? $signed(outputWires_8_imag) : $signed(_GEN_2104); // @[SDFChainRadix22.scala 364:24]
+  assign _T_2140 = ~initialOutDone; // @[SDFChainRadix22.scala 368:33]
+  assign _T_2141 = state != 2'h2; // @[SDFChainRadix22.scala 368:127]
+  assign _T_2142 = io_out_ready & _T_2141; // @[SDFChainRadix22.scala 368:117]
+  assign _GEN_2124 = {$signed(_GEN_2106), 14'h0}; // @[SDFChainRadix22.scala 375:33]
+  assign _GEN_2107 = {{2{_GEN_2124[29]}},_GEN_2124}; // @[SDFChainRadix22.scala 375:33]
+  assign _GEN_2125 = {$signed(_GEN_2105), 14'h0}; // @[SDFChainRadix22.scala 375:33]
+  assign _GEN_2108 = {{2{_GEN_2125[29]}},_GEN_2125}; // @[SDFChainRadix22.scala 375:33]
+  assign _GEN_2126 = _GEN_2108[31:14]; // @[SDFChainRadix22.scala 63:26 SDFChainRadix22.scala 384:22 SDFChainRadix22.scala 396:27]
+  assign _GEN_2128 = _GEN_2107[31:14]; // @[SDFChainRadix22.scala 63:26 SDFChainRadix22.scala 384:22 SDFChainRadix22.scala 397:27]
+  assign io_in_ready = _T_2140 | _T_2142; // @[SDFChainRadix22.scala 368:15]
+  assign io_out_valid = enableInit & initialOutDone; // @[SDFChainRadix22.scala 401:18]
+  assign io_out_bits_real = _GEN_2126[15:0]; // @[SDFChainRadix22.scala 400:17]
+  assign io_out_bits_imag = _GEN_2128[15:0]; // @[SDFChainRadix22.scala 400:17]
+  assign io_lastOut = pktEnd & _T_83; // @[SDFChainRadix22.scala 428:14]
   assign io_busy = state != 2'h0; // @[SDFChainRadix22.scala 430:11]
   assign sdf_stages_0_clock = clock;
-  assign sdf_stages_0_reset = reset;
-  assign sdf_stages_0_io_in_real = activeStages_0 ? $signed(_GEN_330) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_0_io_in_imag = activeStages_0 ? $signed(_GEN_329) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_0_io_cntr = _GEN_184 - _T_234; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_0_io_en = _T_225 ? 1'h0 : _GEN_175; // @[SDFChainRadix22.scala 223:14]
+  assign sdf_stages_0_io_in_real = io_in_bits_real; // @[SDFChainRadix22.scala 347:23]
+  assign sdf_stages_0_io_in_imag = io_in_bits_imag; // @[SDFChainRadix22.scala 347:23]
+  assign sdf_stages_0_io_cntr = {{8'd0}, _T_166[0]}; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_0_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
   assign sdf_stages_1_clock = clock;
-  assign sdf_stages_1_reset = reset;
-  assign sdf_stages_1_io_in_real = activeStages_1 ? $signed(_GEN_339) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_1_io_in_imag = activeStages_1 ? $signed(_GEN_338) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_1_io_cntr = {{1'd0}, _T_251[7:0]}; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_1_io_en = _T_240 ? 1'h0 : _GEN_193; // @[SDFChainRadix22.scala 223:14]
+  assign sdf_stages_1_io_in_real = _T_275[15:0]; // @[SDFChainRadix22.scala 319:21]
+  assign sdf_stages_1_io_in_imag = _T_279[15:0]; // @[SDFChainRadix22.scala 319:21]
+  assign sdf_stages_1_io_cntr = {{7'd0}, _T_173[1:0]}; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_1_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
   assign sdf_stages_2_clock = clock;
-  assign sdf_stages_2_reset = reset;
-  assign sdf_stages_2_io_in_real = activeStages_2 ? $signed(_GEN_1915) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_2_io_in_imag = activeStages_2 ? $signed(_GEN_1914) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_2_io_cntr = {{2'd0}, _T_266[6:0]}; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_2_io_en = _T_255 ? 1'h0 : _GEN_211; // @[SDFChainRadix22.scala 223:14]
+  assign sdf_stages_2_io_in_real = _T_289 ? $signed(outputWires_1_imag) : $signed(outputWires_1_real); // @[SDFChainRadix22.scala 340:23]
+  assign sdf_stages_2_io_in_imag = _T_289 ? $signed(_T_295) : $signed(outputWires_1_imag); // @[SDFChainRadix22.scala 340:23]
+  assign sdf_stages_2_io_cntr = {{6'd0}, _T_180[2:0]}; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_2_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
   assign sdf_stages_3_clock = clock;
-  assign sdf_stages_3_reset = reset;
-  assign sdf_stages_3_io_in_real = activeStages_3 ? $signed(_GEN_1924) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_3_io_in_imag = activeStages_3 ? $signed(_GEN_1923) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_3_io_cntr = {{3'd0}, _T_281[5:0]}; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_3_io_en = _T_270 ? 1'h0 : _GEN_229; // @[SDFChainRadix22.scala 223:14]
+  assign sdf_stages_3_io_in_real = _T_407[15:0]; // @[SDFChainRadix22.scala 319:21]
+  assign sdf_stages_3_io_in_imag = _T_411[15:0]; // @[SDFChainRadix22.scala 319:21]
+  assign sdf_stages_3_io_cntr = {{5'd0}, _T_187[3:0]}; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_3_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
   assign sdf_stages_4_clock = clock;
-  assign sdf_stages_4_reset = reset;
-  assign sdf_stages_4_io_in_real = activeStages_4 ? $signed(_GEN_2348) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_4_io_in_imag = activeStages_4 ? $signed(_GEN_2347) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_4_io_cntr = {{4'd0}, _T_296[4:0]}; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_4_io_en = _T_285 ? 1'h0 : _GEN_247; // @[SDFChainRadix22.scala 223:14]
+  assign sdf_stages_4_io_in_real = _T_421 ? $signed(outputWires_3_imag) : $signed(outputWires_3_real); // @[SDFChainRadix22.scala 340:23]
+  assign sdf_stages_4_io_in_imag = _T_421 ? $signed(_T_427) : $signed(outputWires_3_imag); // @[SDFChainRadix22.scala 340:23]
+  assign sdf_stages_4_io_cntr = {{4'd0}, _T_194[4:0]}; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_4_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
   assign sdf_stages_5_clock = clock;
-  assign sdf_stages_5_reset = reset;
-  assign sdf_stages_5_io_in_real = activeStages_5 ? $signed(_GEN_2357) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_5_io_in_imag = activeStages_5 ? $signed(_GEN_2356) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_5_io_cntr = {{5'd0}, _T_311[3:0]}; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_5_io_en = _T_300 ? 1'h0 : _GEN_265; // @[SDFChainRadix22.scala 223:14]
+  assign sdf_stages_5_io_in_real = _T_779[15:0]; // @[SDFChainRadix22.scala 319:21]
+  assign sdf_stages_5_io_in_imag = _T_783[15:0]; // @[SDFChainRadix22.scala 319:21]
+  assign sdf_stages_5_io_cntr = {{3'd0}, _T_201[5:0]}; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_5_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
   assign sdf_stages_6_clock = clock;
-  assign sdf_stages_6_reset = reset;
-  assign sdf_stages_6_io_in_real = activeStages_6 ? $signed(_GEN_2493) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_6_io_in_imag = activeStages_6 ? $signed(_GEN_2492) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_6_io_cntr = {{6'd0}, _T_326[2:0]}; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_6_io_en = _T_315 ? 1'h0 : _GEN_283; // @[SDFChainRadix22.scala 223:14]
+  assign sdf_stages_6_io_in_real = _T_793 ? $signed(outputWires_5_imag) : $signed(outputWires_5_real); // @[SDFChainRadix22.scala 340:23]
+  assign sdf_stages_6_io_in_imag = _T_793 ? $signed(_T_799) : $signed(outputWires_5_imag); // @[SDFChainRadix22.scala 340:23]
+  assign sdf_stages_6_io_cntr = {{2'd0}, _T_208[6:0]}; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_6_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
   assign sdf_stages_7_clock = clock;
-  assign sdf_stages_7_reset = reset;
-  assign sdf_stages_7_io_in_real = activeStages_7 ? $signed(_GEN_2502) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_7_io_in_imag = activeStages_7 ? $signed(_GEN_2501) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_7_io_cntr = {{7'd0}, _T_341[1:0]}; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_7_io_en = _T_330 ? 1'h0 : _GEN_301; // @[SDFChainRadix22.scala 223:14]
+  assign sdf_stages_7_io_in_real = _T_2110[15:0]; // @[SDFChainRadix22.scala 319:21]
+  assign sdf_stages_7_io_in_imag = _T_2114[15:0]; // @[SDFChainRadix22.scala 319:21]
+  assign sdf_stages_7_io_cntr = {{1'd0}, _T_215[7:0]}; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_7_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
   assign sdf_stages_8_clock = clock;
   assign sdf_stages_8_reset = reset;
-  assign sdf_stages_8_io_in_real = activeStages_8 ? $signed(_GEN_2566) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_8_io_in_imag = activeStages_8 ? $signed(_GEN_2565) : $signed(16'sh0); // @[SDFChainRadix22.scala 252:21 SDFChainRadix22.scala 255:21]
-  assign sdf_stages_8_io_cntr = {{8'd0}, _T_356[0]}; // @[SDFChainRadix22.scala 224:16]
-  assign sdf_stages_8_io_en = _T_345 ? 1'h0 : _GEN_319; // @[SDFChainRadix22.scala 223:14]
-  assign outQueue_clock = clock;
-  assign outQueue_reset = reset;
-  assign outQueue_io_enq_valid = outValid; // @[SDFChainRadix22.scala 365:25]
-  assign outQueue_io_enq_bits_real = outputWires_8_real; // @[SDFChainRadix22.scala 364:24]
-  assign outQueue_io_enq_bits_imag = outputWires_8_imag; // @[SDFChainRadix22.scala 364:24]
-  assign outQueue_io_deq_ready = io_out_ready; // @[SDFChainRadix22.scala 366:25]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  regNumStages = _RAND_0[8:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  state = _RAND_1[1:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  initialOutDone = _RAND_2[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_3 = {1{`RANDOM}};
-  cnt = _RAND_3[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  cntValidOut = _RAND_4[8:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  lastWait = _RAND_5[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  lastIndeed = _RAND_6[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_7 = {1{`RANDOM}};
-  initialInDone = _RAND_7[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_8 = {1{`RANDOM}};
-  initialInDonePrev = _RAND_8[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_9 = {1{`RANDOM}};
-  _T_141 = _RAND_9[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_10 = {1{`RANDOM}};
-  _T_149 = _RAND_10[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_11 = {1{`RANDOM}};
-  _T_157 = _RAND_11[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_12 = {1{`RANDOM}};
-  _T_165 = _RAND_12[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_13 = {1{`RANDOM}};
-  _T_173 = _RAND_13[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_14 = {1{`RANDOM}};
-  _T_181 = _RAND_14[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_15 = {1{`RANDOM}};
-  _T_189 = _RAND_15[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_16 = {1{`RANDOM}};
-  _T_197 = _RAND_16[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_17 = {1{`RANDOM}};
-  _T_135 = _RAND_17[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_18 = {1{`RANDOM}};
-  _T_136 = _RAND_18[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_19 = {1{`RANDOM}};
-  enableVector_1 = _RAND_19[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_20 = {1{`RANDOM}};
-  _T_139 = _RAND_20[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_21 = {1{`RANDOM}};
-  _T_140 = _RAND_21[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_22 = {1{`RANDOM}};
-  _T_143 = _RAND_22[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_23 = {1{`RANDOM}};
-  _T_144 = _RAND_23[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_24 = {1{`RANDOM}};
-  enableVector_2 = _RAND_24[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_25 = {1{`RANDOM}};
-  _T_147 = _RAND_25[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_26 = {1{`RANDOM}};
-  _T_148 = _RAND_26[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_27 = {1{`RANDOM}};
-  _T_151 = _RAND_27[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_28 = {1{`RANDOM}};
-  _T_152 = _RAND_28[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_29 = {1{`RANDOM}};
-  enableVector_3 = _RAND_29[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_30 = {1{`RANDOM}};
-  _T_155 = _RAND_30[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_31 = {1{`RANDOM}};
-  _T_156 = _RAND_31[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_32 = {1{`RANDOM}};
-  _T_159 = _RAND_32[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_33 = {1{`RANDOM}};
-  _T_160 = _RAND_33[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_34 = {1{`RANDOM}};
-  enableVector_4 = _RAND_34[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_35 = {1{`RANDOM}};
-  _T_163 = _RAND_35[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_36 = {1{`RANDOM}};
-  _T_164 = _RAND_36[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_37 = {1{`RANDOM}};
-  _T_167 = _RAND_37[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_38 = {1{`RANDOM}};
-  _T_168 = _RAND_38[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_39 = {1{`RANDOM}};
-  enableVector_5 = _RAND_39[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_40 = {1{`RANDOM}};
-  _T_171 = _RAND_40[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_41 = {1{`RANDOM}};
-  _T_172 = _RAND_41[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_42 = {1{`RANDOM}};
-  _T_175 = _RAND_42[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_43 = {1{`RANDOM}};
-  _T_176 = _RAND_43[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_44 = {1{`RANDOM}};
-  enableVector_6 = _RAND_44[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_45 = {1{`RANDOM}};
-  _T_179 = _RAND_45[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_46 = {1{`RANDOM}};
-  _T_180 = _RAND_46[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_47 = {1{`RANDOM}};
-  _T_183 = _RAND_47[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_48 = {1{`RANDOM}};
-  _T_184 = _RAND_48[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_49 = {1{`RANDOM}};
-  enableVector_7 = _RAND_49[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_50 = {1{`RANDOM}};
-  _T_187 = _RAND_50[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_51 = {1{`RANDOM}};
-  _T_188 = _RAND_51[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_52 = {1{`RANDOM}};
-  _T_191 = _RAND_52[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_53 = {1{`RANDOM}};
-  _T_192 = _RAND_53[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_54 = {1{`RANDOM}};
-  enableVector_8 = _RAND_54[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_55 = {1{`RANDOM}};
-  _T_195 = _RAND_55[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_56 = {1{`RANDOM}};
-  _T_196 = _RAND_56[9:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_57 = {1{`RANDOM}};
-  _T_212 = _RAND_57[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_58 = {1{`RANDOM}};
-  _T_369 = _RAND_58[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_59 = {1{`RANDOM}};
-  _T_381_real = _RAND_59[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_60 = {1{`RANDOM}};
-  _T_381_imag = _RAND_60[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_61 = {1{`RANDOM}};
-  outputWires_0_real = _RAND_61[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_62 = {1{`RANDOM}};
-  outputWires_0_imag = _RAND_62[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_63 = {1{`RANDOM}};
-  _T_1689 = _RAND_63[8:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_64 = {1{`RANDOM}};
-  twiddles_1_real = _RAND_64[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_65 = {1{`RANDOM}};
-  twiddles_1_imag = _RAND_65[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_66 = {1{`RANDOM}};
-  _T_1699 = _RAND_66[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_67 = {1{`RANDOM}};
-  _T_1701 = _RAND_67[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_68 = {2{`RANDOM}};
-  _T_1703 = _RAND_68[32:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_69 = {1{`RANDOM}};
-  _T_1705 = _RAND_69[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_70 = {1{`RANDOM}};
-  _T_1707 = _RAND_70[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_71 = {2{`RANDOM}};
-  _T_1709 = _RAND_71[32:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_72 = {1{`RANDOM}};
-  _T_1735 = _RAND_72[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_73 = {1{`RANDOM}};
-  _T_1747_real = _RAND_73[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_74 = {1{`RANDOM}};
-  _T_1747_imag = _RAND_74[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_75 = {1{`RANDOM}};
-  outputWires_2_real = _RAND_75[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_76 = {1{`RANDOM}};
-  outputWires_2_imag = _RAND_76[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_77 = {1{`RANDOM}};
-  _T_2095 = _RAND_77[8:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_78 = {1{`RANDOM}};
-  twiddles_3_real = _RAND_78[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_79 = {1{`RANDOM}};
-  twiddles_3_imag = _RAND_79[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_80 = {1{`RANDOM}};
-  _T_2106 = _RAND_80[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_81 = {1{`RANDOM}};
-  _T_2108 = _RAND_81[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_82 = {2{`RANDOM}};
-  _T_2110 = _RAND_82[32:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_83 = {1{`RANDOM}};
-  _T_2112 = _RAND_83[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_84 = {1{`RANDOM}};
-  _T_2114 = _RAND_84[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_85 = {2{`RANDOM}};
-  _T_2116 = _RAND_85[32:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_86 = {1{`RANDOM}};
-  _T_2142 = _RAND_86[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_87 = {1{`RANDOM}};
-  _T_2154_real = _RAND_87[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_88 = {1{`RANDOM}};
-  _T_2154_imag = _RAND_88[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_89 = {1{`RANDOM}};
-  outputWires_4_real = _RAND_89[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_90 = {1{`RANDOM}};
-  outputWires_4_imag = _RAND_90[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_91 = {1{`RANDOM}};
-  _T_2262 = _RAND_91[8:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_92 = {1{`RANDOM}};
-  twiddles_5_real = _RAND_92[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_93 = {1{`RANDOM}};
-  twiddles_5_imag = _RAND_93[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_94 = {1{`RANDOM}};
-  _T_2273 = _RAND_94[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_95 = {1{`RANDOM}};
-  _T_2275 = _RAND_95[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_96 = {2{`RANDOM}};
-  _T_2277 = _RAND_96[32:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_97 = {1{`RANDOM}};
-  _T_2279 = _RAND_97[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_98 = {1{`RANDOM}};
-  _T_2281 = _RAND_98[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_99 = {2{`RANDOM}};
-  _T_2283 = _RAND_99[32:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_100 = {1{`RANDOM}};
-  _T_2309 = _RAND_100[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_101 = {1{`RANDOM}};
-  _T_2321_real = _RAND_101[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_102 = {1{`RANDOM}};
-  _T_2321_imag = _RAND_102[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_103 = {1{`RANDOM}};
-  outputWires_6_real = _RAND_103[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_104 = {1{`RANDOM}};
-  outputWires_6_imag = _RAND_104[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_105 = {1{`RANDOM}};
-  _T_2369 = _RAND_105[8:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_106 = {1{`RANDOM}};
-  twiddles_7_real = _RAND_106[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_107 = {1{`RANDOM}};
-  twiddles_7_imag = _RAND_107[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_108 = {1{`RANDOM}};
-  _T_2380 = _RAND_108[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_109 = {1{`RANDOM}};
-  _T_2382 = _RAND_109[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_110 = {2{`RANDOM}};
-  _T_2384 = _RAND_110[32:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_111 = {1{`RANDOM}};
-  _T_2386 = _RAND_111[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_112 = {1{`RANDOM}};
-  _T_2388 = _RAND_112[31:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_113 = {2{`RANDOM}};
-  _T_2390 = _RAND_113[32:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_114 = {1{`RANDOM}};
-  _T_2413_real = _RAND_114[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_115 = {1{`RANDOM}};
-  _T_2413_imag = _RAND_115[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_116 = {1{`RANDOM}};
-  outputWires_8_real = _RAND_116[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_117 = {1{`RANDOM}};
-  outputWires_8_imag = _RAND_117[15:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_118 = {1{`RANDOM}};
-  _T_2418 = _RAND_118[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_119 = {1{`RANDOM}};
-  _T_2419 = _RAND_119[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_120 = {1{`RANDOM}};
-  outValid = _RAND_120[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_121 = {1{`RANDOM}};
-  _T_2421 = _RAND_121[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_122 = {1{`RANDOM}};
-  _T_2422 = _RAND_122[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_123 = {1{`RANDOM}};
-  _T_2423 = _RAND_123[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if (reset) begin
-      regNumStages <= 9'h9;
-    end else if (_T_56) begin
-      regNumStages <= io_fftSize;
-    end
-    if (reset) begin
-      state <= 2'h0;
-    end else if (_T_56) begin
-      if (_T_49) begin
-        state <= 2'h1;
-      end
-    end else if (_T_59) begin
-      if (fireLast) begin
-        state <= 2'h2;
-      end
-    end else if (_T_60) begin
-      if (io_lastOut) begin
-        state <= 2'h0;
-      end
-    end
-    if (reset) begin
-      initialOutDone <= 1'h0;
-    end else begin
-      initialOutDone <= _GEN_164;
-    end
-    if (reset) begin
-      cnt <= 10'h0;
-    end else if (_T_65) begin
-      cnt <= 10'h0;
-    end else if (enableInit) begin
-      cnt <= _T_133;
-    end
-    if (reset) begin
-      cntValidOut <= 9'h0;
-    end else if (_T_80) begin
-      cntValidOut <= 9'h0;
-    end else if (_T_64) begin
-      cntValidOut <= _T_83;
-    end
-    if (reset) begin
-      lastWait <= 1'h0;
-    end else if (_T_65) begin
-      lastWait <= 1'h0;
-    end else begin
-      lastWait <= _GEN_28;
-    end
-    if (reset) begin
-      lastIndeed <= 1'h0;
-    end else if (_T_65) begin
-      lastIndeed <= 1'h0;
-    end else begin
-      lastIndeed <= _GEN_32;
-    end
-    if (reset) begin
-      initialInDone <= 1'h0;
-    end else if (_T_65) begin
-      initialInDone <= 1'h0;
-    end else begin
-      initialInDone <= _GEN_17;
-    end
-    if (reset) begin
-      initialInDonePrev <= 1'h0;
-    end else begin
-      initialInDonePrev <= initialInDone;
-    end
-    if (reset) begin
-      _T_141 <= 10'h0;
-    end else if (_T_65) begin
-      _T_141 <= 10'h0;
-    end else begin
-      _T_141 <= _T_140;
-    end
-    if (reset) begin
-      _T_149 <= 10'h0;
-    end else if (_T_65) begin
-      _T_149 <= 10'h0;
-    end else begin
-      _T_149 <= _T_148;
-    end
-    if (reset) begin
-      _T_157 <= 10'h0;
-    end else if (_T_65) begin
-      _T_157 <= 10'h0;
-    end else begin
-      _T_157 <= _T_156;
-    end
-    if (reset) begin
-      _T_165 <= 10'h0;
-    end else if (_T_65) begin
-      _T_165 <= 10'h0;
-    end else begin
-      _T_165 <= _T_164;
-    end
-    if (reset) begin
-      _T_173 <= 10'h0;
-    end else if (_T_65) begin
-      _T_173 <= 10'h0;
-    end else begin
-      _T_173 <= _T_172;
-    end
-    if (reset) begin
-      _T_181 <= 10'h0;
-    end else if (_T_65) begin
-      _T_181 <= 10'h0;
-    end else begin
-      _T_181 <= _T_180;
-    end
-    if (reset) begin
-      _T_189 <= 10'h0;
-    end else if (_T_65) begin
-      _T_189 <= 10'h0;
-    end else begin
-      _T_189 <= _T_188;
-    end
-    if (reset) begin
-      _T_197 <= 10'h0;
-    end else if (_T_65) begin
-      _T_197 <= 10'h0;
-    end else begin
-      _T_197 <= _T_196;
-    end
-    if (reset) begin
-      _T_135 <= 1'h0;
-    end else if (_T_65) begin
-      _T_135 <= 1'h0;
-    end else begin
-      _T_135 <= enableInit;
-    end
-    if (reset) begin
-      _T_136 <= 1'h0;
-    end else if (_T_65) begin
-      _T_136 <= 1'h0;
-    end else begin
-      _T_136 <= _T_135;
-    end
-    if (reset) begin
-      enableVector_1 <= 1'h0;
-    end else if (_T_65) begin
-      enableVector_1 <= 1'h0;
-    end else begin
-      enableVector_1 <= _T_136;
-    end
-    if (reset) begin
-      _T_139 <= 10'h0;
-    end else if (_T_65) begin
-      _T_139 <= 10'h0;
-    end else begin
-      _T_139 <= cnt;
-    end
-    if (reset) begin
-      _T_140 <= 10'h0;
-    end else if (_T_65) begin
-      _T_140 <= 10'h0;
-    end else begin
-      _T_140 <= _T_139;
-    end
-    if (reset) begin
-      _T_143 <= 1'h0;
-    end else if (_T_65) begin
-      _T_143 <= 1'h0;
-    end else begin
-      _T_143 <= enableVector_1;
-    end
-    if (reset) begin
-      _T_144 <= 1'h0;
-    end else if (_T_65) begin
-      _T_144 <= 1'h0;
-    end else begin
-      _T_144 <= _T_143;
-    end
-    if (reset) begin
-      enableVector_2 <= 1'h0;
-    end else if (_T_65) begin
-      enableVector_2 <= 1'h0;
-    end else begin
-      enableVector_2 <= _T_144;
-    end
-    if (reset) begin
-      _T_147 <= 10'h0;
-    end else if (_T_65) begin
-      _T_147 <= 10'h0;
-    end else begin
-      _T_147 <= _T_141;
-    end
-    if (reset) begin
-      _T_148 <= 10'h0;
-    end else if (_T_65) begin
-      _T_148 <= 10'h0;
-    end else begin
-      _T_148 <= _T_147;
-    end
-    if (reset) begin
-      _T_151 <= 1'h0;
-    end else if (_T_65) begin
-      _T_151 <= 1'h0;
-    end else begin
-      _T_151 <= enableVector_2;
-    end
-    if (reset) begin
-      _T_152 <= 1'h0;
-    end else if (_T_65) begin
-      _T_152 <= 1'h0;
-    end else begin
-      _T_152 <= _T_151;
-    end
-    if (reset) begin
-      enableVector_3 <= 1'h0;
-    end else if (_T_65) begin
-      enableVector_3 <= 1'h0;
-    end else begin
-      enableVector_3 <= _T_152;
-    end
-    if (reset) begin
-      _T_155 <= 10'h0;
-    end else if (_T_65) begin
-      _T_155 <= 10'h0;
-    end else begin
-      _T_155 <= _T_149;
-    end
-    if (reset) begin
-      _T_156 <= 10'h0;
-    end else if (_T_65) begin
-      _T_156 <= 10'h0;
-    end else begin
-      _T_156 <= _T_155;
-    end
-    if (reset) begin
-      _T_159 <= 1'h0;
-    end else if (_T_65) begin
-      _T_159 <= 1'h0;
-    end else begin
-      _T_159 <= enableVector_3;
-    end
-    if (reset) begin
-      _T_160 <= 1'h0;
-    end else if (_T_65) begin
-      _T_160 <= 1'h0;
-    end else begin
-      _T_160 <= _T_159;
-    end
-    if (reset) begin
-      enableVector_4 <= 1'h0;
-    end else if (_T_65) begin
-      enableVector_4 <= 1'h0;
-    end else begin
-      enableVector_4 <= _T_160;
-    end
-    if (reset) begin
-      _T_163 <= 10'h0;
-    end else if (_T_65) begin
-      _T_163 <= 10'h0;
-    end else begin
-      _T_163 <= _T_157;
-    end
-    if (reset) begin
-      _T_164 <= 10'h0;
-    end else if (_T_65) begin
-      _T_164 <= 10'h0;
-    end else begin
-      _T_164 <= _T_163;
-    end
-    if (reset) begin
-      _T_167 <= 1'h0;
-    end else if (_T_65) begin
-      _T_167 <= 1'h0;
-    end else begin
-      _T_167 <= enableVector_4;
-    end
-    if (reset) begin
-      _T_168 <= 1'h0;
-    end else if (_T_65) begin
-      _T_168 <= 1'h0;
-    end else begin
-      _T_168 <= _T_167;
-    end
-    if (reset) begin
-      enableVector_5 <= 1'h0;
-    end else if (_T_65) begin
-      enableVector_5 <= 1'h0;
-    end else begin
-      enableVector_5 <= _T_168;
-    end
-    if (reset) begin
-      _T_171 <= 10'h0;
-    end else if (_T_65) begin
-      _T_171 <= 10'h0;
-    end else begin
-      _T_171 <= _T_165;
-    end
-    if (reset) begin
-      _T_172 <= 10'h0;
-    end else if (_T_65) begin
-      _T_172 <= 10'h0;
-    end else begin
-      _T_172 <= _T_171;
-    end
-    if (reset) begin
-      _T_175 <= 1'h0;
-    end else if (_T_65) begin
-      _T_175 <= 1'h0;
-    end else begin
-      _T_175 <= enableVector_5;
-    end
-    if (reset) begin
-      _T_176 <= 1'h0;
-    end else if (_T_65) begin
-      _T_176 <= 1'h0;
-    end else begin
-      _T_176 <= _T_175;
-    end
-    if (reset) begin
-      enableVector_6 <= 1'h0;
-    end else if (_T_65) begin
-      enableVector_6 <= 1'h0;
-    end else begin
-      enableVector_6 <= _T_176;
-    end
-    if (reset) begin
-      _T_179 <= 10'h0;
-    end else if (_T_65) begin
-      _T_179 <= 10'h0;
-    end else begin
-      _T_179 <= _T_173;
-    end
-    if (reset) begin
-      _T_180 <= 10'h0;
-    end else if (_T_65) begin
-      _T_180 <= 10'h0;
-    end else begin
-      _T_180 <= _T_179;
-    end
-    if (reset) begin
-      _T_183 <= 1'h0;
-    end else if (_T_65) begin
-      _T_183 <= 1'h0;
-    end else begin
-      _T_183 <= enableVector_6;
-    end
-    if (reset) begin
-      _T_184 <= 1'h0;
-    end else if (_T_65) begin
-      _T_184 <= 1'h0;
-    end else begin
-      _T_184 <= _T_183;
-    end
-    if (reset) begin
-      enableVector_7 <= 1'h0;
-    end else if (_T_65) begin
-      enableVector_7 <= 1'h0;
-    end else begin
-      enableVector_7 <= _T_184;
-    end
-    if (reset) begin
-      _T_187 <= 10'h0;
-    end else if (_T_65) begin
-      _T_187 <= 10'h0;
-    end else begin
-      _T_187 <= _T_181;
-    end
-    if (reset) begin
-      _T_188 <= 10'h0;
-    end else if (_T_65) begin
-      _T_188 <= 10'h0;
-    end else begin
-      _T_188 <= _T_187;
-    end
-    if (reset) begin
-      _T_191 <= 1'h0;
-    end else if (_T_65) begin
-      _T_191 <= 1'h0;
-    end else begin
-      _T_191 <= enableVector_7;
-    end
-    if (reset) begin
-      _T_192 <= 1'h0;
-    end else if (_T_65) begin
-      _T_192 <= 1'h0;
-    end else begin
-      _T_192 <= _T_191;
-    end
-    if (reset) begin
-      enableVector_8 <= 1'h0;
-    end else if (_T_65) begin
-      enableVector_8 <= 1'h0;
-    end else begin
-      enableVector_8 <= _T_192;
-    end
-    if (reset) begin
-      _T_195 <= 10'h0;
-    end else if (_T_65) begin
-      _T_195 <= 10'h0;
-    end else begin
-      _T_195 <= _T_189;
-    end
-    if (reset) begin
-      _T_196 <= 10'h0;
-    end else if (_T_65) begin
-      _T_196 <= 10'h0;
-    end else begin
-      _T_196 <= _T_195;
-    end
-    _T_212 <= _T_49 | _T_130;
-    _T_369 <= _T_364 & _T_367;
-    if (_T_369) begin
-      _T_381_real <= _T_372_real;
-    end else begin
-      _T_381_real <= sdf_stages_0_io_out_real;
-    end
-    if (_T_369) begin
-      _T_381_imag <= _T_375;
-    end else begin
-      _T_381_imag <= sdf_stages_0_io_out_imag;
-    end
-    outputWires_0_real <= _T_381_real;
-    outputWires_0_imag <= _T_381_imag;
-    if (_GEN_193) begin
-      _T_1689 <= _T_1687;
-    end
-    if (8'hff == _GEN_881) begin
-      twiddles_1_real <= -16'sh25b;
-    end else if (8'hfe == _GEN_881) begin
-      twiddles_1_real <= -16'sh4b5;
-    end else if (8'hfd == _GEN_881) begin
-      twiddles_1_real <= -16'sh70e;
-    end else if (8'hfc == _GEN_881) begin
-      twiddles_1_real <= -16'sh964;
-    end else if (8'hfb == _GEN_881) begin
-      twiddles_1_real <= -16'shbb7;
-    end else if (8'hfa == _GEN_881) begin
-      twiddles_1_real <= -16'she06;
-    end else if (8'hf9 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1050;
-    end else if (8'hf8 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1294;
-    end else if (8'hf7 == _GEN_881) begin
-      twiddles_1_real <= -16'sh14d2;
-    end else if (8'hf6 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1709;
-    end else if (8'hf5 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1937;
-    end else if (8'hf4 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1b5d;
-    end else if (8'hf3 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1d79;
-    end else if (8'hf2 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1f8c;
-    end else if (8'hf1 == _GEN_881) begin
-      twiddles_1_real <= -16'sh2193;
-    end else if (8'hf0 == _GEN_881) begin
-      twiddles_1_real <= -16'sh238e;
-    end else if (8'hef == _GEN_881) begin
-      twiddles_1_real <= -16'sh257e;
-    end else if (8'hee == _GEN_881) begin
-      twiddles_1_real <= -16'sh2760;
-    end else if (8'hed == _GEN_881) begin
-      twiddles_1_real <= -16'sh2935;
-    end else if (8'hec == _GEN_881) begin
-      twiddles_1_real <= -16'sh2afb;
-    end else if (8'heb == _GEN_881) begin
-      twiddles_1_real <= -16'sh2cb2;
-    end else if (8'hea == _GEN_881) begin
-      twiddles_1_real <= -16'sh2e5a;
-    end else if (8'he9 == _GEN_881) begin
-      twiddles_1_real <= -16'sh2ff2;
-    end else if (8'he8 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3179;
-    end else if (8'he7 == _GEN_881) begin
-      twiddles_1_real <= -16'sh32ef;
-    end else if (8'he6 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3453;
-    end else if (8'he5 == _GEN_881) begin
-      twiddles_1_real <= -16'sh35a5;
-    end else if (8'he4 == _GEN_881) begin
-      twiddles_1_real <= -16'sh36e5;
-    end else if (8'he3 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3812;
-    end else if (8'he2 == _GEN_881) begin
-      twiddles_1_real <= -16'sh392b;
-    end else if (8'he1 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3a30;
-    end else if (8'he0 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3b21;
-    end else if (8'hdf == _GEN_881) begin
-      twiddles_1_real <= -16'sh3bfd;
-    end else if (8'hde == _GEN_881) begin
-      twiddles_1_real <= -16'sh3cc5;
-    end else if (8'hdd == _GEN_881) begin
-      twiddles_1_real <= -16'sh3d78;
-    end else if (8'hdc == _GEN_881) begin
-      twiddles_1_real <= -16'sh3e15;
-    end else if (8'hdb == _GEN_881) begin
-      twiddles_1_real <= -16'sh3e9d;
-    end else if (8'hda == _GEN_881) begin
-      twiddles_1_real <= -16'sh3f0f;
-    end else if (8'hd9 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3f6b;
-    end else if (8'hd8 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3fb1;
-    end else if (8'hd7 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3fe1;
-    end else if (8'hd6 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3ffb;
-    end else if (8'hd5 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3fff;
-    end else if (8'hd4 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3ffb;
-    end else if (8'hd3 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3fec;
-    end else if (8'hd2 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3fd4;
-    end else if (8'hd1 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3fc4;
-    end else if (8'hd0 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3fb1;
-    end else if (8'hcf == _GEN_881) begin
-      twiddles_1_real <= -16'sh3f85;
-    end else if (8'hce == _GEN_881) begin
-      twiddles_1_real <= -16'sh3f4f;
-    end else if (8'hcd == _GEN_881) begin
-      twiddles_1_real <= -16'sh3f30;
-    end else if (8'hcc == _GEN_881) begin
-      twiddles_1_real <= -16'sh3f0f;
-    end else if (8'hcb == _GEN_881) begin
-      twiddles_1_real <= -16'sh3ec5;
-    end else if (8'hca == _GEN_881) begin
-      twiddles_1_real <= -16'sh3e72;
-    end else if (8'hc9 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3e45;
-    end else if (8'hc8 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3e15;
-    end else if (8'hc7 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3daf;
-    end else if (8'hc6 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3d3f;
-    end else if (8'hc5 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3d03;
-    end else if (8'hc4 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3cc5;
-    end else if (8'hc3 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3c42;
-    end else if (8'hc2 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3bb6;
-    end else if (8'hc1 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3b6d;
-    end else if (8'hc0 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3b21;
-    end else if (8'hbf == _GEN_881) begin
-      twiddles_1_real <= -16'sh3a82;
-    end else if (8'hbe == _GEN_881) begin
-      twiddles_1_real <= -16'sh39db;
-    end else if (8'hbd == _GEN_881) begin
-      twiddles_1_real <= -16'sh3984;
-    end else if (8'hbc == _GEN_881) begin
-      twiddles_1_real <= -16'sh392b;
-    end else if (8'hbb == _GEN_881) begin
-      twiddles_1_real <= -16'sh3871;
-    end else if (8'hba == _GEN_881) begin
-      twiddles_1_real <= -16'sh37b0;
-    end else if (8'hb9 == _GEN_881) begin
-      twiddles_1_real <= -16'sh374b;
-    end else if (8'hb8 == _GEN_881) begin
-      twiddles_1_real <= -16'sh36e5;
-    end else if (8'hb7 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3612;
-    end else if (8'hb6 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3537;
-    end else if (8'hb5 == _GEN_881) begin
-      twiddles_1_real <= -16'sh34c6;
-    end else if (8'hb4 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3453;
-    end else if (8'hb3 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3368;
-    end else if (8'hb2 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3274;
-    end else if (8'hb1 == _GEN_881) begin
-      twiddles_1_real <= -16'sh31f8;
-    end else if (8'hb0 == _GEN_881) begin
-      twiddles_1_real <= -16'sh3179;
-    end else if (8'haf == _GEN_881) begin
-      twiddles_1_real <= -16'sh3076;
-    end else if (8'hae == _GEN_881) begin
-      twiddles_1_real <= -16'sh2f6c;
-    end else if (8'had == _GEN_881) begin
-      twiddles_1_real <= -16'sh2ee4;
-    end else if (8'hac == _GEN_881) begin
-      twiddles_1_real <= -16'sh2e5a;
-    end else if (8'hab == _GEN_881) begin
-      twiddles_1_real <= -16'sh2d41;
-    end else if (8'haa == _GEN_881) begin
-      twiddles_1_real <= -16'sh2c21;
-    end else if (8'ha9 == _GEN_881) begin
-      twiddles_1_real <= -16'sh2b8f;
-    end else if (8'ha8 == _GEN_881) begin
-      twiddles_1_real <= -16'sh2afb;
-    end else if (8'ha7 == _GEN_881) begin
-      twiddles_1_real <= -16'sh29ce;
-    end else if (8'ha6 == _GEN_881) begin
-      twiddles_1_real <= -16'sh289a;
-    end else if (8'ha5 == _GEN_881) begin
-      twiddles_1_real <= -16'sh27fe;
-    end else if (8'ha4 == _GEN_881) begin
-      twiddles_1_real <= -16'sh2760;
-    end else if (8'ha3 == _GEN_881) begin
-      twiddles_1_real <= -16'sh2620;
-    end else if (8'ha2 == _GEN_881) begin
-      twiddles_1_real <= -16'sh24da;
-    end else if (8'ha1 == _GEN_881) begin
-      twiddles_1_real <= -16'sh2435;
-    end else if (8'ha0 == _GEN_881) begin
-      twiddles_1_real <= -16'sh238e;
-    end else if (8'h9f == _GEN_881) begin
-      twiddles_1_real <= -16'sh223d;
-    end else if (8'h9e == _GEN_881) begin
-      twiddles_1_real <= -16'sh20e7;
-    end else if (8'h9d == _GEN_881) begin
-      twiddles_1_real <= -16'sh203a;
-    end else if (8'h9c == _GEN_881) begin
-      twiddles_1_real <= -16'sh1f8c;
-    end else if (8'h9b == _GEN_881) begin
-      twiddles_1_real <= -16'sh1e2b;
-    end else if (8'h9a == _GEN_881) begin
-      twiddles_1_real <= -16'sh1cc6;
-    end else if (8'h99 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1c12;
-    end else if (8'h98 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1b5d;
-    end else if (8'h97 == _GEN_881) begin
-      twiddles_1_real <= -16'sh19ef;
-    end else if (8'h96 == _GEN_881) begin
-      twiddles_1_real <= -16'sh187e;
-    end else if (8'h95 == _GEN_881) begin
-      twiddles_1_real <= -16'sh17c4;
-    end else if (8'h94 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1709;
-    end else if (8'h93 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1590;
-    end else if (8'h92 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1413;
-    end else if (8'h91 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1354;
-    end else if (8'h90 == _GEN_881) begin
-      twiddles_1_real <= -16'sh1294;
-    end else if (8'h8f == _GEN_881) begin
-      twiddles_1_real <= -16'sh1112;
-    end else if (8'h8e == _GEN_881) begin
-      twiddles_1_real <= -16'shf8d;
-    end else if (8'h8d == _GEN_881) begin
-      twiddles_1_real <= -16'sheca;
-    end else if (8'h8c == _GEN_881) begin
-      twiddles_1_real <= -16'she06;
-    end else if (8'h8b == _GEN_881) begin
-      twiddles_1_real <= -16'shc7c;
-    end else if (8'h8a == _GEN_881) begin
-      twiddles_1_real <= -16'shaf1;
-    end else if (8'h89 == _GEN_881) begin
-      twiddles_1_real <= -16'sha2b;
-    end else if (8'h88 == _GEN_881) begin
-      twiddles_1_real <= -16'sh964;
-    end else if (8'h87 == _GEN_881) begin
-      twiddles_1_real <= -16'sh7d6;
-    end else if (8'h86 == _GEN_881) begin
-      twiddles_1_real <= -16'sh646;
-    end else if (8'h85 == _GEN_881) begin
-      twiddles_1_real <= -16'sh57e;
-    end else if (8'h84 == _GEN_881) begin
-      twiddles_1_real <= -16'sh4b5;
-    end else if (8'h83 == _GEN_881) begin
-      twiddles_1_real <= -16'sh324;
-    end else if (8'h82 == _GEN_881) begin
-      twiddles_1_real <= -16'sh192;
-    end else if (8'h81 == _GEN_881) begin
-      twiddles_1_real <= -16'shc9;
-    end else if (8'h80 == _GEN_881) begin
-      twiddles_1_real <= 16'sh0;
-    end else if (8'h7f == _GEN_881) begin
-      twiddles_1_real <= 16'shc9;
-    end else if (8'h7e == _GEN_881) begin
-      twiddles_1_real <= 16'sh192;
-    end else if (8'h7d == _GEN_881) begin
-      twiddles_1_real <= 16'sh25b;
-    end else if (8'h7c == _GEN_881) begin
-      twiddles_1_real <= 16'sh324;
-    end else if (8'h7b == _GEN_881) begin
-      twiddles_1_real <= 16'sh3ed;
-    end else if (8'h7a == _GEN_881) begin
-      twiddles_1_real <= 16'sh4b5;
-    end else if (8'h79 == _GEN_881) begin
-      twiddles_1_real <= 16'sh57e;
-    end else if (8'h78 == _GEN_881) begin
-      twiddles_1_real <= 16'sh646;
-    end else if (8'h77 == _GEN_881) begin
-      twiddles_1_real <= 16'sh70e;
-    end else if (8'h76 == _GEN_881) begin
-      twiddles_1_real <= 16'sh7d6;
-    end else if (8'h75 == _GEN_881) begin
-      twiddles_1_real <= 16'sh89d;
-    end else if (8'h74 == _GEN_881) begin
-      twiddles_1_real <= 16'sh964;
-    end else if (8'h73 == _GEN_881) begin
-      twiddles_1_real <= 16'sha2b;
-    end else if (8'h72 == _GEN_881) begin
-      twiddles_1_real <= 16'shaf1;
-    end else if (8'h71 == _GEN_881) begin
-      twiddles_1_real <= 16'shbb7;
-    end else if (8'h70 == _GEN_881) begin
-      twiddles_1_real <= 16'shc7c;
-    end else if (8'h6f == _GEN_881) begin
-      twiddles_1_real <= 16'shd41;
-    end else if (8'h6e == _GEN_881) begin
-      twiddles_1_real <= 16'she06;
-    end else if (8'h6d == _GEN_881) begin
-      twiddles_1_real <= 16'sheca;
-    end else if (8'h6c == _GEN_881) begin
-      twiddles_1_real <= 16'shf8d;
-    end else if (8'h6b == _GEN_881) begin
-      twiddles_1_real <= 16'sh1050;
-    end else if (8'h6a == _GEN_881) begin
-      twiddles_1_real <= 16'sh1112;
-    end else if (8'h69 == _GEN_881) begin
-      twiddles_1_real <= 16'sh11d3;
-    end else if (8'h68 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1294;
-    end else if (8'h67 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1354;
-    end else if (8'h66 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1413;
-    end else if (8'h65 == _GEN_881) begin
-      twiddles_1_real <= 16'sh14d2;
-    end else if (8'h64 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1590;
-    end else if (8'h63 == _GEN_881) begin
-      twiddles_1_real <= 16'sh164c;
-    end else if (8'h62 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1709;
-    end else if (8'h61 == _GEN_881) begin
-      twiddles_1_real <= 16'sh17c4;
-    end else if (8'h60 == _GEN_881) begin
-      twiddles_1_real <= 16'sh187e;
-    end else if (8'h5f == _GEN_881) begin
-      twiddles_1_real <= 16'sh1937;
-    end else if (8'h5e == _GEN_881) begin
-      twiddles_1_real <= 16'sh19ef;
-    end else if (8'h5d == _GEN_881) begin
-      twiddles_1_real <= 16'sh1aa7;
-    end else if (8'h5c == _GEN_881) begin
-      twiddles_1_real <= 16'sh1b5d;
-    end else if (8'h5b == _GEN_881) begin
-      twiddles_1_real <= 16'sh1c12;
-    end else if (8'h5a == _GEN_881) begin
-      twiddles_1_real <= 16'sh1cc6;
-    end else if (8'h59 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1d79;
-    end else if (8'h58 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1e2b;
-    end else if (8'h57 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1edc;
-    end else if (8'h56 == _GEN_881) begin
-      twiddles_1_real <= 16'sh1f8c;
-    end else if (8'h55 == _GEN_881) begin
-      twiddles_1_real <= 16'sh203a;
-    end else if (8'h54 == _GEN_881) begin
-      twiddles_1_real <= 16'sh20e7;
-    end else if (8'h53 == _GEN_881) begin
-      twiddles_1_real <= 16'sh2193;
-    end else if (8'h52 == _GEN_881) begin
-      twiddles_1_real <= 16'sh223d;
-    end else if (8'h51 == _GEN_881) begin
-      twiddles_1_real <= 16'sh22e7;
-    end else if (8'h50 == _GEN_881) begin
-      twiddles_1_real <= 16'sh238e;
-    end else if (8'h4f == _GEN_881) begin
-      twiddles_1_real <= 16'sh2435;
-    end else if (8'h4e == _GEN_881) begin
-      twiddles_1_real <= 16'sh24da;
-    end else if (8'h4d == _GEN_881) begin
-      twiddles_1_real <= 16'sh257e;
-    end else if (8'h4c == _GEN_881) begin
-      twiddles_1_real <= 16'sh2620;
-    end else if (8'h4b == _GEN_881) begin
-      twiddles_1_real <= 16'sh26c1;
-    end else if (8'h4a == _GEN_881) begin
-      twiddles_1_real <= 16'sh2760;
-    end else if (8'h49 == _GEN_881) begin
-      twiddles_1_real <= 16'sh27fe;
-    end else if (8'h48 == _GEN_881) begin
-      twiddles_1_real <= 16'sh289a;
-    end else if (8'h47 == _GEN_881) begin
-      twiddles_1_real <= 16'sh2935;
-    end else if (8'h46 == _GEN_881) begin
-      twiddles_1_real <= 16'sh29ce;
-    end else if (8'h45 == _GEN_881) begin
-      twiddles_1_real <= 16'sh2a65;
-    end else if (8'h44 == _GEN_881) begin
-      twiddles_1_real <= 16'sh2afb;
-    end else if (8'h43 == _GEN_881) begin
-      twiddles_1_real <= 16'sh2b8f;
-    end else if (8'h42 == _GEN_881) begin
-      twiddles_1_real <= 16'sh2c21;
-    end else if (8'h41 == _GEN_881) begin
-      twiddles_1_real <= 16'sh2cb2;
-    end else if (8'h40 == _GEN_881) begin
-      twiddles_1_real <= 16'sh2d41;
-    end else if (8'h3f == _GEN_881) begin
-      twiddles_1_real <= 16'sh2dcf;
-    end else if (8'h3e == _GEN_881) begin
-      twiddles_1_real <= 16'sh2e5a;
-    end else if (8'h3d == _GEN_881) begin
-      twiddles_1_real <= 16'sh2ee4;
-    end else if (8'h3c == _GEN_881) begin
-      twiddles_1_real <= 16'sh2f6c;
-    end else if (8'h3b == _GEN_881) begin
-      twiddles_1_real <= 16'sh2ff2;
-    end else if (8'h3a == _GEN_881) begin
-      twiddles_1_real <= 16'sh3076;
-    end else if (8'h39 == _GEN_881) begin
-      twiddles_1_real <= 16'sh30f9;
-    end else if (8'h38 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3179;
-    end else if (8'h37 == _GEN_881) begin
-      twiddles_1_real <= 16'sh31f8;
-    end else if (8'h36 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3274;
-    end else if (8'h35 == _GEN_881) begin
-      twiddles_1_real <= 16'sh32ef;
-    end else if (8'h34 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3368;
-    end else if (8'h33 == _GEN_881) begin
-      twiddles_1_real <= 16'sh33df;
-    end else if (8'h32 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3453;
-    end else if (8'h31 == _GEN_881) begin
-      twiddles_1_real <= 16'sh34c6;
-    end else if (8'h30 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3537;
-    end else if (8'h2f == _GEN_881) begin
-      twiddles_1_real <= 16'sh35a5;
-    end else if (8'h2e == _GEN_881) begin
-      twiddles_1_real <= 16'sh3612;
-    end else if (8'h2d == _GEN_881) begin
-      twiddles_1_real <= 16'sh367d;
-    end else if (8'h2c == _GEN_881) begin
-      twiddles_1_real <= 16'sh36e5;
-    end else if (8'h2b == _GEN_881) begin
-      twiddles_1_real <= 16'sh374b;
-    end else if (8'h2a == _GEN_881) begin
-      twiddles_1_real <= 16'sh37b0;
-    end else if (8'h29 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3812;
-    end else if (8'h28 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3871;
-    end else if (8'h27 == _GEN_881) begin
-      twiddles_1_real <= 16'sh38cf;
-    end else if (8'h26 == _GEN_881) begin
-      twiddles_1_real <= 16'sh392b;
-    end else if (8'h25 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3984;
-    end else if (8'h24 == _GEN_881) begin
-      twiddles_1_real <= 16'sh39db;
-    end else if (8'h23 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3a30;
-    end else if (8'h22 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3a82;
-    end else if (8'h21 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3ad3;
-    end else if (8'h20 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3b21;
-    end else if (8'h1f == _GEN_881) begin
-      twiddles_1_real <= 16'sh3b6d;
-    end else if (8'h1e == _GEN_881) begin
-      twiddles_1_real <= 16'sh3bb6;
-    end else if (8'h1d == _GEN_881) begin
-      twiddles_1_real <= 16'sh3bfd;
-    end else if (8'h1c == _GEN_881) begin
-      twiddles_1_real <= 16'sh3c42;
-    end else if (8'h1b == _GEN_881) begin
-      twiddles_1_real <= 16'sh3c85;
-    end else if (8'h1a == _GEN_881) begin
-      twiddles_1_real <= 16'sh3cc5;
-    end else if (8'h19 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3d03;
-    end else if (8'h18 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3d3f;
-    end else if (8'h17 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3d78;
-    end else if (8'h16 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3daf;
-    end else if (8'h15 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3de3;
-    end else if (8'h14 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3e15;
-    end else if (8'h13 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3e45;
-    end else if (8'h12 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3e72;
-    end else if (8'h11 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3e9d;
-    end else if (8'h10 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3ec5;
-    end else if (8'hf == _GEN_881) begin
-      twiddles_1_real <= 16'sh3eeb;
-    end else if (8'he == _GEN_881) begin
-      twiddles_1_real <= 16'sh3f0f;
-    end else if (8'hd == _GEN_881) begin
-      twiddles_1_real <= 16'sh3f30;
-    end else if (8'hc == _GEN_881) begin
-      twiddles_1_real <= 16'sh3f4f;
-    end else if (8'hb == _GEN_881) begin
-      twiddles_1_real <= 16'sh3f6b;
-    end else if (8'ha == _GEN_881) begin
-      twiddles_1_real <= 16'sh3f85;
-    end else if (8'h9 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3f9c;
-    end else if (8'h8 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3fb1;
-    end else if (8'h7 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3fc4;
-    end else if (8'h6 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3fd4;
-    end else if (8'h5 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3fe1;
-    end else if (8'h4 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3fec;
-    end else if (8'h3 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3ff5;
-    end else if (8'h2 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3ffb;
-    end else if (8'h1 == _GEN_881) begin
-      twiddles_1_real <= 16'sh3fff;
-    end else begin
-      twiddles_1_real <= 16'sh4000;
-    end
-    if (8'hff == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3ff5;
-    end else if (8'hfe == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3fd4;
-    end else if (8'hfd == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3f9c;
-    end else if (8'hfc == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3f4f;
-    end else if (8'hfb == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3eeb;
-    end else if (8'hfa == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3e72;
-    end else if (8'hf9 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3de3;
-    end else if (8'hf8 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3d3f;
-    end else if (8'hf7 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3c85;
-    end else if (8'hf6 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3bb6;
-    end else if (8'hf5 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3ad3;
-    end else if (8'hf4 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh39db;
-    end else if (8'hf3 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh38cf;
-    end else if (8'hf2 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh37b0;
-    end else if (8'hf1 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh367d;
-    end else if (8'hf0 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3537;
-    end else if (8'hef == _GEN_881) begin
-      twiddles_1_imag <= 16'sh33df;
-    end else if (8'hee == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3274;
-    end else if (8'hed == _GEN_881) begin
-      twiddles_1_imag <= 16'sh30f9;
-    end else if (8'hec == _GEN_881) begin
-      twiddles_1_imag <= 16'sh2f6c;
-    end else if (8'heb == _GEN_881) begin
-      twiddles_1_imag <= 16'sh2dcf;
-    end else if (8'hea == _GEN_881) begin
-      twiddles_1_imag <= 16'sh2c21;
-    end else if (8'he9 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh2a65;
-    end else if (8'he8 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh289a;
-    end else if (8'he7 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh26c1;
-    end else if (8'he6 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh24da;
-    end else if (8'he5 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh22e7;
-    end else if (8'he4 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh20e7;
-    end else if (8'he3 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh1edc;
-    end else if (8'he2 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh1cc6;
-    end else if (8'he1 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh1aa7;
-    end else if (8'he0 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh187e;
-    end else if (8'hdf == _GEN_881) begin
-      twiddles_1_imag <= 16'sh164c;
-    end else if (8'hde == _GEN_881) begin
-      twiddles_1_imag <= 16'sh1413;
-    end else if (8'hdd == _GEN_881) begin
-      twiddles_1_imag <= 16'sh11d3;
-    end else if (8'hdc == _GEN_881) begin
-      twiddles_1_imag <= 16'shf8d;
-    end else if (8'hdb == _GEN_881) begin
-      twiddles_1_imag <= 16'shd41;
-    end else if (8'hda == _GEN_881) begin
-      twiddles_1_imag <= 16'shaf1;
-    end else if (8'hd9 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh89d;
-    end else if (8'hd8 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh646;
-    end else if (8'hd7 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh3ed;
-    end else if (8'hd6 == _GEN_881) begin
-      twiddles_1_imag <= 16'sh192;
-    end else if (8'hd5 == _GEN_881) begin
-      twiddles_1_imag <= -16'shc9;
-    end else if (8'hd4 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh192;
-    end else if (8'hd3 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh324;
-    end else if (8'hd2 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh4b5;
-    end else if (8'hd1 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh57e;
-    end else if (8'hd0 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh646;
-    end else if (8'hcf == _GEN_881) begin
-      twiddles_1_imag <= -16'sh7d6;
-    end else if (8'hce == _GEN_881) begin
-      twiddles_1_imag <= -16'sh964;
-    end else if (8'hcd == _GEN_881) begin
-      twiddles_1_imag <= -16'sha2b;
-    end else if (8'hcc == _GEN_881) begin
-      twiddles_1_imag <= -16'shaf1;
-    end else if (8'hcb == _GEN_881) begin
-      twiddles_1_imag <= -16'shc7c;
-    end else if (8'hca == _GEN_881) begin
-      twiddles_1_imag <= -16'she06;
-    end else if (8'hc9 == _GEN_881) begin
-      twiddles_1_imag <= -16'sheca;
-    end else if (8'hc8 == _GEN_881) begin
-      twiddles_1_imag <= -16'shf8d;
-    end else if (8'hc7 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1112;
-    end else if (8'hc6 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1294;
-    end else if (8'hc5 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1354;
-    end else if (8'hc4 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1413;
-    end else if (8'hc3 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1590;
-    end else if (8'hc2 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1709;
-    end else if (8'hc1 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh17c4;
-    end else if (8'hc0 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh187e;
-    end else if (8'hbf == _GEN_881) begin
-      twiddles_1_imag <= -16'sh19ef;
-    end else if (8'hbe == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1b5d;
-    end else if (8'hbd == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1c12;
-    end else if (8'hbc == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1cc6;
-    end else if (8'hbb == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1e2b;
-    end else if (8'hba == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1f8c;
-    end else if (8'hb9 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh203a;
-    end else if (8'hb8 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh20e7;
-    end else if (8'hb7 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh223d;
-    end else if (8'hb6 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh238e;
-    end else if (8'hb5 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2435;
-    end else if (8'hb4 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh24da;
-    end else if (8'hb3 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2620;
-    end else if (8'hb2 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2760;
-    end else if (8'hb1 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh27fe;
-    end else if (8'hb0 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh289a;
-    end else if (8'haf == _GEN_881) begin
-      twiddles_1_imag <= -16'sh29ce;
-    end else if (8'hae == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2afb;
-    end else if (8'had == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2b8f;
-    end else if (8'hac == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2c21;
-    end else if (8'hab == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2d41;
-    end else if (8'haa == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2e5a;
-    end else if (8'ha9 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2ee4;
-    end else if (8'ha8 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2f6c;
-    end else if (8'ha7 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3076;
-    end else if (8'ha6 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3179;
-    end else if (8'ha5 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh31f8;
-    end else if (8'ha4 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3274;
-    end else if (8'ha3 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3368;
-    end else if (8'ha2 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3453;
-    end else if (8'ha1 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh34c6;
-    end else if (8'ha0 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3537;
-    end else if (8'h9f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3612;
-    end else if (8'h9e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh36e5;
-    end else if (8'h9d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh374b;
-    end else if (8'h9c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh37b0;
-    end else if (8'h9b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3871;
-    end else if (8'h9a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh392b;
-    end else if (8'h99 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3984;
-    end else if (8'h98 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh39db;
-    end else if (8'h97 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3a82;
-    end else if (8'h96 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3b21;
-    end else if (8'h95 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3b6d;
-    end else if (8'h94 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3bb6;
-    end else if (8'h93 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3c42;
-    end else if (8'h92 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3cc5;
-    end else if (8'h91 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3d03;
-    end else if (8'h90 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3d3f;
-    end else if (8'h8f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3daf;
-    end else if (8'h8e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3e15;
-    end else if (8'h8d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3e45;
-    end else if (8'h8c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3e72;
-    end else if (8'h8b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3ec5;
-    end else if (8'h8a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f0f;
-    end else if (8'h89 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f30;
-    end else if (8'h88 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f4f;
-    end else if (8'h87 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f85;
-    end else if (8'h86 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fb1;
-    end else if (8'h85 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fc4;
-    end else if (8'h84 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fd4;
-    end else if (8'h83 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fec;
-    end else if (8'h82 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3ffb;
-    end else if (8'h81 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fff;
-    end else if (8'h80 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh4000;
-    end else if (8'h7f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fff;
-    end else if (8'h7e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3ffb;
-    end else if (8'h7d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3ff5;
-    end else if (8'h7c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fec;
-    end else if (8'h7b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fe1;
-    end else if (8'h7a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fd4;
-    end else if (8'h79 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fc4;
-    end else if (8'h78 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3fb1;
-    end else if (8'h77 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f9c;
-    end else if (8'h76 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f85;
-    end else if (8'h75 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f6b;
-    end else if (8'h74 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f4f;
-    end else if (8'h73 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f30;
-    end else if (8'h72 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3f0f;
-    end else if (8'h71 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3eeb;
-    end else if (8'h70 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3ec5;
-    end else if (8'h6f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3e9d;
-    end else if (8'h6e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3e72;
-    end else if (8'h6d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3e45;
-    end else if (8'h6c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3e15;
-    end else if (8'h6b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3de3;
-    end else if (8'h6a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3daf;
-    end else if (8'h69 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3d78;
-    end else if (8'h68 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3d3f;
-    end else if (8'h67 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3d03;
-    end else if (8'h66 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3cc5;
-    end else if (8'h65 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3c85;
-    end else if (8'h64 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3c42;
-    end else if (8'h63 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3bfd;
-    end else if (8'h62 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3bb6;
-    end else if (8'h61 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3b6d;
-    end else if (8'h60 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3b21;
-    end else if (8'h5f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3ad3;
-    end else if (8'h5e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3a82;
-    end else if (8'h5d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3a30;
-    end else if (8'h5c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh39db;
-    end else if (8'h5b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3984;
-    end else if (8'h5a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh392b;
-    end else if (8'h59 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh38cf;
-    end else if (8'h58 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3871;
-    end else if (8'h57 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3812;
-    end else if (8'h56 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh37b0;
-    end else if (8'h55 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh374b;
-    end else if (8'h54 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh36e5;
-    end else if (8'h53 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh367d;
-    end else if (8'h52 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3612;
-    end else if (8'h51 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh35a5;
-    end else if (8'h50 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3537;
-    end else if (8'h4f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh34c6;
-    end else if (8'h4e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3453;
-    end else if (8'h4d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh33df;
-    end else if (8'h4c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3368;
-    end else if (8'h4b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh32ef;
-    end else if (8'h4a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3274;
-    end else if (8'h49 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh31f8;
-    end else if (8'h48 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3179;
-    end else if (8'h47 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh30f9;
-    end else if (8'h46 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3076;
-    end else if (8'h45 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2ff2;
-    end else if (8'h44 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2f6c;
-    end else if (8'h43 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2ee4;
-    end else if (8'h42 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2e5a;
-    end else if (8'h41 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2dcf;
-    end else if (8'h40 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2d41;
-    end else if (8'h3f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2cb2;
-    end else if (8'h3e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2c21;
-    end else if (8'h3d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2b8f;
-    end else if (8'h3c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2afb;
-    end else if (8'h3b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2a65;
-    end else if (8'h3a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh29ce;
-    end else if (8'h39 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2935;
-    end else if (8'h38 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh289a;
-    end else if (8'h37 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh27fe;
-    end else if (8'h36 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2760;
-    end else if (8'h35 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh26c1;
-    end else if (8'h34 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2620;
-    end else if (8'h33 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh257e;
-    end else if (8'h32 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh24da;
-    end else if (8'h31 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2435;
-    end else if (8'h30 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh238e;
-    end else if (8'h2f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh22e7;
-    end else if (8'h2e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh223d;
-    end else if (8'h2d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh2193;
-    end else if (8'h2c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh20e7;
-    end else if (8'h2b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh203a;
-    end else if (8'h2a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1f8c;
-    end else if (8'h29 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1edc;
-    end else if (8'h28 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1e2b;
-    end else if (8'h27 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1d79;
-    end else if (8'h26 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1cc6;
-    end else if (8'h25 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1c12;
-    end else if (8'h24 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1b5d;
-    end else if (8'h23 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1aa7;
-    end else if (8'h22 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh19ef;
-    end else if (8'h21 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1937;
-    end else if (8'h20 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh187e;
-    end else if (8'h1f == _GEN_881) begin
-      twiddles_1_imag <= -16'sh17c4;
-    end else if (8'h1e == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1709;
-    end else if (8'h1d == _GEN_881) begin
-      twiddles_1_imag <= -16'sh164c;
-    end else if (8'h1c == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1590;
-    end else if (8'h1b == _GEN_881) begin
-      twiddles_1_imag <= -16'sh14d2;
-    end else if (8'h1a == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1413;
-    end else if (8'h19 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1354;
-    end else if (8'h18 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1294;
-    end else if (8'h17 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh11d3;
-    end else if (8'h16 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1112;
-    end else if (8'h15 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh1050;
-    end else if (8'h14 == _GEN_881) begin
-      twiddles_1_imag <= -16'shf8d;
-    end else if (8'h13 == _GEN_881) begin
-      twiddles_1_imag <= -16'sheca;
-    end else if (8'h12 == _GEN_881) begin
-      twiddles_1_imag <= -16'she06;
-    end else if (8'h11 == _GEN_881) begin
-      twiddles_1_imag <= -16'shd41;
-    end else if (8'h10 == _GEN_881) begin
-      twiddles_1_imag <= -16'shc7c;
-    end else if (8'hf == _GEN_881) begin
-      twiddles_1_imag <= -16'shbb7;
-    end else if (8'he == _GEN_881) begin
-      twiddles_1_imag <= -16'shaf1;
-    end else if (8'hd == _GEN_881) begin
-      twiddles_1_imag <= -16'sha2b;
-    end else if (8'hc == _GEN_881) begin
-      twiddles_1_imag <= -16'sh964;
-    end else if (8'hb == _GEN_881) begin
-      twiddles_1_imag <= -16'sh89d;
-    end else if (8'ha == _GEN_881) begin
-      twiddles_1_imag <= -16'sh7d6;
-    end else if (8'h9 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh70e;
-    end else if (8'h8 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh646;
-    end else if (8'h7 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh57e;
-    end else if (8'h6 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh4b5;
-    end else if (8'h5 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh3ed;
-    end else if (8'h4 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh324;
-    end else if (8'h3 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh25b;
-    end else if (8'h2 == _GEN_881) begin
-      twiddles_1_imag <= -16'sh192;
-    end else if (8'h1 == _GEN_881) begin
-      twiddles_1_imag <= -16'shc9;
-    end else begin
-      twiddles_1_imag <= 16'sh0;
-    end
-    _T_1699 <= $signed(sdf_stages_1_io_out_real) * $signed(twiddles_1_real);
-    _T_1701 <= $signed(sdf_stages_1_io_out_imag) * $signed(twiddles_1_imag);
-    _T_1703 <= $signed(_T_1699) - $signed(_T_1701);
-    _T_1705 <= $signed(sdf_stages_1_io_out_real) * $signed(twiddles_1_imag);
-    _T_1707 <= $signed(sdf_stages_1_io_out_imag) * $signed(twiddles_1_real);
-    _T_1709 <= $signed(_T_1705) + $signed(_T_1707);
-    _T_1735 <= _T_1730 & _T_1733;
-    if (_T_1735) begin
-      _T_1747_real <= _T_1738_real;
-    end else begin
-      _T_1747_real <= sdf_stages_2_io_out_real;
-    end
-    if (_T_1735) begin
-      _T_1747_imag <= _T_1741;
-    end else begin
-      _T_1747_imag <= sdf_stages_2_io_out_imag;
-    end
-    outputWires_2_real <= _T_1747_real;
-    outputWires_2_imag <= _T_1747_imag;
-    if (_GEN_229) begin
-      _T_2095 <= _T_2093;
-    end
-    if (6'h3f == _GEN_2082) begin
-      twiddles_3_real <= -16'sh964;
-    end else if (6'h3e == _GEN_2082) begin
-      twiddles_3_real <= -16'sh1294;
-    end else if (6'h3d == _GEN_2082) begin
-      twiddles_3_real <= -16'sh1b5d;
-    end else if (6'h3c == _GEN_2082) begin
-      twiddles_3_real <= -16'sh238e;
-    end else if (6'h3b == _GEN_2082) begin
-      twiddles_3_real <= -16'sh2afb;
-    end else if (6'h3a == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3179;
-    end else if (6'h39 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh36e5;
-    end else if (6'h38 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3b21;
-    end else if (6'h37 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3e15;
-    end else if (6'h36 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3fb1;
-    end else if (6'h35 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3fec;
-    end else if (6'h34 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3fb1;
-    end else if (6'h33 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3ec5;
-    end else if (6'h32 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3d3f;
-    end else if (6'h31 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3c42;
-    end else if (6'h30 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3b21;
-    end else if (6'h2f == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3871;
-    end else if (6'h2e == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3537;
-    end else if (6'h2d == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3368;
-    end else if (6'h2c == _GEN_2082) begin
-      twiddles_3_real <= -16'sh3179;
-    end else if (6'h2b == _GEN_2082) begin
-      twiddles_3_real <= -16'sh2d41;
-    end else if (6'h2a == _GEN_2082) begin
-      twiddles_3_real <= -16'sh289a;
-    end else if (6'h29 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh2620;
-    end else if (6'h28 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh238e;
-    end else if (6'h27 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh1e2b;
-    end else if (6'h26 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh187e;
-    end else if (6'h25 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh1590;
-    end else if (6'h24 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh1294;
-    end else if (6'h23 == _GEN_2082) begin
-      twiddles_3_real <= -16'shc7c;
-    end else if (6'h22 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh646;
-    end else if (6'h21 == _GEN_2082) begin
-      twiddles_3_real <= -16'sh324;
-    end else if (6'h20 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh0;
-    end else if (6'h1f == _GEN_2082) begin
-      twiddles_3_real <= 16'sh324;
-    end else if (6'h1e == _GEN_2082) begin
-      twiddles_3_real <= 16'sh646;
-    end else if (6'h1d == _GEN_2082) begin
-      twiddles_3_real <= 16'sh964;
-    end else if (6'h1c == _GEN_2082) begin
-      twiddles_3_real <= 16'shc7c;
-    end else if (6'h1b == _GEN_2082) begin
-      twiddles_3_real <= 16'shf8d;
-    end else if (6'h1a == _GEN_2082) begin
-      twiddles_3_real <= 16'sh1294;
-    end else if (6'h19 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh1590;
-    end else if (6'h18 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh187e;
-    end else if (6'h17 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh1b5d;
-    end else if (6'h16 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh1e2b;
-    end else if (6'h15 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh20e7;
-    end else if (6'h14 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh238e;
-    end else if (6'h13 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh2620;
-    end else if (6'h12 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh289a;
-    end else if (6'h11 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh2afb;
-    end else if (6'h10 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh2d41;
-    end else if (6'hf == _GEN_2082) begin
-      twiddles_3_real <= 16'sh2f6c;
-    end else if (6'he == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3179;
-    end else if (6'hd == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3368;
-    end else if (6'hc == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3537;
-    end else if (6'hb == _GEN_2082) begin
-      twiddles_3_real <= 16'sh36e5;
-    end else if (6'ha == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3871;
-    end else if (6'h9 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh39db;
-    end else if (6'h8 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3b21;
-    end else if (6'h7 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3c42;
-    end else if (6'h6 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3d3f;
-    end else if (6'h5 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3e15;
-    end else if (6'h4 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3ec5;
-    end else if (6'h3 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3f4f;
-    end else if (6'h2 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3fb1;
-    end else if (6'h1 == _GEN_2082) begin
-      twiddles_3_real <= 16'sh3fec;
-    end else begin
-      twiddles_3_real <= 16'sh4000;
-    end
-    if (6'h3f == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh3f4f;
-    end else if (6'h3e == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh3d3f;
-    end else if (6'h3d == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh39db;
-    end else if (6'h3c == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh3537;
-    end else if (6'h3b == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh2f6c;
-    end else if (6'h3a == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh289a;
-    end else if (6'h39 == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh20e7;
-    end else if (6'h38 == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh187e;
-    end else if (6'h37 == _GEN_2082) begin
-      twiddles_3_imag <= 16'shf8d;
-    end else if (6'h36 == _GEN_2082) begin
-      twiddles_3_imag <= 16'sh646;
-    end else if (6'h35 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh324;
-    end else if (6'h34 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh646;
-    end else if (6'h33 == _GEN_2082) begin
-      twiddles_3_imag <= -16'shc7c;
-    end else if (6'h32 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh1294;
-    end else if (6'h31 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh1590;
-    end else if (6'h30 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh187e;
-    end else if (6'h2f == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh1e2b;
-    end else if (6'h2e == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh238e;
-    end else if (6'h2d == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh2620;
-    end else if (6'h2c == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh289a;
-    end else if (6'h2b == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh2d41;
-    end else if (6'h2a == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3179;
-    end else if (6'h29 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3368;
-    end else if (6'h28 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3537;
-    end else if (6'h27 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3871;
-    end else if (6'h26 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3b21;
-    end else if (6'h25 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3c42;
-    end else if (6'h24 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3d3f;
-    end else if (6'h23 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3ec5;
-    end else if (6'h22 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3fb1;
-    end else if (6'h21 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3fec;
-    end else if (6'h20 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh4000;
-    end else if (6'h1f == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3fec;
-    end else if (6'h1e == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3fb1;
-    end else if (6'h1d == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3f4f;
-    end else if (6'h1c == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3ec5;
-    end else if (6'h1b == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3e15;
-    end else if (6'h1a == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3d3f;
-    end else if (6'h19 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3c42;
-    end else if (6'h18 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3b21;
-    end else if (6'h17 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh39db;
-    end else if (6'h16 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3871;
-    end else if (6'h15 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh36e5;
-    end else if (6'h14 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3537;
-    end else if (6'h13 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3368;
-    end else if (6'h12 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh3179;
-    end else if (6'h11 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh2f6c;
-    end else if (6'h10 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh2d41;
-    end else if (6'hf == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh2afb;
-    end else if (6'he == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh289a;
-    end else if (6'hd == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh2620;
-    end else if (6'hc == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh238e;
-    end else if (6'hb == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh20e7;
-    end else if (6'ha == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh1e2b;
-    end else if (6'h9 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh1b5d;
-    end else if (6'h8 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh187e;
-    end else if (6'h7 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh1590;
-    end else if (6'h6 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh1294;
-    end else if (6'h5 == _GEN_2082) begin
-      twiddles_3_imag <= -16'shf8d;
-    end else if (6'h4 == _GEN_2082) begin
-      twiddles_3_imag <= -16'shc7c;
-    end else if (6'h3 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh964;
-    end else if (6'h2 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh646;
-    end else if (6'h1 == _GEN_2082) begin
-      twiddles_3_imag <= -16'sh324;
-    end else begin
-      twiddles_3_imag <= 16'sh0;
-    end
-    _T_2106 <= $signed(sdf_stages_3_io_out_real) * $signed(twiddles_3_real);
-    _T_2108 <= $signed(sdf_stages_3_io_out_imag) * $signed(twiddles_3_imag);
-    _T_2110 <= $signed(_T_2106) - $signed(_T_2108);
-    _T_2112 <= $signed(sdf_stages_3_io_out_real) * $signed(twiddles_3_imag);
-    _T_2114 <= $signed(sdf_stages_3_io_out_imag) * $signed(twiddles_3_real);
-    _T_2116 <= $signed(_T_2112) + $signed(_T_2114);
-    _T_2142 <= _T_2137 & _T_2140;
-    if (_T_2142) begin
-      _T_2154_real <= _T_2145_real;
-    end else begin
-      _T_2154_real <= sdf_stages_4_io_out_real;
-    end
-    if (_T_2142) begin
-      _T_2154_imag <= _T_2148;
-    end else begin
-      _T_2154_imag <= sdf_stages_4_io_out_imag;
-    end
-    outputWires_4_real <= _T_2154_real;
-    outputWires_4_imag <= _T_2154_imag;
-    if (_GEN_265) begin
-      _T_2262 <= _T_2260;
-    end
-    if (4'hf == _GEN_2419) begin
-      twiddles_5_real <= -16'sh238e;
-    end else if (4'he == _GEN_2419) begin
-      twiddles_5_real <= -16'sh3b21;
-    end else if (4'hd == _GEN_2419) begin
-      twiddles_5_real <= -16'sh3ec5;
-    end else if (4'hc == _GEN_2419) begin
-      twiddles_5_real <= -16'sh3b21;
-    end else if (4'hb == _GEN_2419) begin
-      twiddles_5_real <= -16'sh2d41;
-    end else if (4'ha == _GEN_2419) begin
-      twiddles_5_real <= -16'sh187e;
-    end else if (4'h9 == _GEN_2419) begin
-      twiddles_5_real <= -16'shc7c;
-    end else if (4'h8 == _GEN_2419) begin
-      twiddles_5_real <= 16'sh0;
-    end else if (4'h7 == _GEN_2419) begin
-      twiddles_5_real <= 16'shc7c;
-    end else if (4'h6 == _GEN_2419) begin
-      twiddles_5_real <= 16'sh187e;
-    end else if (4'h5 == _GEN_2419) begin
-      twiddles_5_real <= 16'sh238e;
-    end else if (4'h4 == _GEN_2419) begin
-      twiddles_5_real <= 16'sh2d41;
-    end else if (4'h3 == _GEN_2419) begin
-      twiddles_5_real <= 16'sh3537;
-    end else if (4'h2 == _GEN_2419) begin
-      twiddles_5_real <= 16'sh3b21;
-    end else if (4'h1 == _GEN_2419) begin
-      twiddles_5_real <= 16'sh3ec5;
-    end else begin
-      twiddles_5_real <= 16'sh4000;
-    end
-    if (4'hf == _GEN_2419) begin
-      twiddles_5_imag <= 16'sh3537;
-    end else if (4'he == _GEN_2419) begin
-      twiddles_5_imag <= 16'sh187e;
-    end else if (4'hd == _GEN_2419) begin
-      twiddles_5_imag <= -16'shc7c;
-    end else if (4'hc == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh187e;
-    end else if (4'hb == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh2d41;
-    end else if (4'ha == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh3b21;
-    end else if (4'h9 == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh3ec5;
-    end else if (4'h8 == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh4000;
-    end else if (4'h7 == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh3ec5;
-    end else if (4'h6 == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh3b21;
-    end else if (4'h5 == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh3537;
-    end else if (4'h4 == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh2d41;
-    end else if (4'h3 == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh238e;
-    end else if (4'h2 == _GEN_2419) begin
-      twiddles_5_imag <= -16'sh187e;
-    end else if (4'h1 == _GEN_2419) begin
-      twiddles_5_imag <= -16'shc7c;
-    end else begin
-      twiddles_5_imag <= 16'sh0;
-    end
-    _T_2273 <= $signed(sdf_stages_5_io_out_real) * $signed(twiddles_5_real);
-    _T_2275 <= $signed(sdf_stages_5_io_out_imag) * $signed(twiddles_5_imag);
-    _T_2277 <= $signed(_T_2273) - $signed(_T_2275);
-    _T_2279 <= $signed(sdf_stages_5_io_out_real) * $signed(twiddles_5_imag);
-    _T_2281 <= $signed(sdf_stages_5_io_out_imag) * $signed(twiddles_5_real);
-    _T_2283 <= $signed(_T_2279) + $signed(_T_2281);
-    _T_2309 <= _T_2304 & _T_2307;
-    if (_T_2309) begin
-      _T_2321_real <= _T_2312_real;
-    end else begin
-      _T_2321_real <= sdf_stages_6_io_out_real;
-    end
-    if (_T_2309) begin
-      _T_2321_imag <= _T_2315;
-    end else begin
-      _T_2321_imag <= sdf_stages_6_io_out_imag;
-    end
-    outputWires_6_real <= _T_2321_real;
-    outputWires_6_imag <= _T_2321_imag;
-    if (_GEN_301) begin
-      _T_2369 <= _T_2367;
-    end
-    if (2'h3 == _GEN_2540) begin
-      twiddles_7_real <= -16'sh2d41;
-    end else if (2'h2 == _GEN_2540) begin
-      twiddles_7_real <= 16'sh0;
-    end else if (2'h1 == _GEN_2540) begin
-      twiddles_7_real <= 16'sh2d41;
-    end else begin
-      twiddles_7_real <= 16'sh4000;
-    end
-    if (2'h3 == _GEN_2540) begin
-      twiddles_7_imag <= -16'sh2d41;
-    end else if (2'h2 == _GEN_2540) begin
-      twiddles_7_imag <= -16'sh4000;
-    end else if (2'h1 == _GEN_2540) begin
-      twiddles_7_imag <= -16'sh2d41;
-    end else begin
-      twiddles_7_imag <= 16'sh0;
-    end
-    _T_2380 <= $signed(sdf_stages_7_io_out_real) * $signed(twiddles_7_real);
-    _T_2382 <= $signed(sdf_stages_7_io_out_imag) * $signed(twiddles_7_imag);
-    _T_2384 <= $signed(_T_2380) - $signed(_T_2382);
-    _T_2386 <= $signed(sdf_stages_7_io_out_real) * $signed(twiddles_7_imag);
-    _T_2388 <= $signed(sdf_stages_7_io_out_imag) * $signed(twiddles_7_real);
-    _T_2390 <= $signed(_T_2386) + $signed(_T_2388);
-    _T_2413_real <= sdf_stages_8_io_out_real;
-    _T_2413_imag <= sdf_stages_8_io_out_imag;
-    outputWires_8_real <= _T_2413_real;
-    outputWires_8_imag <= _T_2413_imag;
-    if (reset) begin
-      _T_2418 <= 1'h0;
-    end else if (_T_65) begin
-      _T_2418 <= 1'h0;
-    end else if (_T_211) begin
-      _T_2418 <= _T_214;
-    end else begin
-      _T_2418 <= _T_215;
-    end
-    if (reset) begin
-      _T_2419 <= 1'h0;
-    end else if (_T_65) begin
-      _T_2419 <= 1'h0;
-    end else begin
-      _T_2419 <= _T_2418;
-    end
-    if (reset) begin
-      outValid <= 1'h0;
-    end else if (_T_65) begin
-      outValid <= 1'h0;
-    end else begin
-      outValid <= _T_2419;
-    end
-    if (reset) begin
-      _T_2421 <= 1'h0;
-    end else begin
-      _T_2421 <= _T_2420;
-    end
-    if (reset) begin
-      _T_2422 <= 1'h0;
-    end else begin
-      _T_2422 <= _T_2421;
-    end
-    if (reset) begin
-      _T_2423 <= 1'h0;
-    end else begin
-      _T_2423 <= _T_2422;
-    end
-  end
-endmodule
-module Queue_1(
-  input         clock,
-  input         reset,
-  output        io_enq_ready,
-  input         io_enq_valid,
-  input  [15:0] io_enq_bits_real,
-  input  [15:0] io_enq_bits_imag,
-  input         io_deq_ready,
-  output        io_deq_valid,
-  output [15:0] io_deq_bits_real,
-  output [15:0] io_deq_bits_imag
-);
-  reg [15:0] _T_4_real [0:0]; // @[Decoupled.scala 209:24]
-  reg [31:0] _RAND_0;
-  wire [15:0] _T_4_real__T_22_data; // @[Decoupled.scala 209:24]
-  wire  _T_4_real__T_22_addr; // @[Decoupled.scala 209:24]
-  wire [15:0] _T_4_real__T_16_data; // @[Decoupled.scala 209:24]
-  wire  _T_4_real__T_16_addr; // @[Decoupled.scala 209:24]
-  wire  _T_4_real__T_16_mask; // @[Decoupled.scala 209:24]
-  wire  _T_4_real__T_16_en; // @[Decoupled.scala 209:24]
-  reg [15:0] _T_4_imag [0:0]; // @[Decoupled.scala 209:24]
-  reg [31:0] _RAND_1;
-  wire [15:0] _T_4_imag__T_22_data; // @[Decoupled.scala 209:24]
-  wire  _T_4_imag__T_22_addr; // @[Decoupled.scala 209:24]
-  wire [15:0] _T_4_imag__T_16_data; // @[Decoupled.scala 209:24]
-  wire  _T_4_imag__T_16_addr; // @[Decoupled.scala 209:24]
-  wire  _T_4_imag__T_16_mask; // @[Decoupled.scala 209:24]
-  wire  _T_4_imag__T_16_en; // @[Decoupled.scala 209:24]
-  reg  _T_5; // @[Decoupled.scala 212:35]
-  reg [31:0] _RAND_2;
-  wire  _T_7; // @[Decoupled.scala 215:36]
-  wire  _T_10; // @[Decoupled.scala 40:37]
-  wire  _T_12; // @[Decoupled.scala 40:37]
-  wire  _GEN_8; // @[Decoupled.scala 240:27]
-  wire  _GEN_12; // @[Decoupled.scala 237:18]
-  wire  _GEN_11; // @[Decoupled.scala 237:18]
-  wire  _T_17; // @[Decoupled.scala 227:16]
-  wire  _T_18; // @[Decoupled.scala 231:19]
-  assign _T_4_real__T_22_addr = 1'h0;
-  assign _T_4_real__T_22_data = _T_4_real[_T_4_real__T_22_addr]; // @[Decoupled.scala 209:24]
-  assign _T_4_real__T_16_data = io_enq_bits_real;
-  assign _T_4_real__T_16_addr = 1'h0;
-  assign _T_4_real__T_16_mask = 1'h1;
-  assign _T_4_real__T_16_en = _T_7 ? _GEN_8 : _T_10;
-  assign _T_4_imag__T_22_addr = 1'h0;
-  assign _T_4_imag__T_22_data = _T_4_imag[_T_4_imag__T_22_addr]; // @[Decoupled.scala 209:24]
-  assign _T_4_imag__T_16_data = io_enq_bits_imag;
-  assign _T_4_imag__T_16_addr = 1'h0;
-  assign _T_4_imag__T_16_mask = 1'h1;
-  assign _T_4_imag__T_16_en = _T_7 ? _GEN_8 : _T_10;
-  assign _T_7 = ~_T_5; // @[Decoupled.scala 215:36]
-  assign _T_10 = io_enq_ready & io_enq_valid; // @[Decoupled.scala 40:37]
-  assign _T_12 = io_deq_ready & io_deq_valid; // @[Decoupled.scala 40:37]
-  assign _GEN_8 = io_deq_ready ? 1'h0 : _T_10; // @[Decoupled.scala 240:27]
-  assign _GEN_12 = _T_7 ? _GEN_8 : _T_10; // @[Decoupled.scala 237:18]
-  assign _GEN_11 = _T_7 ? 1'h0 : _T_12; // @[Decoupled.scala 237:18]
-  assign _T_17 = _GEN_12 != _GEN_11; // @[Decoupled.scala 227:16]
-  assign _T_18 = ~_T_7; // @[Decoupled.scala 231:19]
-  assign io_enq_ready = ~_T_5; // @[Decoupled.scala 232:16]
-  assign io_deq_valid = io_enq_valid | _T_18; // @[Decoupled.scala 231:16 Decoupled.scala 236:40]
-  assign io_deq_bits_real = _T_7 ? $signed(io_enq_bits_real) : $signed(_T_4_real__T_22_data); // @[Decoupled.scala 233:15 Decoupled.scala 238:19]
-  assign io_deq_bits_imag = _T_7 ? $signed(io_enq_bits_imag) : $signed(_T_4_imag__T_22_data); // @[Decoupled.scala 233:15 Decoupled.scala 238:19]
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-  _RAND_0 = {1{`RANDOM}};
-  `ifdef RANDOMIZE_MEM_INIT
-  for (initvar = 0; initvar < 1; initvar = initvar+1)
-    _T_4_real[initvar] = _RAND_0[15:0];
-  `endif // RANDOMIZE_MEM_INIT
-  _RAND_1 = {1{`RANDOM}};
-  `ifdef RANDOMIZE_MEM_INIT
-  for (initvar = 0; initvar < 1; initvar = initvar+1)
-    _T_4_imag[initvar] = _RAND_1[15:0];
-  `endif // RANDOMIZE_MEM_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_2 = {1{`RANDOM}};
-  _T_5 = _RAND_2[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`endif // SYNTHESIS
-  always @(posedge clock) begin
-    if(_T_4_real__T_16_en & _T_4_real__T_16_mask) begin
-      _T_4_real[_T_4_real__T_16_addr] <= _T_4_real__T_16_data; // @[Decoupled.scala 209:24]
-    end
-    if(_T_4_imag__T_16_en & _T_4_imag__T_16_mask) begin
-      _T_4_imag[_T_4_imag__T_16_addr] <= _T_4_imag__T_16_data; // @[Decoupled.scala 209:24]
-    end
-    if (reset) begin
-      _T_5 <= 1'h0;
-    end else if (_T_17) begin
-      if (_T_7) begin
-        if (io_deq_ready) begin
-          _T_5 <= 1'h0;
-        end else begin
-          _T_5 <= _T_10;
-        end
-      end else begin
-        _T_5 <= _T_10;
-      end
-    end
-  end
-endmodule
-module BitReversePingPong(
-  input         clock,
-  input         reset,
-  output        io_in_ready,
-  input         io_in_valid,
-  input  [15:0] io_in_bits_real,
-  input  [15:0] io_in_bits_imag,
-  input         io_out_ready,
-  output        io_out_valid,
-  output [15:0] io_out_bits_real,
-  output [15:0] io_out_bits_imag,
-  input  [9:0]  io_size,
-  input         io_lastIn,
-  output        io_lastOut
-);
-  wire [8:0] SRAM_depth_512_width_32_mem_R0_addr; // @[BitReversePingPong.scala 54:28]
-  wire  SRAM_depth_512_width_32_mem_R0_clk; // @[BitReversePingPong.scala 54:28]
-  wire [15:0] SRAM_depth_512_width_32_mem_R0_data_real; // @[BitReversePingPong.scala 54:28]
-  wire [15:0] SRAM_depth_512_width_32_mem_R0_data_imag; // @[BitReversePingPong.scala 54:28]
-  wire [8:0] SRAM_depth_512_width_32_mem_W0_addr; // @[BitReversePingPong.scala 54:28]
-  wire  SRAM_depth_512_width_32_mem_W0_en; // @[BitReversePingPong.scala 54:28]
-  wire  SRAM_depth_512_width_32_mem_W0_clk; // @[BitReversePingPong.scala 54:28]
-  wire [15:0] SRAM_depth_512_width_32_mem_W0_data_real; // @[BitReversePingPong.scala 54:28]
-  wire [15:0] SRAM_depth_512_width_32_mem_W0_data_imag; // @[BitReversePingPong.scala 54:28]
-  wire [8:0] memPong_R0_addr; // @[BitReversePingPong.scala 55:28]
-  wire  memPong_R0_clk; // @[BitReversePingPong.scala 55:28]
-  wire [15:0] memPong_R0_data_real; // @[BitReversePingPong.scala 55:28]
-  wire [15:0] memPong_R0_data_imag; // @[BitReversePingPong.scala 55:28]
-  wire [8:0] memPong_W0_addr; // @[BitReversePingPong.scala 55:28]
-  wire  memPong_W0_en; // @[BitReversePingPong.scala 55:28]
-  wire  memPong_W0_clk; // @[BitReversePingPong.scala 55:28]
-  wire [15:0] memPong_W0_data_real; // @[BitReversePingPong.scala 55:28]
-  wire [15:0] memPong_W0_data_imag; // @[BitReversePingPong.scala 55:28]
-  wire  outQueue_clock; // @[BitReversePingPong.scala 210:24]
-  wire  outQueue_reset; // @[BitReversePingPong.scala 210:24]
-  wire  outQueue_io_enq_ready; // @[BitReversePingPong.scala 210:24]
-  wire  outQueue_io_enq_valid; // @[BitReversePingPong.scala 210:24]
-  wire [15:0] outQueue_io_enq_bits_real; // @[BitReversePingPong.scala 210:24]
-  wire [15:0] outQueue_io_enq_bits_imag; // @[BitReversePingPong.scala 210:24]
-  wire  outQueue_io_deq_ready; // @[BitReversePingPong.scala 210:24]
-  wire  outQueue_io_deq_valid; // @[BitReversePingPong.scala 210:24]
-  wire [15:0] outQueue_io_deq_bits_real; // @[BitReversePingPong.scala 210:24]
-  wire [15:0] outQueue_io_deq_bits_imag; // @[BitReversePingPong.scala 210:24]
-  reg [1:0] state; // @[BitReversePingPong.scala 62:22]
-  reg [31:0] _RAND_0;
-  wire  readyWrite; // @[BitReversePingPong.scala 68:26]
-  wire  _T_4; // @[BitReversePingPong.scala 69:49]
-  reg [8:0] value; // @[Counter.scala 29:33]
-  reg [31:0] _RAND_1;
-  wire [8:0] _T_8; // @[Counter.scala 39:22]
-  wire [8:0] _GEN_4; // @[CounterWithReset.scala 14:25]
-  wire [8:0] writeCounter; // @[CounterWithReset.scala 10:19 CounterWithReset.scala 11:9 CounterWithReset.scala 14:44]
-  wire [9:0] _T_18; // @[BitReversePingPong.scala 74:66]
-  wire [9:0] _GEN_56; // @[BitReversePingPong.scala 74:35]
-  wire  cntWriteMax; // @[BitReversePingPong.scala 74:35]
-  wire  _T_22; // @[BitReversePingPong.scala 80:32]
-  wire  _T_193; // @[BitReversePingPong.scala 149:15]
-  wire  _T_194; // @[Decoupled.scala 40:37]
-  wire [1:0] _GEN_27; // @[BitReversePingPong.scala 150:25]
-  wire  _T_195; // @[BitReversePingPong.scala 154:20]
-  wire  lastWrite; // @[BitReversePingPong.scala 123:31]
-  wire [1:0] _GEN_28; // @[BitReversePingPong.scala 160:32]
-  wire [1:0] _GEN_29; // @[BitReversePingPong.scala 156:24]
-  wire [1:0] _GEN_30; // @[BitReversePingPong.scala 155:22]
-  wire  _T_196; // @[BitReversePingPong.scala 169:20]
-  wire  _T_174; // @[BitReversePingPong.scala 125:19]
-  reg [8:0] value_1; // @[Counter.scala 29:33]
-  reg [31:0] _RAND_2;
-  wire [8:0] _GEN_9; // @[CounterWithReset.scala 14:25]
-  wire [9:0] _GEN_57; // @[BitReversePingPong.scala 75:31]
-  wire  cntReadMax; // @[BitReversePingPong.scala 75:31]
-  wire  lastRead; // @[BitReversePingPong.scala 122:30]
-  wire  writeOnly; // @[BitReversePingPong.scala 125:30]
-  wire  _T_197; // @[BitReversePingPong.scala 179:11]
-  wire  _T_173; // @[BitReversePingPong.scala 124:31]
-  wire  readOnly; // @[BitReversePingPong.scala 124:28]
-  wire  _T_198; // @[BitReversePingPong.scala 179:25]
-  wire  _T_199; // @[BitReversePingPong.scala 179:22]
-  wire  _T_200; // @[BitReversePingPong.scala 179:35]
-  wire [1:0] _GEN_33; // @[BitReversePingPong.scala 170:21]
-  wire [1:0] _GEN_34; // @[BitReversePingPong.scala 176:22]
-  wire [1:0] _GEN_35; // @[BitReversePingPong.scala 179:49]
-  wire  _T_201; // @[BitReversePingPong.scala 183:20]
-  reg  doubleRead; // @[BitReversePingPong.scala 86:27]
-  reg [31:0] _RAND_3;
-  wire  _T_202; // @[BitReversePingPong.scala 185:13]
-  reg  last; // @[BitReversePingPong.scala 85:21]
-  reg [31:0] _RAND_4;
-  wire [1:0] _GEN_36; // @[BitReversePingPong.scala 186:21]
-  wire [1:0] _GEN_38; // @[BitReversePingPong.scala 185:26]
-  wire [1:0] _GEN_41; // @[BitReversePingPong.scala 184:21]
-  wire [1:0] _GEN_44; // @[BitReversePingPong.scala 183:44]
-  wire [1:0] _GEN_48; // @[BitReversePingPong.scala 169:45]
-  wire [1:0] _GEN_50; // @[BitReversePingPong.scala 154:45]
-  wire [1:0] state_next; // @[BitReversePingPong.scala 149:35]
-  wire  _T_23; // @[BitReversePingPong.scala 80:77]
-  wire  rstCntWritten; // @[BitReversePingPong.scala 80:63]
-  wire  validRead; // @[BitReversePingPong.scala 71:48]
-  wire  _T_11; // @[BitReversePingPong.scala 72:47]
-  wire [8:0] _T_15; // @[Counter.scala 39:22]
-  wire  _T_26; // @[BitReversePingPong.scala 81:28]
-  wire  rstCntRead; // @[BitReversePingPong.scala 81:59]
-  reg  readPing; // @[BitReversePingPong.scala 83:25]
-  reg [31:0] _RAND_5;
-  reg  writePing; // @[BitReversePingPong.scala 84:26]
-  reg [31:0] _RAND_6;
-  wire  bools_0; // @[BitReversePingPong.scala 98:39]
-  wire  bools_1; // @[BitReversePingPong.scala 98:39]
-  wire  bools_2; // @[BitReversePingPong.scala 98:39]
-  wire  bools_3; // @[BitReversePingPong.scala 98:39]
-  wire  bools_4; // @[BitReversePingPong.scala 98:39]
-  wire  bools_5; // @[BitReversePingPong.scala 98:39]
-  wire  bools_6; // @[BitReversePingPong.scala 98:39]
-  wire  bools_7; // @[BitReversePingPong.scala 98:39]
-  wire  bools_8; // @[BitReversePingPong.scala 98:39]
-  wire [1:0] _T_33; // @[Cat.scala 29:58]
-  wire [2:0] _T_40; // @[Cat.scala 29:58]
-  wire [3:0] _T_50; // @[Cat.scala 29:58]
-  wire [4:0] _T_63; // @[Cat.scala 29:58]
-  wire [5:0] _T_79; // @[Cat.scala 29:58]
-  wire [6:0] _T_98; // @[Cat.scala 29:58]
-  wire [7:0] _T_103; // @[Bitwise.scala 103:31]
-  wire [7:0] _T_105; // @[Bitwise.scala 103:65]
-  wire [7:0] _T_107; // @[Bitwise.scala 103:75]
-  wire [7:0] _T_108; // @[Bitwise.scala 103:39]
-  wire [7:0] _GEN_58; // @[Bitwise.scala 103:31]
-  wire [7:0] _T_113; // @[Bitwise.scala 103:31]
-  wire [7:0] _T_115; // @[Bitwise.scala 103:65]
-  wire [7:0] _T_117; // @[Bitwise.scala 103:75]
-  wire [7:0] _T_118; // @[Bitwise.scala 103:39]
-  wire [7:0] _GEN_59; // @[Bitwise.scala 103:31]
-  wire [7:0] _T_123; // @[Bitwise.scala 103:31]
-  wire [7:0] _T_125; // @[Bitwise.scala 103:65]
-  wire [7:0] _T_127; // @[Bitwise.scala 103:75]
-  wire [7:0] _T_128; // @[Bitwise.scala 103:39]
-  wire [8:0] _T_161; // @[Cat.scala 29:58]
-  wire [8:0] _T_162; // @[Mux.scala 87:16]
-  wire [8:0] _T_163; // @[Mux.scala 87:16]
-  wire [8:0] _T_164; // @[Mux.scala 87:16]
-  wire [8:0] _T_165; // @[Mux.scala 87:16]
-  wire [8:0] _T_166; // @[Mux.scala 87:16]
-  wire [8:0] _T_167; // @[Mux.scala 87:16]
-  wire [8:0] _T_168; // @[Mux.scala 87:16]
-  wire [8:0] _T_169; // @[Mux.scala 87:16]
-  wire  _T_172; // @[BitReversePingPong.scala 119:22]
-  wire  _GEN_10; // @[BitReversePingPong.scala 119:36]
-  wire  _T_176; // @[BitReversePingPong.scala 134:19]
-  wire  _GEN_11; // @[BitReversePingPong.scala 133:21]
-  wire  _T_177; // @[BitReversePingPong.scala 137:20]
-  wire  _GEN_12; // @[BitReversePingPong.scala 136:22]
-  wire  _GEN_13; // @[BitReversePingPong.scala 128:35]
-  wire  _GEN_14; // @[BitReversePingPong.scala 128:35]
-  wire  _GEN_31; // @[BitReversePingPong.scala 171:24]
-  wire  _GEN_40; // @[BitReversePingPong.scala 185:26]
-  wire [8:0] read_address; // @[BitReversePingPong.scala 92:25 BitReversePingPong.scala 104:15]
-  reg  _T_211; // @[BitReversePingPong.scala 211:38]
-  reg [31:0] _RAND_7;
-  wire  _T_218; // @[BitReversePingPong.scala 212:100]
-  reg  _T_219; // @[BitReversePingPong.scala 212:35]
-  reg [31:0] _RAND_8;
-  wire  _T_230; // @[Decoupled.scala 40:37]
-  SRAM_depth_512_width_32_mem SRAM_depth_512_width_32_mem ( // @[BitReversePingPong.scala 54:28]
-    .R0_addr(SRAM_depth_512_width_32_mem_R0_addr),
-    .R0_clk(SRAM_depth_512_width_32_mem_R0_clk),
-    .R0_data_real(SRAM_depth_512_width_32_mem_R0_data_real),
-    .R0_data_imag(SRAM_depth_512_width_32_mem_R0_data_imag),
-    .W0_addr(SRAM_depth_512_width_32_mem_W0_addr),
-    .W0_en(SRAM_depth_512_width_32_mem_W0_en),
-    .W0_clk(SRAM_depth_512_width_32_mem_W0_clk),
-    .W0_data_real(SRAM_depth_512_width_32_mem_W0_data_real),
-    .W0_data_imag(SRAM_depth_512_width_32_mem_W0_data_imag)
-  );
-  SRAM_depth_512_width_32_mem memPong ( // @[BitReversePingPong.scala 55:28]
-    .R0_addr(memPong_R0_addr),
-    .R0_clk(memPong_R0_clk),
-    .R0_data_real(memPong_R0_data_real),
-    .R0_data_imag(memPong_R0_data_imag),
-    .W0_addr(memPong_W0_addr),
-    .W0_en(memPong_W0_en),
-    .W0_clk(memPong_W0_clk),
-    .W0_data_real(memPong_W0_data_real),
-    .W0_data_imag(memPong_W0_data_imag)
-  );
-  Queue_1 outQueue ( // @[BitReversePingPong.scala 210:24]
-    .clock(outQueue_clock),
-    .reset(outQueue_reset),
-    .io_enq_ready(outQueue_io_enq_ready),
-    .io_enq_valid(outQueue_io_enq_valid),
-    .io_enq_bits_real(outQueue_io_enq_bits_real),
-    .io_enq_bits_imag(outQueue_io_enq_bits_imag),
-    .io_deq_ready(outQueue_io_deq_ready),
-    .io_deq_valid(outQueue_io_deq_valid),
-    .io_deq_bits_real(outQueue_io_deq_bits_real),
-    .io_deq_bits_imag(outQueue_io_deq_bits_imag)
-  );
-  assign readyWrite = state != 2'h3; // @[BitReversePingPong.scala 68:26]
-  assign _T_4 = io_in_valid & readyWrite; // @[BitReversePingPong.scala 69:49]
-  assign _T_8 = value + 9'h1; // @[Counter.scala 39:22]
-  assign _GEN_4 = value; // @[CounterWithReset.scala 14:25]
-  assign writeCounter = value; // @[CounterWithReset.scala 10:19 CounterWithReset.scala 11:9 CounterWithReset.scala 14:44]
-  assign _T_18 = io_size - 10'h1; // @[BitReversePingPong.scala 74:66]
-  assign _GEN_56 = {{1'd0}, _GEN_4}; // @[BitReversePingPong.scala 74:35]
-  assign cntWriteMax = _GEN_56 == _T_18; // @[BitReversePingPong.scala 74:35]
-  assign _T_22 = cntWriteMax & _T_4; // @[BitReversePingPong.scala 80:32]
-  assign _T_193 = state == 2'h0; // @[BitReversePingPong.scala 149:15]
-  assign _T_194 = io_in_ready & io_in_valid; // @[Decoupled.scala 40:37]
-  assign _GEN_27 = _T_194 ? 2'h1 : state; // @[BitReversePingPong.scala 150:25]
-  assign _T_195 = state == 2'h1; // @[BitReversePingPong.scala 154:20]
-  assign lastWrite = cntWriteMax & io_in_valid; // @[BitReversePingPong.scala 123:31]
-  assign _GEN_28 = io_out_ready ? 2'h2 : 2'h1; // @[BitReversePingPong.scala 160:32]
-  assign _GEN_29 = io_lastIn ? 2'h3 : _GEN_28; // @[BitReversePingPong.scala 156:24]
-  assign _GEN_30 = lastWrite ? _GEN_29 : state; // @[BitReversePingPong.scala 155:22]
-  assign _T_196 = state == 2'h2; // @[BitReversePingPong.scala 169:20]
-  assign _T_174 = ~lastWrite; // @[BitReversePingPong.scala 125:19]
-  assign _GEN_9 = value_1; // @[CounterWithReset.scala 14:25]
-  assign _GEN_57 = {{1'd0}, value_1}; // @[BitReversePingPong.scala 75:31]
-  assign cntReadMax = _GEN_57 == _T_18; // @[BitReversePingPong.scala 75:31]
-  assign lastRead = cntReadMax & io_out_ready; // @[BitReversePingPong.scala 122:30]
-  assign writeOnly = _T_174 & lastRead; // @[BitReversePingPong.scala 125:30]
-  assign _T_197 = ~writeOnly; // @[BitReversePingPong.scala 179:11]
-  assign _T_173 = ~lastRead; // @[BitReversePingPong.scala 124:31]
-  assign readOnly = lastWrite & _T_173; // @[BitReversePingPong.scala 124:28]
-  assign _T_198 = ~readOnly; // @[BitReversePingPong.scala 179:25]
-  assign _T_199 = _T_197 & _T_198; // @[BitReversePingPong.scala 179:22]
-  assign _T_200 = _T_199 & io_lastIn; // @[BitReversePingPong.scala 179:35]
-  assign _GEN_33 = readOnly ? 2'h3 : state; // @[BitReversePingPong.scala 170:21]
-  assign _GEN_34 = writeOnly ? 2'h1 : _GEN_33; // @[BitReversePingPong.scala 176:22]
-  assign _GEN_35 = _T_200 ? 2'h3 : _GEN_34; // @[BitReversePingPong.scala 179:49]
-  assign _T_201 = state == 2'h3; // @[BitReversePingPong.scala 183:20]
-  assign _T_202 = ~doubleRead; // @[BitReversePingPong.scala 185:13]
-  assign _GEN_36 = last ? 2'h0 : 2'h2; // @[BitReversePingPong.scala 186:21]
-  assign _GEN_38 = _T_202 ? _GEN_36 : state; // @[BitReversePingPong.scala 185:26]
-  assign _GEN_41 = lastRead ? _GEN_38 : state; // @[BitReversePingPong.scala 184:21]
-  assign _GEN_44 = _T_201 ? _GEN_41 : state; // @[BitReversePingPong.scala 183:44]
-  assign _GEN_48 = _T_196 ? _GEN_35 : _GEN_44; // @[BitReversePingPong.scala 169:45]
-  assign _GEN_50 = _T_195 ? _GEN_30 : _GEN_48; // @[BitReversePingPong.scala 154:45]
-  assign state_next = _T_193 ? _GEN_27 : _GEN_50; // @[BitReversePingPong.scala 149:35]
-  assign _T_23 = state_next == 2'h0; // @[BitReversePingPong.scala 80:77]
-  assign rstCntWritten = _T_22 | _T_23; // @[BitReversePingPong.scala 80:63]
-  assign validRead = _T_201 | _T_196; // @[BitReversePingPong.scala 71:48]
-  assign _T_11 = io_out_ready & validRead; // @[BitReversePingPong.scala 72:47]
-  assign _T_15 = value_1 + 9'h1; // @[Counter.scala 39:22]
-  assign _T_26 = cntReadMax & _T_11; // @[BitReversePingPong.scala 81:28]
-  assign rstCntRead = _T_26 | _T_23; // @[BitReversePingPong.scala 81:59]
-  assign bools_0 = 10'h2 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign bools_1 = 10'h4 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign bools_2 = 10'h8 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign bools_3 = 10'h10 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign bools_4 = 10'h20 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign bools_5 = 10'h40 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign bools_6 = 10'h80 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign bools_7 = 10'h100 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign bools_8 = 10'h200 == io_size; // @[BitReversePingPong.scala 98:39]
-  assign _T_33 = {_GEN_4[0],_GEN_4[1]}; // @[Cat.scala 29:58]
-  assign _T_40 = {_GEN_4[0],_GEN_4[1],_GEN_4[2]}; // @[Cat.scala 29:58]
-  assign _T_50 = {_GEN_4[0],_GEN_4[1],_GEN_4[2],_GEN_4[3]}; // @[Cat.scala 29:58]
-  assign _T_63 = {_GEN_4[0],_GEN_4[1],_GEN_4[2],_GEN_4[3],_GEN_4[4]}; // @[Cat.scala 29:58]
-  assign _T_79 = {_GEN_4[0],_GEN_4[1],_GEN_4[2],_GEN_4[3],_GEN_4[4],_GEN_4[5]}; // @[Cat.scala 29:58]
-  assign _T_98 = {_GEN_4[0],_GEN_4[1],_GEN_4[2],_GEN_4[3],_GEN_4[4],_GEN_4[5],_GEN_4[6]}; // @[Cat.scala 29:58]
-  assign _T_103 = {{4'd0}, _GEN_4[7:4]}; // @[Bitwise.scala 103:31]
-  assign _T_105 = {_GEN_4[3:0], 4'h0}; // @[Bitwise.scala 103:65]
-  assign _T_107 = _T_105 & 8'hf0; // @[Bitwise.scala 103:75]
-  assign _T_108 = _T_103 | _T_107; // @[Bitwise.scala 103:39]
-  assign _GEN_58 = {{2'd0}, _T_108[7:2]}; // @[Bitwise.scala 103:31]
-  assign _T_113 = _GEN_58 & 8'h33; // @[Bitwise.scala 103:31]
-  assign _T_115 = {_T_108[5:0], 2'h0}; // @[Bitwise.scala 103:65]
-  assign _T_117 = _T_115 & 8'hcc; // @[Bitwise.scala 103:75]
-  assign _T_118 = _T_113 | _T_117; // @[Bitwise.scala 103:39]
-  assign _GEN_59 = {{1'd0}, _T_118[7:1]}; // @[Bitwise.scala 103:31]
-  assign _T_123 = _GEN_59 & 8'h55; // @[Bitwise.scala 103:31]
-  assign _T_125 = {_T_118[6:0], 1'h0}; // @[Bitwise.scala 103:65]
-  assign _T_127 = _T_125 & 8'haa; // @[Bitwise.scala 103:75]
-  assign _T_128 = _T_123 | _T_127; // @[Bitwise.scala 103:39]
-  assign _T_161 = {_T_128,_GEN_4[8]}; // @[Cat.scala 29:58]
-  assign _T_162 = bools_8 ? _T_161 : 9'h0; // @[Mux.scala 87:16]
-  assign _T_163 = bools_7 ? {{1'd0}, _T_128} : _T_162; // @[Mux.scala 87:16]
-  assign _T_164 = bools_6 ? {{2'd0}, _T_98} : _T_163; // @[Mux.scala 87:16]
-  assign _T_165 = bools_5 ? {{3'd0}, _T_79} : _T_164; // @[Mux.scala 87:16]
-  assign _T_166 = bools_4 ? {{4'd0}, _T_63} : _T_165; // @[Mux.scala 87:16]
-  assign _T_167 = bools_3 ? {{5'd0}, _T_50} : _T_166; // @[Mux.scala 87:16]
-  assign _T_168 = bools_2 ? {{6'd0}, _T_40} : _T_167; // @[Mux.scala 87:16]
-  assign _T_169 = bools_1 ? {{7'd0}, _T_33} : _T_168; // @[Mux.scala 87:16]
-  assign _T_172 = _T_194 & io_lastIn; // @[BitReversePingPong.scala 119:22]
-  assign _GEN_10 = _T_172 | last; // @[BitReversePingPong.scala 119:36]
-  assign _T_176 = ~readPing; // @[BitReversePingPong.scala 134:19]
-  assign _GEN_11 = lastRead ? _T_176 : readPing; // @[BitReversePingPong.scala 133:21]
-  assign _T_177 = ~writePing; // @[BitReversePingPong.scala 137:20]
-  assign _GEN_12 = lastWrite ? _T_177 : writePing; // @[BitReversePingPong.scala 136:22]
-  assign _GEN_13 = _T_193 | _GEN_11; // @[BitReversePingPong.scala 128:35]
-  assign _GEN_14 = _T_193 | _GEN_12; // @[BitReversePingPong.scala 128:35]
-  assign _GEN_31 = io_lastIn | doubleRead; // @[BitReversePingPong.scala 171:24]
-  assign _GEN_40 = _T_202 & doubleRead; // @[BitReversePingPong.scala 185:26]
-  assign read_address = value_1; // @[BitReversePingPong.scala 92:25 BitReversePingPong.scala 104:15]
-  assign _T_218 = validRead & io_out_ready; // @[BitReversePingPong.scala 212:100]
-  assign _T_230 = io_out_ready & io_out_valid; // @[Decoupled.scala 40:37]
-  assign io_in_ready = state != 2'h3; // @[BitReversePingPong.scala 216:16]
-  assign io_out_valid = outQueue_io_deq_valid; // @[BitReversePingPong.scala 217:16]
-  assign io_out_bits_real = outQueue_io_deq_bits_real; // @[BitReversePingPong.scala 215:16]
-  assign io_out_bits_imag = outQueue_io_deq_bits_imag; // @[BitReversePingPong.scala 215:16]
-  assign io_lastOut = _T_193 & _T_230; // @[BitReversePingPong.scala 225:16]
-  assign SRAM_depth_512_width_32_mem_R0_addr = _GEN_9; // @[BitReversePingPong.scala 202:28]
-  assign SRAM_depth_512_width_32_mem_R0_clk = clock; // @[BitReversePingPong.scala 202:28]
-  assign SRAM_depth_512_width_32_mem_W0_addr = bools_0 ? {{8'd0}, _GEN_4[0]} : _T_169; // @[BitReversePingPong.scala 142:12]
-  assign SRAM_depth_512_width_32_mem_W0_en = _T_194 & writePing; // @[BitReversePingPong.scala 54:28 BitReversePingPong.scala 142:12]
-  assign SRAM_depth_512_width_32_mem_W0_clk = clock; // @[BitReversePingPong.scala 142:12]
-  assign SRAM_depth_512_width_32_mem_W0_data_real = io_in_bits_real; // @[BitReversePingPong.scala 142:27]
-  assign SRAM_depth_512_width_32_mem_W0_data_imag = io_in_bits_imag; // @[BitReversePingPong.scala 142:27]
-  assign memPong_R0_addr = _GEN_9; // @[BitReversePingPong.scala 203:28]
-  assign memPong_R0_clk = clock; // @[BitReversePingPong.scala 203:28]
-  assign memPong_W0_addr = bools_0 ? {{8'd0}, _GEN_4[0]} : _T_169; // @[BitReversePingPong.scala 146:11]
-  assign memPong_W0_en = _T_194 & _T_177; // @[BitReversePingPong.scala 55:28 BitReversePingPong.scala 146:11]
-  assign memPong_W0_clk = clock; // @[BitReversePingPong.scala 146:11]
-  assign memPong_W0_data_real = io_in_bits_real; // @[BitReversePingPong.scala 146:26]
-  assign memPong_W0_data_imag = io_in_bits_imag; // @[BitReversePingPong.scala 146:26]
-  assign outQueue_clock = clock;
-  assign outQueue_reset = reset;
-  assign outQueue_io_enq_valid = _T_219; // @[BitReversePingPong.scala 212:25]
-  assign outQueue_io_enq_bits_real = _T_211 ? $signed(SRAM_depth_512_width_32_mem_R0_data_real) : $signed(memPong_R0_data_real); // @[BitReversePingPong.scala 211:24]
-  assign outQueue_io_enq_bits_imag = _T_211 ? $signed(SRAM_depth_512_width_32_mem_R0_data_imag) : $signed(memPong_R0_data_imag); // @[BitReversePingPong.scala 211:24]
-  assign outQueue_io_deq_ready = io_out_ready; // @[BitReversePingPong.scala 213:25]
+  assign sdf_stages_8_io_in_real = _T_2124 ? $signed(outputWires_7_imag) : $signed(outputWires_7_real); // @[SDFChainRadix22.scala 340:23]
+  assign sdf_stages_8_io_in_imag = _T_2124 ? $signed(_T_2130) : $signed(outputWires_7_imag); // @[SDFChainRadix22.scala 340:23]
+  assign sdf_stages_8_io_cntr = cntr_wires_0 - _T_220; // @[SDFChainRadix22.scala 224:16]
+  assign sdf_stages_8_io_en = _T_46 | _T_122; // @[SDFChainRadix22.scala 223:14]
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -11558,35 +8847,15 @@ initial begin
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_1 = {1{`RANDOM}};
-  value = _RAND_1[8:0];
+  initialOutDone = _RAND_1[0:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_2 = {1{`RANDOM}};
-  value_1 = _RAND_2[8:0];
+  cnt = _RAND_2[9:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_3 = {1{`RANDOM}};
-  doubleRead = _RAND_3[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_4 = {1{`RANDOM}};
-  last = _RAND_4[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_5 = {1{`RANDOM}};
-  readPing = _RAND_5[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_6 = {1{`RANDOM}};
-  writePing = _RAND_6[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_7 = {1{`RANDOM}};
-  _T_211 = _RAND_7[0:0];
-  `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_8 = {1{`RANDOM}};
-  _T_219 = _RAND_8[0:0];
+  cntValidOut = _RAND_3[8:0];
   `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
@@ -11594,104 +8863,41 @@ end // initial
   always @(posedge clock) begin
     if (reset) begin
       state <= 2'h0;
-    end else if (_T_193) begin
-      if (_T_194) begin
+    end else if (_T_53) begin
+      if (_T_46) begin
         state <= 2'h1;
       end
-    end else if (_T_195) begin
-      if (lastWrite) begin
-        if (io_lastIn) begin
-          state <= 2'h3;
-        end else if (io_out_ready) begin
-          state <= 2'h2;
-        end else begin
-          state <= 2'h1;
-        end
+    end else if (_T_56) begin
+      if (fireLast) begin
+        state <= 2'h2;
       end
-    end else if (_T_196) begin
-      if (_T_200) begin
-        state <= 2'h3;
-      end else if (writeOnly) begin
-        state <= 2'h1;
-      end else if (readOnly) begin
-        state <= 2'h3;
-      end
-    end else if (_T_201) begin
-      if (lastRead) begin
-        if (_T_202) begin
-          if (last) begin
-            state <= 2'h0;
-          end else begin
-            state <= 2'h2;
-          end
-        end
+    end else if (_T_57) begin
+      if (io_lastOut) begin
+        state <= 2'h0;
       end
     end
     if (reset) begin
-      value <= 9'h0;
-    end else if (rstCntWritten) begin
-      value <= 9'h0;
-    end else if (_T_4) begin
-      value <= _T_8;
-    end
-    if (reset) begin
-      value_1 <= 9'h0;
-    end else if (rstCntRead) begin
-      value_1 <= 9'h0;
-    end else if (_T_11) begin
-      value_1 <= _T_15;
-    end
-    if (reset) begin
-      doubleRead <= 1'h0;
-    end else if (!(_T_193)) begin
-      if (!(_T_195)) begin
-        if (_T_196) begin
-          if (readOnly) begin
-            doubleRead <= _GEN_31;
-          end
-        end else if (_T_201) begin
-          if (lastRead) begin
-            doubleRead <= _GEN_40;
-          end
-        end
-      end
-    end
-    if (reset) begin
-      last <= 1'h0;
-    end else if (_T_193) begin
-      last <= _GEN_10;
-    end else if (_T_195) begin
-      last <= _GEN_10;
-    end else if (_T_196) begin
-      last <= _GEN_10;
-    end else if (_T_201) begin
-      if (lastRead) begin
-        if (_T_202) begin
-          if (last) begin
-            last <= 1'h0;
-          end else begin
-            last <= _GEN_10;
-          end
-        end else begin
-          last <= _GEN_10;
-        end
-      end else begin
-        last <= _GEN_10;
-      end
+      initialOutDone <= 1'h0;
     end else begin
-      last <= _GEN_10;
+      initialOutDone <= _GEN_46;
     end
-    readPing <= reset | _GEN_13;
-    writePing <= reset | _GEN_14;
-    _T_211 <= readPing;
     if (reset) begin
-      _T_219 <= 1'h0;
-    end else begin
-      _T_219 <= _T_218;
+      cnt <= 10'h0;
+    end else if (_T_62) begin
+      cnt <= 10'h0;
+    end else if (enableInit) begin
+      cnt <= _T_125;
+    end
+    if (reset) begin
+      cntValidOut <= 9'h0;
+    end else if (_T_77) begin
+      cntValidOut <= 9'h0;
+    end else if (_T_61) begin
+      cntValidOut <= _T_80;
     end
   end
 endmodule
-module SDFFFT_size_512_width_16_radix_22_bitreverse_1(
+module SDFFFT_size_512_width_16_radix_22_bitreverse_0(
   input         clock,
   input         reset,
   output        io_in_ready,
@@ -11704,7 +8910,6 @@ module SDFFFT_size_512_width_16_radix_22_bitreverse_1(
   output [15:0] io_out_bits_imag,
   output        io_lastOut,
   input         io_lastIn,
-  input  [8:0]  io_fftSize,
   output        io_busy
 );
   wire  SDFChainRadix22_clock; // @[SDFFFT.scala 219:119]
@@ -11719,36 +8924,34 @@ module SDFFFT_size_512_width_16_radix_22_bitreverse_1(
   wire [15:0] SDFChainRadix22_io_out_bits_imag; // @[SDFFFT.scala 219:119]
   wire  SDFChainRadix22_io_lastOut; // @[SDFFFT.scala 219:119]
   wire  SDFChainRadix22_io_lastIn; // @[SDFFFT.scala 219:119]
-  wire [8:0] SDFChainRadix22_io_fftSize; // @[SDFFFT.scala 219:119]
   wire  SDFChainRadix22_io_busy; // @[SDFFFT.scala 219:119]
-  wire  BitReversePingPong_clock; // @[SDFFFT.scala 228:35]
-  wire  BitReversePingPong_reset; // @[SDFFFT.scala 228:35]
-  wire  BitReversePingPong_io_in_ready; // @[SDFFFT.scala 228:35]
-  wire  BitReversePingPong_io_in_valid; // @[SDFFFT.scala 228:35]
-  wire [15:0] BitReversePingPong_io_in_bits_real; // @[SDFFFT.scala 228:35]
-  wire [15:0] BitReversePingPong_io_in_bits_imag; // @[SDFFFT.scala 228:35]
-  wire  BitReversePingPong_io_out_ready; // @[SDFFFT.scala 228:35]
-  wire  BitReversePingPong_io_out_valid; // @[SDFFFT.scala 228:35]
-  wire [15:0] BitReversePingPong_io_out_bits_real; // @[SDFFFT.scala 228:35]
-  wire [15:0] BitReversePingPong_io_out_bits_imag; // @[SDFFFT.scala 228:35]
-  wire [9:0] BitReversePingPong_io_size; // @[SDFFFT.scala 228:35]
-  wire  BitReversePingPong_io_lastIn; // @[SDFFFT.scala 228:35]
-  wire  BitReversePingPong_io_lastOut; // @[SDFFFT.scala 228:35]
   reg [8:0] cntWin; // @[SDFFFT.scala 71:23]
   reg [31:0] _RAND_0;
-  wire [8:0] _T_5; // @[SDFFFT.scala 75:41]
-  wire [512:0] _T_6; // @[SDFFFT.scala 75:23]
-  wire  _T_7; // @[Decoupled.scala 40:37]
-  wire [8:0] _T_9; // @[SDFFFT.scala 80:22]
-  wire [8:0] numPoints; // @[SDFFFT.scala 72:23 SDFFFT.scala 75:15]
-  wire [8:0] _T_11; // @[SDFFFT.scala 82:44]
-  wire  _T_12; // @[SDFFFT.scala 82:29]
-  wire  _T_13; // @[SDFFFT.scala 82:19]
-  wire [511:0] _T_147; // @[SDFFFT.scala 230:44]
-  wire [31:0] _T_148; // @[FixedPointTypeClass.scala 42:59]
-  wire [31:0] _T_149; // @[FixedPointTypeClass.scala 42:59]
-  wire [17:0] _GEN_526; // @[SDFFFT.scala 236:33 SDFFFT.scala 244:23]
-  wire [17:0] _GEN_528; // @[SDFFFT.scala 237:33 SDFFFT.scala 244:23]
+  wire  _T_4; // @[Decoupled.scala 40:37]
+  wire [8:0] _T_6; // @[SDFFFT.scala 80:22]
+  wire [8:0] _T_8; // @[SDFFFT.scala 82:44]
+  wire  _T_9; // @[SDFFFT.scala 82:29]
+  wire  _T_10; // @[SDFFFT.scala 82:19]
+  wire [7:0] _T_85; // @[Bitwise.scala 103:31]
+  wire [7:0] _T_87; // @[Bitwise.scala 103:65]
+  wire [7:0] _T_89; // @[Bitwise.scala 103:75]
+  wire [7:0] _T_90; // @[Bitwise.scala 103:39]
+  wire [7:0] _GEN_522; // @[Bitwise.scala 103:31]
+  wire [7:0] _T_95; // @[Bitwise.scala 103:31]
+  wire [7:0] _T_97; // @[Bitwise.scala 103:65]
+  wire [7:0] _T_99; // @[Bitwise.scala 103:75]
+  wire [7:0] _T_100; // @[Bitwise.scala 103:39]
+  wire [7:0] _GEN_523; // @[Bitwise.scala 103:31]
+  wire [7:0] _T_105; // @[Bitwise.scala 103:31]
+  wire [7:0] _T_107; // @[Bitwise.scala 103:65]
+  wire [7:0] _T_109; // @[Bitwise.scala 103:75]
+  wire [7:0] _T_110; // @[Bitwise.scala 103:39]
+  wire [8:0] _T_143; // @[Cat.scala 29:58]
+  wire [8:0] addrWin; // @[Mux.scala 87:16]
+  wire [31:0] _T_152; // @[FixedPointTypeClass.scala 42:59]
+  wire [31:0] _T_153; // @[FixedPointTypeClass.scala 42:59]
+  wire [17:0] _GEN_526; // @[SDFFFT.scala 301:31 SDFFFT.scala 309:21]
+  wire [17:0] _GEN_528; // @[SDFFFT.scala 302:31 SDFFFT.scala 309:21]
   SDFChainRadix22 SDFChainRadix22 ( // @[SDFFFT.scala 219:119]
     .clock(SDFChainRadix22_clock),
     .reset(SDFChainRadix22_reset),
@@ -11762,59 +8965,46 @@ module SDFFFT_size_512_width_16_radix_22_bitreverse_1(
     .io_out_bits_imag(SDFChainRadix22_io_out_bits_imag),
     .io_lastOut(SDFChainRadix22_io_lastOut),
     .io_lastIn(SDFChainRadix22_io_lastIn),
-    .io_fftSize(SDFChainRadix22_io_fftSize),
     .io_busy(SDFChainRadix22_io_busy)
   );
-  BitReversePingPong BitReversePingPong ( // @[SDFFFT.scala 228:35]
-    .clock(BitReversePingPong_clock),
-    .reset(BitReversePingPong_reset),
-    .io_in_ready(BitReversePingPong_io_in_ready),
-    .io_in_valid(BitReversePingPong_io_in_valid),
-    .io_in_bits_real(BitReversePingPong_io_in_bits_real),
-    .io_in_bits_imag(BitReversePingPong_io_in_bits_imag),
-    .io_out_ready(BitReversePingPong_io_out_ready),
-    .io_out_valid(BitReversePingPong_io_out_valid),
-    .io_out_bits_real(BitReversePingPong_io_out_bits_real),
-    .io_out_bits_imag(BitReversePingPong_io_out_bits_imag),
-    .io_size(BitReversePingPong_io_size),
-    .io_lastIn(BitReversePingPong_io_lastIn),
-    .io_lastOut(BitReversePingPong_io_lastOut)
-  );
-  assign _T_5 = io_fftSize - 9'h1; // @[SDFFFT.scala 75:41]
-  assign _T_6 = 513'h2 << _T_5; // @[SDFFFT.scala 75:23]
-  assign _T_7 = io_in_ready & io_in_valid; // @[Decoupled.scala 40:37]
-  assign _T_9 = cntWin + 9'h1; // @[SDFFFT.scala 80:22]
-  assign numPoints = _T_6[8:0]; // @[SDFFFT.scala 72:23 SDFFFT.scala 75:15]
-  assign _T_11 = numPoints - 9'h1; // @[SDFFFT.scala 82:44]
-  assign _T_12 = cntWin == _T_11; // @[SDFFFT.scala 82:29]
-  assign _T_13 = io_lastIn | _T_12; // @[SDFFFT.scala 82:19]
-  assign _T_147 = 512'h1 << io_fftSize; // @[SDFFFT.scala 230:44]
-  assign _T_148 = $signed(io_in_bits_real) * 16'sh4000; // @[FixedPointTypeClass.scala 42:59]
-  assign _T_149 = $signed(io_in_bits_imag) * 16'sh4000; // @[FixedPointTypeClass.scala 42:59]
-  assign io_in_ready = SDFChainRadix22_io_in_ready; // @[SDFFFT.scala 240:25 SDFFFT.scala 244:23]
-  assign io_out_valid = BitReversePingPong_io_out_valid; // @[SDFFFT.scala 241:20 SDFFFT.scala 248:26]
-  assign io_out_bits_real = BitReversePingPong_io_out_bits_real; // @[SDFFFT.scala 241:20 SDFFFT.scala 246:25]
-  assign io_out_bits_imag = BitReversePingPong_io_out_bits_imag; // @[SDFFFT.scala 241:20 SDFFFT.scala 246:25]
-  assign io_lastOut = BitReversePingPong_io_lastOut; // @[SDFFFT.scala 254:22]
+  assign _T_4 = io_in_ready & io_in_valid; // @[Decoupled.scala 40:37]
+  assign _T_6 = cntWin + 9'h1; // @[SDFFFT.scala 80:22]
+  assign _T_8 = 9'h0 - 9'h1; // @[SDFFFT.scala 82:44]
+  assign _T_9 = cntWin == _T_8; // @[SDFFFT.scala 82:29]
+  assign _T_10 = io_lastIn | _T_9; // @[SDFFFT.scala 82:19]
+  assign _T_85 = {{4'd0}, cntWin[7:4]}; // @[Bitwise.scala 103:31]
+  assign _T_87 = {cntWin[3:0], 4'h0}; // @[Bitwise.scala 103:65]
+  assign _T_89 = _T_87 & 8'hf0; // @[Bitwise.scala 103:75]
+  assign _T_90 = _T_85 | _T_89; // @[Bitwise.scala 103:39]
+  assign _GEN_522 = {{2'd0}, _T_90[7:2]}; // @[Bitwise.scala 103:31]
+  assign _T_95 = _GEN_522 & 8'h33; // @[Bitwise.scala 103:31]
+  assign _T_97 = {_T_90[5:0], 2'h0}; // @[Bitwise.scala 103:65]
+  assign _T_99 = _T_97 & 8'hcc; // @[Bitwise.scala 103:75]
+  assign _T_100 = _T_95 | _T_99; // @[Bitwise.scala 103:39]
+  assign _GEN_523 = {{1'd0}, _T_100[7:1]}; // @[Bitwise.scala 103:31]
+  assign _T_105 = _GEN_523 & 8'h55; // @[Bitwise.scala 103:31]
+  assign _T_107 = {_T_100[6:0], 1'h0}; // @[Bitwise.scala 103:65]
+  assign _T_109 = _T_107 & 8'haa; // @[Bitwise.scala 103:75]
+  assign _T_110 = _T_105 | _T_109; // @[Bitwise.scala 103:39]
+  assign _T_143 = {_T_110,cntWin[8]}; // @[Cat.scala 29:58]
+  assign addrWin = _T_143; // @[Mux.scala 87:16]
+  assign _T_152 = $signed(io_in_bits_real) * 16'sh4000; // @[FixedPointTypeClass.scala 42:59]
+  assign _T_153 = $signed(io_in_bits_imag) * 16'sh4000; // @[FixedPointTypeClass.scala 42:59]
+  assign io_in_ready = SDFChainRadix22_io_in_ready; // @[SDFFFT.scala 305:23 SDFFFT.scala 309:21]
+  assign io_out_valid = SDFChainRadix22_io_out_valid; // @[SDFFFT.scala 306:18 SDFFFT.scala 313:24]
+  assign io_out_bits_real = SDFChainRadix22_io_out_bits_real; // @[SDFFFT.scala 306:18 SDFFFT.scala 311:23]
+  assign io_out_bits_imag = SDFChainRadix22_io_out_bits_imag; // @[SDFFFT.scala 306:18 SDFFFT.scala 311:23]
+  assign io_lastOut = SDFChainRadix22_io_lastOut; // @[SDFFFT.scala 317:20]
   assign io_busy = SDFChainRadix22_io_busy; // @[SDFFFT.scala 320:15]
   assign SDFChainRadix22_clock = clock;
   assign SDFChainRadix22_reset = reset;
-  assign SDFChainRadix22_io_in_valid = io_in_valid; // @[SDFFFT.scala 239:29 SDFFFT.scala 244:23]
-  assign _GEN_526 = _T_148[31:14]; // @[SDFFFT.scala 236:33 SDFFFT.scala 244:23]
-  assign SDFChainRadix22_io_in_bits_real = _GEN_526[15:0]; // @[SDFFFT.scala 236:33 SDFFFT.scala 244:23]
-  assign _GEN_528 = _T_149[31:14]; // @[SDFFFT.scala 237:33 SDFFFT.scala 244:23]
-  assign SDFChainRadix22_io_in_bits_imag = _GEN_528[15:0]; // @[SDFFFT.scala 237:33 SDFFFT.scala 244:23]
-  assign SDFChainRadix22_io_out_ready = BitReversePingPong_io_in_ready; // @[SDFFFT.scala 252:29]
-  assign SDFChainRadix22_io_lastIn = io_lastIn; // @[SDFFFT.scala 251:25]
-  assign SDFChainRadix22_io_fftSize = io_fftSize; // @[SDFFFT.scala 323:28]
-  assign BitReversePingPong_clock = clock;
-  assign BitReversePingPong_reset = reset;
-  assign BitReversePingPong_io_in_valid = SDFChainRadix22_io_out_valid; // @[SDFFFT.scala 252:29]
-  assign BitReversePingPong_io_in_bits_real = SDFChainRadix22_io_out_bits_real; // @[SDFFFT.scala 252:29]
-  assign BitReversePingPong_io_in_bits_imag = SDFChainRadix22_io_out_bits_imag; // @[SDFFFT.scala 252:29]
-  assign BitReversePingPong_io_out_ready = io_out_ready; // @[SDFFFT.scala 241:20 SDFFFT.scala 249:38]
-  assign BitReversePingPong_io_size = _T_147[9:0]; // @[SDFFFT.scala 230:37]
-  assign BitReversePingPong_io_lastIn = SDFChainRadix22_io_lastOut; // @[SDFFFT.scala 253:33]
+  assign SDFChainRadix22_io_in_valid = io_in_valid; // @[SDFFFT.scala 304:27 SDFFFT.scala 309:21]
+  assign _GEN_526 = _T_152[31:14]; // @[SDFFFT.scala 301:31 SDFFFT.scala 309:21]
+  assign SDFChainRadix22_io_in_bits_real = _GEN_526[15:0]; // @[SDFFFT.scala 301:31 SDFFFT.scala 309:21]
+  assign _GEN_528 = _T_153[31:14]; // @[SDFFFT.scala 302:31 SDFFFT.scala 309:21]
+  assign SDFChainRadix22_io_in_bits_imag = _GEN_528[15:0]; // @[SDFFFT.scala 302:31 SDFFFT.scala 309:21]
+  assign SDFChainRadix22_io_out_ready = io_out_ready; // @[SDFFFT.scala 306:18 SDFFFT.scala 314:28]
+  assign SDFChainRadix22_io_lastIn = io_lastIn; // @[SDFFFT.scala 316:23]
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -11856,14 +9046,14 @@ end // initial
   always @(posedge clock) begin
     if (reset) begin
       cntWin <= 9'h0;
-    end else if (_T_13) begin
+    end else if (_T_10) begin
       cntWin <= 9'h0;
-    end else if (_T_7) begin
-      cntWin <= _T_9;
+    end else if (_T_4) begin
+      cntWin <= _T_6;
     end
   end
 endmodule
-module Queue_3(
+module Queue_1(
   input         clock,
   input         reset,
   output        io_enq_ready,
@@ -12045,8 +9235,6 @@ module AXI4FFTBlock(
   input  [30:0] auto_mem_in_aw_bits_addr,
   output        auto_mem_in_w_ready,
   input         auto_mem_in_w_valid,
-  input  [31:0] auto_mem_in_w_bits_data,
-  input  [3:0]  auto_mem_in_w_bits_strb,
   input         auto_mem_in_b_ready,
   output        auto_mem_in_b_valid,
   output        auto_mem_in_b_bits_id,
@@ -12054,7 +9242,6 @@ module AXI4FFTBlock(
   input         auto_mem_in_ar_valid,
   input         auto_mem_in_ar_bits_id,
   input  [30:0] auto_mem_in_ar_bits_addr,
-  input  [2:0]  auto_mem_in_ar_bits_size,
   input         auto_mem_in_r_ready,
   output        auto_mem_in_r_valid,
   output        auto_mem_in_r_bits_id,
@@ -12080,7 +9267,6 @@ module AXI4FFTBlock(
   wire [15:0] fft_io_out_bits_imag; // @[FFTBlock.scala 59:21]
   wire  fft_io_lastOut; // @[FFTBlock.scala 59:21]
   wire  fft_io_lastIn; // @[FFTBlock.scala 59:21]
-  wire [8:0] fft_io_fftSize; // @[FFTBlock.scala 59:21]
   wire  fft_io_busy; // @[FFTBlock.scala 59:21]
   wire  Queue_clock; // @[Decoupled.scala 287:21]
   wire  Queue_reset; // @[Decoupled.scala 287:21]
@@ -12096,59 +9282,17 @@ module AXI4FFTBlock(
   wire  Queue_io_deq_bits_extra; // @[Decoupled.scala 287:21]
   reg  busy; // @[FFTBlock.scala 63:34]
   reg [31:0] _RAND_0;
-  reg [3:0] fftSize; // @[FFTBlock.scala 69:28]
-  reg [31:0] _RAND_1;
   wire  _T_2; // @[RegisterRouter.scala 40:39]
-  wire  _T_3; // @[RegisterRouter.scala 40:26]
   wire  _T_4; // @[RegisterRouter.scala 42:29]
   wire  _T_47_ready; // @[RegisterRouter.scala 59:16 Decoupled.scala 290:17]
   wire [30:0] _T_11; // @[RegisterRouter.scala 48:19]
-  wire [5:0] _T_51; // @[RegisterRouter.scala 59:16]
   wire  _T_53; // @[RegisterRouter.scala 59:16]
   wire  _T_5; // @[RegisterRouter.scala 42:26]
-  wire [1:0] _T_14; // @[OneHot.scala 65:12]
-  wire [1:0] _T_16; // @[Misc.scala 200:81]
-  wire  _T_17; // @[Misc.scala 204:21]
-  wire  _T_20; // @[Misc.scala 209:20]
-  wire  _T_22; // @[Misc.scala 213:38]
-  wire  _T_23; // @[Misc.scala 213:29]
-  wire  _T_25; // @[Misc.scala 213:38]
-  wire  _T_26; // @[Misc.scala 213:29]
-  wire  _T_29; // @[Misc.scala 209:20]
-  wire  _T_30; // @[Misc.scala 212:27]
-  wire  _T_31; // @[Misc.scala 213:38]
-  wire  _T_32; // @[Misc.scala 213:29]
-  wire  _T_33; // @[Misc.scala 212:27]
-  wire  _T_34; // @[Misc.scala 213:38]
-  wire  _T_35; // @[Misc.scala 213:29]
-  wire  _T_36; // @[Misc.scala 212:27]
-  wire  _T_37; // @[Misc.scala 213:38]
-  wire  _T_38; // @[Misc.scala 213:29]
-  wire  _T_39; // @[Misc.scala 212:27]
-  wire  _T_40; // @[Misc.scala 213:38]
-  wire  _T_41; // @[Misc.scala 213:29]
-  wire [3:0] _T_44; // @[Cat.scala 29:58]
-  wire [3:0] _T_46; // @[RegisterRouter.scala 54:25]
-  wire [7:0] _T_65; // @[Bitwise.scala 72:12]
-  wire [7:0] _T_67; // @[Bitwise.scala 72:12]
-  wire [7:0] _T_69; // @[Bitwise.scala 72:12]
-  wire [7:0] _T_71; // @[Bitwise.scala 72:12]
-  wire [31:0] _T_74; // @[Cat.scala 29:58]
-  wire  _T_154; // @[RegisterRouter.scala 59:16]
-  wire [1:0] _T_148; // @[OneHot.scala 58:35]
   wire  _T_171; // @[RegisterRouter.scala 59:16]
-  wire  _T_116; // @[RegisterRouter.scala 59:16]
-  wire  _T_173; // @[RegisterRouter.scala 59:16]
-  wire  _T_174; // @[RegisterRouter.scala 59:16]
-  wire  _T_123; // @[RegisterRouter.scala 59:16]
-  wire  _GEN_10; // @[MuxLiteral.scala 48:10]
-  wire [3:0] _T_226_1; // @[MuxLiteral.scala 48:48 MuxLiteral.scala 48:48]
-  wire [3:0] _GEN_12; // @[MuxLiteral.scala 48:10]
-  wire [3:0] _T_228; // @[RegisterRouter.scala 59:16]
-  wire  _T_229_bits_read; // @[Decoupled.scala 308:19 Decoupled.scala 309:14]
-  wire  _T_229_valid; // @[Decoupled.scala 308:19 Decoupled.scala 310:15]
-  wire  _T_232; // @[RegisterRouter.scala 65:29]
-  SDFFFT_size_512_width_16_radix_22_bitreverse_1 fft ( // @[FFTBlock.scala 59:21]
+  wire  _T_172_bits_read; // @[Decoupled.scala 308:19 Decoupled.scala 309:14]
+  wire  _T_172_valid; // @[Decoupled.scala 308:19 Decoupled.scala 310:15]
+  wire  _T_175; // @[RegisterRouter.scala 65:29]
+  SDFFFT_size_512_width_16_radix_22_bitreverse_0 fft ( // @[FFTBlock.scala 59:21]
     .clock(fft_clock),
     .reset(fft_reset),
     .io_in_ready(fft_io_in_ready),
@@ -12161,10 +9305,9 @@ module AXI4FFTBlock(
     .io_out_bits_imag(fft_io_out_bits_imag),
     .io_lastOut(fft_io_lastOut),
     .io_lastIn(fft_io_lastIn),
-    .io_fftSize(fft_io_fftSize),
     .io_busy(fft_io_busy)
   );
-  Queue_3 Queue ( // @[Decoupled.scala 287:21]
+  Queue_1 Queue ( // @[Decoupled.scala 287:21]
     .clock(Queue_clock),
     .reset(Queue_reset),
     .io_enq_ready(Queue_io_enq_ready),
@@ -12179,61 +9322,21 @@ module AXI4FFTBlock(
     .io_deq_bits_extra(Queue_io_deq_bits_extra)
   );
   assign _T_2 = auto_mem_in_aw_valid & auto_mem_in_w_valid; // @[RegisterRouter.scala 40:39]
-  assign _T_3 = auto_mem_in_ar_valid | _T_2; // @[RegisterRouter.scala 40:26]
   assign _T_4 = ~auto_mem_in_ar_valid; // @[RegisterRouter.scala 42:29]
   assign _T_47_ready = Queue_io_enq_ready; // @[RegisterRouter.scala 59:16 Decoupled.scala 290:17]
   assign _T_11 = auto_mem_in_ar_valid ? auto_mem_in_ar_bits_addr : auto_mem_in_aw_bits_addr; // @[RegisterRouter.scala 48:19]
-  assign _T_51 = _T_11[7:2] & 6'h3e; // @[RegisterRouter.scala 59:16]
-  assign _T_53 = _T_51 == 6'h0; // @[RegisterRouter.scala 59:16]
+  assign _T_53 = _T_11[7:2] == 6'h0; // @[RegisterRouter.scala 59:16]
   assign _T_5 = _T_47_ready & _T_4; // @[RegisterRouter.scala 42:26]
-  assign _T_14 = 2'h1 << auto_mem_in_ar_bits_size[0]; // @[OneHot.scala 65:12]
-  assign _T_16 = _T_14 | 2'h1; // @[Misc.scala 200:81]
-  assign _T_17 = auto_mem_in_ar_bits_size >= 3'h2; // @[Misc.scala 204:21]
-  assign _T_20 = ~auto_mem_in_ar_bits_addr[1]; // @[Misc.scala 209:20]
-  assign _T_22 = _T_16[1] & _T_20; // @[Misc.scala 213:38]
-  assign _T_23 = _T_17 | _T_22; // @[Misc.scala 213:29]
-  assign _T_25 = _T_16[1] & auto_mem_in_ar_bits_addr[1]; // @[Misc.scala 213:38]
-  assign _T_26 = _T_17 | _T_25; // @[Misc.scala 213:29]
-  assign _T_29 = ~auto_mem_in_ar_bits_addr[0]; // @[Misc.scala 209:20]
-  assign _T_30 = _T_20 & _T_29; // @[Misc.scala 212:27]
-  assign _T_31 = _T_16[0] & _T_30; // @[Misc.scala 213:38]
-  assign _T_32 = _T_23 | _T_31; // @[Misc.scala 213:29]
-  assign _T_33 = _T_20 & auto_mem_in_ar_bits_addr[0]; // @[Misc.scala 212:27]
-  assign _T_34 = _T_16[0] & _T_33; // @[Misc.scala 213:38]
-  assign _T_35 = _T_23 | _T_34; // @[Misc.scala 213:29]
-  assign _T_36 = auto_mem_in_ar_bits_addr[1] & _T_29; // @[Misc.scala 212:27]
-  assign _T_37 = _T_16[0] & _T_36; // @[Misc.scala 213:38]
-  assign _T_38 = _T_26 | _T_37; // @[Misc.scala 213:29]
-  assign _T_39 = auto_mem_in_ar_bits_addr[1] & auto_mem_in_ar_bits_addr[0]; // @[Misc.scala 212:27]
-  assign _T_40 = _T_16[0] & _T_39; // @[Misc.scala 213:38]
-  assign _T_41 = _T_26 | _T_40; // @[Misc.scala 213:29]
-  assign _T_44 = {_T_41,_T_38,_T_35,_T_32}; // @[Cat.scala 29:58]
-  assign _T_46 = auto_mem_in_ar_valid ? _T_44 : auto_mem_in_w_bits_strb; // @[RegisterRouter.scala 54:25]
-  assign _T_65 = _T_46[0] ? 8'hff : 8'h0; // @[Bitwise.scala 72:12]
-  assign _T_67 = _T_46[1] ? 8'hff : 8'h0; // @[Bitwise.scala 72:12]
-  assign _T_69 = _T_46[2] ? 8'hff : 8'h0; // @[Bitwise.scala 72:12]
-  assign _T_71 = _T_46[3] ? 8'hff : 8'h0; // @[Bitwise.scala 72:12]
-  assign _T_74 = {_T_71,_T_69,_T_67,_T_65}; // @[Cat.scala 29:58]
-  assign _T_154 = _T_3 & _T_47_ready; // @[RegisterRouter.scala 59:16]
-  assign _T_148 = 2'h1 << _T_11[2]; // @[OneHot.scala 58:35]
-  assign _T_171 = _T_154 & _T_4; // @[RegisterRouter.scala 59:16]
-  assign _T_116 = _T_74[3:0] == 4'hf; // @[RegisterRouter.scala 59:16]
-  assign _T_173 = _T_171 & _T_148[0]; // @[RegisterRouter.scala 59:16]
-  assign _T_174 = _T_173 & _T_53; // @[RegisterRouter.scala 59:16]
-  assign _T_123 = _T_174 & _T_116; // @[RegisterRouter.scala 59:16]
-  assign _GEN_10 = _T_11[2] ? _T_53 : _T_53; // @[MuxLiteral.scala 48:10]
-  assign _T_226_1 = {{3'd0}, busy}; // @[MuxLiteral.scala 48:48 MuxLiteral.scala 48:48]
-  assign _GEN_12 = _T_11[2] ? _T_226_1 : fftSize; // @[MuxLiteral.scala 48:10]
-  assign _T_228 = _GEN_10 ? _GEN_12 : 4'h0; // @[RegisterRouter.scala 59:16]
-  assign _T_229_bits_read = Queue_io_deq_bits_read; // @[Decoupled.scala 308:19 Decoupled.scala 309:14]
-  assign _T_229_valid = Queue_io_deq_valid; // @[Decoupled.scala 308:19 Decoupled.scala 310:15]
-  assign _T_232 = ~_T_229_bits_read; // @[RegisterRouter.scala 65:29]
+  assign _T_171 = _T_53 & busy; // @[RegisterRouter.scala 59:16]
+  assign _T_172_bits_read = Queue_io_deq_bits_read; // @[Decoupled.scala 308:19 Decoupled.scala 309:14]
+  assign _T_172_valid = Queue_io_deq_valid; // @[Decoupled.scala 308:19 Decoupled.scala 310:15]
+  assign _T_175 = ~_T_172_bits_read; // @[RegisterRouter.scala 65:29]
   assign auto_mem_in_aw_ready = _T_5 & auto_mem_in_w_valid; // @[LazyModule.scala 173:31]
   assign auto_mem_in_w_ready = _T_5 & auto_mem_in_aw_valid; // @[LazyModule.scala 173:31]
-  assign auto_mem_in_b_valid = _T_229_valid & _T_232; // @[LazyModule.scala 173:31]
+  assign auto_mem_in_b_valid = _T_172_valid & _T_175; // @[LazyModule.scala 173:31]
   assign auto_mem_in_b_bits_id = Queue_io_deq_bits_extra; // @[LazyModule.scala 173:31]
   assign auto_mem_in_ar_ready = Queue_io_enq_ready; // @[LazyModule.scala 173:31]
-  assign auto_mem_in_r_valid = _T_229_valid & _T_229_bits_read; // @[LazyModule.scala 173:31]
+  assign auto_mem_in_r_valid = _T_172_valid & _T_172_bits_read; // @[LazyModule.scala 173:31]
   assign auto_mem_in_r_bits_id = Queue_io_deq_bits_extra; // @[LazyModule.scala 173:31]
   assign auto_mem_in_r_bits_data = Queue_io_deq_bits_data; // @[LazyModule.scala 173:31]
   assign auto_stream_in_ready = fft_io_in_ready; // @[LazyModule.scala 173:31]
@@ -12247,14 +9350,13 @@ module AXI4FFTBlock(
   assign fft_io_in_bits_imag = auto_stream_in_bits_data[15:0]; // @[FFTBlock.scala 129:26]
   assign fft_io_out_ready = auto_stream_out_ready; // @[FFTBlock.scala 137:22]
   assign fft_io_lastIn = auto_stream_in_bits_last; // @[FFTBlock.scala 133:24]
-  assign fft_io_fftSize = {{5'd0}, fftSize}; // @[FFTBlock.scala 93:28]
   assign Queue_clock = clock;
   assign Queue_reset = reset;
   assign Queue_io_enq_valid = auto_mem_in_ar_valid | _T_2; // @[Decoupled.scala 288:22]
   assign Queue_io_enq_bits_read = auto_mem_in_ar_valid; // @[Decoupled.scala 289:21]
-  assign Queue_io_enq_bits_data = {{28'd0}, _T_228}; // @[Decoupled.scala 289:21]
+  assign Queue_io_enq_bits_data = {{31'd0}, _T_171}; // @[Decoupled.scala 289:21]
   assign Queue_io_enq_bits_extra = auto_mem_in_ar_valid ? auto_mem_in_ar_bits_id : auto_mem_in_aw_bits_id; // @[Decoupled.scala 289:21]
-  assign Queue_io_deq_ready = _T_229_bits_read ? auto_mem_in_r_ready : auto_mem_in_b_ready; // @[Decoupled.scala 311:15]
+  assign Queue_io_deq_ready = _T_172_bits_read ? auto_mem_in_r_ready : auto_mem_in_b_ready; // @[Decoupled.scala 311:15]
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
 `define RANDOMIZE
 `endif
@@ -12290,10 +9392,6 @@ initial begin
   _RAND_0 = {1{`RANDOM}};
   busy = _RAND_0[0:0];
   `endif // RANDOMIZE_REG_INIT
-  `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  fftSize = _RAND_1[3:0];
-  `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
 `endif // SYNTHESIS
@@ -12303,14 +9401,9 @@ end // initial
     end else begin
       busy <= fft_io_busy;
     end
-    if (reset) begin
-      fftSize <= 4'h9;
-    end else if (_T_123) begin
-      fftSize <= auto_mem_in_w_bits_data[3:0];
-    end
   end
 endmodule
-module Queue_4(
+module Queue_2(
   input         clock,
   input         reset,
   output        io_enq_ready,
@@ -12433,7 +9526,7 @@ end // initial
     end
   end
 endmodule
-module Queue_5(
+module Queue_3(
   input   clock,
   input   reset,
   output  io_enq_ready,
@@ -12611,15 +9704,15 @@ module MagJPLandSQRMagInst(
   reg [31:0] _RAND_4;
   reg [31:0] _T_21; // @[Reg.scala 15:16]
   reg [31:0] _RAND_5;
-  wire [21:0] _T_22; // @[FixedPointTypeClass.scala 153:43]
+  wire [17:0] _T_22; // @[FixedPointTypeClass.scala 153:43]
   reg [31:0] _T_24; // @[Reg.scala 15:16]
   reg [31:0] _RAND_6;
-  wire [21:0] _T_25; // @[FixedPointTypeClass.scala 153:43]
-  reg [22:0] squared_magnitude; // @[Reg.scala 15:16]
+  wire [17:0] _T_25; // @[FixedPointTypeClass.scala 153:43]
+  reg [18:0] squared_magnitude; // @[Reg.scala 15:16]
   reg [31:0] _RAND_7;
-  wire [29:0] _T_27; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  wire [22:0] _T_29; // @[FixedPointTypeClass.scala 133:23]
-  wire [22:0] _T_32; // @[FixedPointTypeClass.scala 20:58]
+  wire [21:0] _T_27; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  wire [18:0] _T_29; // @[FixedPointTypeClass.scala 133:23]
+  wire [18:0] _T_32; // @[FixedPointTypeClass.scala 20:58]
   wire [15:0] trim_squared_magnitude; // @[FixedPointTypeClass.scala 176:41]
   wire [17:0] _GEN_19; // @[FixedPointTypeClass.scala 55:59]
   wire  _T_33; // @[FixedPointTypeClass.scala 55:59]
@@ -12629,7 +9722,7 @@ module MagJPLandSQRMagInst(
   reg [1:0] _T_35; // @[Reg.scala 15:16]
   reg [31:0] _RAND_9;
   wire  _T_38; // @[Mux.scala 68:19]
-  wire [22:0] _T_39; // @[Mux.scala 68:16]
+  wire [18:0] _T_39; // @[Mux.scala 68:16]
   reg [1:0] queueCounter; // @[Skid.scala 27:31]
   reg [31:0] _RAND_10;
   wire  _T_48; // @[Skid.scala 35:31]
@@ -12668,7 +9761,7 @@ module MagJPLandSQRMagInst(
   reg [31:0] _RAND_16;
   reg  _T_65; // @[Reg.scala 27:20]
   reg [31:0] _RAND_17;
-  Queue_4 Queue ( // @[Skid.scala 26:23]
+  Queue_2 Queue ( // @[Skid.scala 26:23]
     .clock(Queue_clock),
     .reset(Queue_reset),
     .io_enq_ready(Queue_io_enq_ready),
@@ -12678,7 +9771,7 @@ module MagJPLandSQRMagInst(
     .io_deq_valid(Queue_io_deq_valid),
     .io_deq_bits(Queue_io_deq_bits)
   );
-  Queue_5 Queue_1 ( // @[Skid.scala 26:23]
+  Queue_3 Queue_1 ( // @[Skid.scala 26:23]
     .clock(Queue_1_clock),
     .reset(Queue_1_reset),
     .io_enq_ready(Queue_1_io_enq_ready),
@@ -12701,17 +9794,17 @@ module MagJPLandSQRMagInst(
   assign _T_15 = u[15:3]; // @[FixedPointTypeClass.scala 117:50]
   assign _GEN_17 = {{3{_T_15[12]}},_T_15}; // @[FixedPointTypeClass.scala 33:22]
   assign _GEN_18 = {{2{_T_18[14]}},_T_18}; // @[FixedPointTypeClass.scala 24:22]
-  assign _T_22 = _T_21[31:10]; // @[FixedPointTypeClass.scala 153:43]
-  assign _T_25 = _T_24[31:10]; // @[FixedPointTypeClass.scala 153:43]
-  assign _T_27 = {$signed(squared_magnitude), 7'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
-  assign _T_29 = _T_27[29:7]; // @[FixedPointTypeClass.scala 133:23]
-  assign _T_32 = $signed(_T_29) + 23'sh40; // @[FixedPointTypeClass.scala 20:58]
-  assign trim_squared_magnitude = _T_32[22:7]; // @[FixedPointTypeClass.scala 176:41]
+  assign _T_22 = _T_21[31:14]; // @[FixedPointTypeClass.scala 153:43]
+  assign _T_25 = _T_24[31:14]; // @[FixedPointTypeClass.scala 153:43]
+  assign _T_27 = {$signed(squared_magnitude), 3'h0}; // @[FixedPointTypeClass.scala 129:22 FixedPointTypeClass.scala 130:12]
+  assign _T_29 = _T_27[21:3]; // @[FixedPointTypeClass.scala 133:23]
+  assign _T_32 = $signed(_T_29) + 19'sh4; // @[FixedPointTypeClass.scala 20:58]
+  assign trim_squared_magnitude = _T_32[18:3]; // @[FixedPointTypeClass.scala 176:41]
   assign _GEN_19 = {{1{jplMagOp1[16]}},jplMagOp1}; // @[FixedPointTypeClass.scala 55:59]
   assign _T_33 = $signed(_GEN_19) > $signed(jplMagOp2); // @[FixedPointTypeClass.scala 55:59]
   assign jplMag = _T_33 ? $signed({{1{jplMagOp1[16]}},jplMagOp1}) : $signed(jplMagOp2); // @[Order.scala 56:31]
   assign _T_38 = 2'h0 == _T_35; // @[Mux.scala 68:19]
-  assign _T_39 = _T_38 ? $signed(squared_magnitude) : $signed({{5{jplMag[17]}},jplMag}); // @[Mux.scala 68:16]
+  assign _T_39 = _T_38 ? $signed(squared_magnitude) : $signed({{1{jplMag[17]}},jplMag}); // @[Mux.scala 68:16]
   assign _T_48 = queueCounter < 2'h3; // @[Skid.scala 35:31]
   assign _T_49 = queueCounter == 2'h3; // @[Skid.scala 35:68]
   assign _T_50 = _T_49 & io_out_ready; // @[Skid.scala 35:89]
@@ -12809,7 +9902,7 @@ initial begin
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_7 = {1{`RANDOM}};
-  squared_magnitude = _RAND_7[22:0];
+  squared_magnitude = _RAND_7[18:0];
   `endif // RANDOMIZE_REG_INIT
   `ifdef RANDOMIZE_REG_INIT
   _RAND_8 = {1{`RANDOM}};
@@ -13067,7 +10160,7 @@ module AXI4LogMagMuxBlock(
     .io_sel(logMagMux_io_sel),
     .io_lastOut(logMagMux_io_lastOut)
   );
-  Queue_3 Queue ( // @[Decoupled.scala 287:21]
+  Queue_1 Queue ( // @[Decoupled.scala 287:21]
     .clock(Queue_clock),
     .reset(Queue_reset),
     .io_enq_ready(Queue_io_enq_ready),
@@ -19162,7 +16255,7 @@ end // initial
     _T_49 <= io_in_0;
   end
 endmodule
-module Queue_7(
+module Queue_5(
   input         clock,
   input         reset,
   output        io_enq_ready,
@@ -19351,7 +16444,7 @@ end // initial
     end
   end
 endmodule
-module Queue_8(
+module Queue_6(
   input   clock,
   input   reset,
   output  io_enq_ready,
@@ -20848,7 +17941,7 @@ module CFARCoreWithASR(
   wire [19:0] _GEN_917; // @[FixedPointTypeClass.scala 211:35]
   reg [35:0] _T_966; // @[Reg.scala 15:16]
   reg [63:0] _RAND_39;
-  wire [26:0] threshold; // @[FixedPointTypeClass.scala 153:43]
+  wire [22:0] threshold; // @[FixedPointTypeClass.scala 153:43]
   reg [15:0] cutDelayed; // @[Reg.scala 15:16]
   reg [31:0] _RAND_40;
   wire  _T_967; // @[CFARCoreWithASR.scala 394:53]
@@ -20864,7 +17957,7 @@ module CFARCoreWithASR(
   wire  _T_978; // @[FixedPointTypeClass.scala 55:59]
   wire  isLocalMax; // @[CFARCoreWithASR.scala 396:44]
   wire [16:0] _GEN_918; // @[FixedPointTypeClass.scala 55:59]
-  wire [26:0] _GEN_919; // @[FixedPointTypeClass.scala 55:59]
+  wire [22:0] _GEN_919; // @[FixedPointTypeClass.scala 55:59]
   wire  isPeak; // @[FixedPointTypeClass.scala 55:59]
   wire  _T_979; // @[CFARCoreWithASR.scala 418:20]
   wire  _T_980; // @[CFARCoreWithASR.scala 418:54]
@@ -20880,7 +17973,7 @@ module CFARCoreWithASR(
   reg  _T_994; // @[Reg.scala 15:16]
   reg [31:0] _RAND_46;
   wire  _T_995; // @[CFARCoreWithASR.scala 435:121]
-  wire [25:0] _GEN_921; // @[CFARCoreWithASR.scala 423:37]
+  wire [21:0] _GEN_921; // @[CFARCoreWithASR.scala 423:37]
   AdjustableShiftRegisterStream laggWindow ( // @[CFARCoreWithASR.scala 43:30]
     .clock(laggWindow_clock),
     .reset(laggWindow_reset),
@@ -21112,7 +18205,7 @@ module CFARCoreWithASR(
     .io_inSize(minCircuit_io_inSize),
     .io_out(minCircuit_io_out)
   );
-  Queue_7 Queue ( // @[CFARCoreWithASR.scala 417:27]
+  Queue_5 Queue ( // @[CFARCoreWithASR.scala 417:27]
     .clock(Queue_clock),
     .reset(Queue_reset),
     .io_enq_ready(Queue_io_enq_ready),
@@ -21126,7 +18219,7 @@ module CFARCoreWithASR(
     .io_deq_bits_cut(Queue_io_deq_bits_cut),
     .io_deq_bits_threshold(Queue_io_deq_bits_threshold)
   );
-  Queue_8 Queue_1 ( // @[CFARCoreWithASR.scala 434:27]
+  Queue_6 Queue_1 ( // @[CFARCoreWithASR.scala 434:27]
     .clock(Queue_1_clock),
     .reset(Queue_1_reset),
     .io_enq_ready(Queue_1_io_enq_ready),
@@ -22152,7 +19245,7 @@ module CFARCoreWithASR(
   assign _T_964 = _T_962 ? $signed(_T_963) : $signed(thrByModes); // @[CFARCoreWithASR.scala 315:41]
   assign thrWithoutScaling = _T_960 ? $signed(thrByModes) : $signed(_T_964); // @[CFARCoreWithASR.scala 313:27]
   assign _GEN_917 = {{4{io_thresholdScaler[15]}},io_thresholdScaler}; // @[FixedPointTypeClass.scala 211:35]
-  assign threshold = _T_966[35:9]; // @[FixedPointTypeClass.scala 153:43]
+  assign threshold = _T_966[35:13]; // @[FixedPointTypeClass.scala 153:43]
   assign _T_967 = io_guardCells == 4'h0; // @[CFARCoreWithASR.scala 394:53]
   assign _T_969 = io_windowCells - 7'h1; // @[CFARCoreWithASR.scala 394:103]
   assign _T_972 = io_guardCells - 4'h1; // @[CFARCoreWithASR.scala 394:150]
@@ -22162,7 +19255,7 @@ module CFARCoreWithASR(
   assign _T_978 = $signed(cutDelayed) > $signed(rightNeighb); // @[FixedPointTypeClass.scala 55:59]
   assign isLocalMax = _T_977 & _T_978; // @[CFARCoreWithASR.scala 396:44]
   assign _GEN_918 = {$signed(cutDelayed), 1'h0}; // @[FixedPointTypeClass.scala 55:59]
-  assign _GEN_919 = {{10{_GEN_918[16]}},_GEN_918}; // @[FixedPointTypeClass.scala 55:59]
+  assign _GEN_919 = {{6{_GEN_918[16]}},_GEN_918}; // @[FixedPointTypeClass.scala 55:59]
   assign isPeak = $signed(_GEN_919) > $signed(threshold); // @[FixedPointTypeClass.scala 55:59]
   assign _T_979 = ~initialInDone; // @[CFARCoreWithASR.scala 418:20]
   assign _T_980 = ~flushingDelayed; // @[CFARCoreWithASR.scala 418:54]
@@ -22234,7 +19327,7 @@ module CFARCoreWithASR(
   assign Queue_io_enq_valid = _T_985 | _T_987; // @[CFARCoreWithASR.scala 419:28]
   assign Queue_io_enq_bits_peak = io_peakGrouping ? _T_989 : isPeak; // @[CFARCoreWithASR.scala 430:34]
   assign Queue_io_enq_bits_cut = cutDelayed; // @[CFARCoreWithASR.scala 422:37]
-  assign _GEN_921 = threshold[26:1]; // @[CFARCoreWithASR.scala 423:37]
+  assign _GEN_921 = threshold[22:1]; // @[CFARCoreWithASR.scala 423:37]
   assign Queue_io_enq_bits_threshold = _GEN_921[15:0]; // @[CFARCoreWithASR.scala 423:37]
   assign Queue_io_deq_ready = io_out_ready; // @[CFARCoreWithASR.scala 432:28]
   assign Queue_1_clock = clock;
@@ -23353,7 +20446,7 @@ module AXI4CFARBlock(
     .io_lastOut(cfar_io_lastOut),
     .io_fftBin(cfar_io_fftBin)
   );
-  Queue_3 Queue ( // @[Decoupled.scala 287:21]
+  Queue_1 Queue ( // @[Decoupled.scala 287:21]
     .clock(Queue_clock),
     .reset(Queue_reset),
     .io_enq_ready(Queue_io_enq_ready),
@@ -23879,7 +20972,7 @@ end // initial
     `endif // SYNTHESIS
   end
 endmodule
-module Queue_10(
+module Queue_8(
   input         clock,
   input         reset,
   output        io_enq_ready,
@@ -24049,7 +21142,7 @@ module AXI4StreamBuffer(
   wire  Queue_io_deq_valid; // @[Decoupled.scala 287:21]
   wire [31:0] Queue_io_deq_bits_data; // @[Decoupled.scala 287:21]
   wire  Queue_io_deq_bits_last; // @[Decoupled.scala 287:21]
-  Queue_10 Queue ( // @[Decoupled.scala 287:21]
+  Queue_8 Queue ( // @[Decoupled.scala 287:21]
     .clock(Queue_clock),
     .reset(Queue_reset),
     .io_enq_ready(Queue_io_enq_ready),
@@ -24072,7 +21165,7 @@ module AXI4StreamBuffer(
   assign Queue_io_enq_bits_last = auto_in_bits_last; // @[Decoupled.scala 289:21]
   assign Queue_io_deq_ready = auto_out_ready; // @[Decoupled.scala 311:15]
 endmodule
-module Queue_11(
+module Queue_9(
   input         clock,
   input         reset,
   output        io_enq_ready,
@@ -24242,7 +21335,7 @@ module AXI4StreamBuffer_1(
   wire  Queue_io_deq_valid; // @[Decoupled.scala 287:21]
   wire [15:0] Queue_io_deq_bits_data; // @[Decoupled.scala 287:21]
   wire  Queue_io_deq_bits_last; // @[Decoupled.scala 287:21]
-  Queue_11 Queue ( // @[Decoupled.scala 287:21]
+  Queue_9 Queue ( // @[Decoupled.scala 287:21]
     .clock(Queue_clock),
     .reset(Queue_reset),
     .io_enq_ready(Queue_io_enq_ready),
@@ -24265,7 +21358,7 @@ module AXI4StreamBuffer_1(
   assign Queue_io_enq_bits_last = auto_in_bits_last; // @[Decoupled.scala 289:21]
   assign Queue_io_deq_ready = auto_out_ready; // @[Decoupled.scala 311:15]
 endmodule
-module Queue_13(
+module Queue_11(
   input         clock,
   input         reset,
   output        io_enq_ready,
@@ -24435,7 +21528,7 @@ module AXI4StreamBuffer_3(
   wire  Queue_io_deq_valid; // @[Decoupled.scala 287:21]
   wire [47:0] Queue_io_deq_bits_data; // @[Decoupled.scala 287:21]
   wire  Queue_io_deq_bits_last; // @[Decoupled.scala 287:21]
-  Queue_13 Queue ( // @[Decoupled.scala 287:21]
+  Queue_11 Queue ( // @[Decoupled.scala 287:21]
     .clock(Queue_clock),
     .reset(Queue_reset),
     .io_enq_ready(Queue_io_enq_ready),
@@ -24668,8 +21761,6 @@ module AXI4Xbar(
   output [30:0] auto_out_0_aw_bits_addr,
   input         auto_out_0_w_ready,
   output        auto_out_0_w_valid,
-  output [31:0] auto_out_0_w_bits_data,
-  output [3:0]  auto_out_0_w_bits_strb,
   output        auto_out_0_b_ready,
   input         auto_out_0_b_valid,
   input         auto_out_0_b_bits_id,
@@ -24677,7 +21768,6 @@ module AXI4Xbar(
   output        auto_out_0_ar_valid,
   output        auto_out_0_ar_bits_id,
   output [30:0] auto_out_0_ar_bits_addr,
-  output [2:0]  auto_out_0_ar_bits_size,
   output        auto_out_0_r_ready,
   input         auto_out_0_r_valid,
   input         auto_out_0_r_bits_id,
@@ -25308,13 +22398,10 @@ module AXI4Xbar(
   assign auto_out_0_aw_bits_id = auto_in_aw_bits_id; // @[LazyModule.scala 173:49]
   assign auto_out_0_aw_bits_addr = auto_in_aw_bits_addr; // @[LazyModule.scala 173:49]
   assign auto_out_0_w_valid = in_0_w_valid & requestWIO_0_0; // @[LazyModule.scala 173:49]
-  assign auto_out_0_w_bits_data = auto_in_w_bits_data; // @[LazyModule.scala 173:49]
-  assign auto_out_0_w_bits_strb = auto_in_w_bits_strb; // @[LazyModule.scala 173:49]
   assign auto_out_0_b_ready = auto_in_b_ready & _T_481_0; // @[LazyModule.scala 173:49]
   assign auto_out_0_ar_valid = in_0_ar_valid & requestARIO_0_0; // @[LazyModule.scala 173:49]
   assign auto_out_0_ar_bits_id = auto_in_ar_bits_id; // @[LazyModule.scala 173:49]
   assign auto_out_0_ar_bits_addr = auto_in_ar_bits_addr; // @[LazyModule.scala 173:49]
-  assign auto_out_0_ar_bits_size = auto_in_ar_bits_size; // @[LazyModule.scala 173:49]
   assign auto_out_0_r_ready = auto_in_r_ready & _T_376_0; // @[LazyModule.scala 173:49]
   assign awIn_0_clock = clock;
   assign awIn_0_reset = reset;
@@ -25949,96 +23036,93 @@ module AXI4Spectrometer(
   wire  widthAdapter_auto_out_valid; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire [31:0] widthAdapter_auto_out_bits_data; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_auto_out_bits_last; // @[AXI4StreamWidthAdapter.scala 82:34]
-  wire  fft_clock; // @[Spectrometer.scala 61:76]
-  wire  fft_reset; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_aw_ready; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_aw_valid; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 61:76]
-  wire [30:0] fft_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_w_ready; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_w_valid; // @[Spectrometer.scala 61:76]
-  wire [31:0] fft_auto_mem_in_w_bits_data; // @[Spectrometer.scala 61:76]
-  wire [3:0] fft_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_b_ready; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_b_valid; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_b_bits_id; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_ar_ready; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_ar_valid; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 61:76]
-  wire [30:0] fft_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 61:76]
-  wire [2:0] fft_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_r_ready; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_r_valid; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_mem_in_r_bits_id; // @[Spectrometer.scala 61:76]
-  wire [31:0] fft_auto_mem_in_r_bits_data; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_stream_in_ready; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_stream_in_valid; // @[Spectrometer.scala 61:76]
-  wire [31:0] fft_auto_stream_in_bits_data; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_stream_in_bits_last; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_stream_out_ready; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_stream_out_valid; // @[Spectrometer.scala 61:76]
-  wire [31:0] fft_auto_stream_out_bits_data; // @[Spectrometer.scala 61:76]
-  wire  fft_auto_stream_out_bits_last; // @[Spectrometer.scala 61:76]
-  wire  mag_clock; // @[Spectrometer.scala 62:76]
-  wire  mag_reset; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_aw_ready; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_aw_valid; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 62:76]
-  wire [30:0] mag_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_w_ready; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_w_valid; // @[Spectrometer.scala 62:76]
-  wire [31:0] mag_auto_mem_in_w_bits_data; // @[Spectrometer.scala 62:76]
-  wire [3:0] mag_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_b_ready; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_b_valid; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_b_bits_id; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_ar_ready; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_ar_valid; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 62:76]
-  wire [30:0] mag_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 62:76]
-  wire [2:0] mag_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_r_ready; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_r_valid; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_mem_in_r_bits_id; // @[Spectrometer.scala 62:76]
-  wire [31:0] mag_auto_mem_in_r_bits_data; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_master_out_ready; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_master_out_valid; // @[Spectrometer.scala 62:76]
-  wire [15:0] mag_auto_master_out_bits_data; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_master_out_bits_last; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_slave_in_ready; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_slave_in_valid; // @[Spectrometer.scala 62:76]
-  wire [31:0] mag_auto_slave_in_bits_data; // @[Spectrometer.scala 62:76]
-  wire  mag_auto_slave_in_bits_last; // @[Spectrometer.scala 62:76]
-  wire  cfar_clock; // @[Spectrometer.scala 63:76]
-  wire  cfar_reset; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_aw_ready; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_aw_valid; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 63:76]
-  wire [30:0] cfar_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_w_ready; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_w_valid; // @[Spectrometer.scala 63:76]
-  wire [31:0] cfar_auto_mem_in_w_bits_data; // @[Spectrometer.scala 63:76]
-  wire [3:0] cfar_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_b_ready; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_b_valid; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_b_bits_id; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_ar_ready; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_ar_valid; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 63:76]
-  wire [30:0] cfar_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 63:76]
-  wire [2:0] cfar_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_r_ready; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_r_valid; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_mem_in_r_bits_id; // @[Spectrometer.scala 63:76]
-  wire [31:0] cfar_auto_mem_in_r_bits_data; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_master_out_ready; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_master_out_valid; // @[Spectrometer.scala 63:76]
-  wire [47:0] cfar_auto_master_out_bits_data; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_master_out_bits_last; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_slave_in_ready; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_slave_in_valid; // @[Spectrometer.scala 63:76]
-  wire [15:0] cfar_auto_slave_in_bits_data; // @[Spectrometer.scala 63:76]
-  wire  cfar_auto_slave_in_bits_last; // @[Spectrometer.scala 63:76]
+  wire  fft_clock; // @[Spectrometer.scala 62:76]
+  wire  fft_reset; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_aw_ready; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_aw_valid; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 62:76]
+  wire [30:0] fft_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_w_ready; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_w_valid; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_b_ready; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_b_valid; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_b_bits_id; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_ar_ready; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_ar_valid; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 62:76]
+  wire [30:0] fft_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_r_ready; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_r_valid; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_mem_in_r_bits_id; // @[Spectrometer.scala 62:76]
+  wire [31:0] fft_auto_mem_in_r_bits_data; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_stream_in_ready; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_stream_in_valid; // @[Spectrometer.scala 62:76]
+  wire [31:0] fft_auto_stream_in_bits_data; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_stream_in_bits_last; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_stream_out_ready; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_stream_out_valid; // @[Spectrometer.scala 62:76]
+  wire [31:0] fft_auto_stream_out_bits_data; // @[Spectrometer.scala 62:76]
+  wire  fft_auto_stream_out_bits_last; // @[Spectrometer.scala 62:76]
+  wire  mag_clock; // @[Spectrometer.scala 63:76]
+  wire  mag_reset; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_aw_ready; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_aw_valid; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 63:76]
+  wire [30:0] mag_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_w_ready; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_w_valid; // @[Spectrometer.scala 63:76]
+  wire [31:0] mag_auto_mem_in_w_bits_data; // @[Spectrometer.scala 63:76]
+  wire [3:0] mag_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_b_ready; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_b_valid; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_b_bits_id; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_ar_ready; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_ar_valid; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 63:76]
+  wire [30:0] mag_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 63:76]
+  wire [2:0] mag_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_r_ready; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_r_valid; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_mem_in_r_bits_id; // @[Spectrometer.scala 63:76]
+  wire [31:0] mag_auto_mem_in_r_bits_data; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_master_out_ready; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_master_out_valid; // @[Spectrometer.scala 63:76]
+  wire [15:0] mag_auto_master_out_bits_data; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_master_out_bits_last; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_slave_in_ready; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_slave_in_valid; // @[Spectrometer.scala 63:76]
+  wire [31:0] mag_auto_slave_in_bits_data; // @[Spectrometer.scala 63:76]
+  wire  mag_auto_slave_in_bits_last; // @[Spectrometer.scala 63:76]
+  wire  cfar_clock; // @[Spectrometer.scala 64:76]
+  wire  cfar_reset; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_aw_ready; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_aw_valid; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_aw_bits_id; // @[Spectrometer.scala 64:76]
+  wire [30:0] cfar_auto_mem_in_aw_bits_addr; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_w_ready; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_w_valid; // @[Spectrometer.scala 64:76]
+  wire [31:0] cfar_auto_mem_in_w_bits_data; // @[Spectrometer.scala 64:76]
+  wire [3:0] cfar_auto_mem_in_w_bits_strb; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_b_ready; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_b_valid; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_b_bits_id; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_ar_ready; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_ar_valid; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_ar_bits_id; // @[Spectrometer.scala 64:76]
+  wire [30:0] cfar_auto_mem_in_ar_bits_addr; // @[Spectrometer.scala 64:76]
+  wire [2:0] cfar_auto_mem_in_ar_bits_size; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_r_ready; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_r_valid; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_mem_in_r_bits_id; // @[Spectrometer.scala 64:76]
+  wire [31:0] cfar_auto_mem_in_r_bits_data; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_master_out_ready; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_master_out_valid; // @[Spectrometer.scala 64:76]
+  wire [47:0] cfar_auto_master_out_bits_data; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_master_out_bits_last; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_slave_in_ready; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_slave_in_valid; // @[Spectrometer.scala 64:76]
+  wire [15:0] cfar_auto_slave_in_bits_data; // @[Spectrometer.scala 64:76]
+  wire  cfar_auto_slave_in_bits_last; // @[Spectrometer.scala 64:76]
   wire  widthAdapter_1_clock; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_1_reset; // @[AXI4StreamWidthAdapter.scala 82:34]
   wire  widthAdapter_1_auto_in_ready; // @[AXI4StreamWidthAdapter.scala 82:34]
@@ -26089,90 +23173,87 @@ module AXI4Spectrometer(
   wire  buffer_3_auto_out_valid; // @[Buffer.scala 29:28]
   wire [47:0] buffer_3_auto_out_bits_data; // @[Buffer.scala 29:28]
   wire  buffer_3_auto_out_bits_last; // @[Buffer.scala 29:28]
-  wire  bus_clock; // @[Spectrometer.scala 48:58]
-  wire  bus_reset; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_aw_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_aw_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_aw_bits_id; // @[Spectrometer.scala 48:58]
-  wire [30:0] bus_auto_in_aw_bits_addr; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_w_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_w_valid; // @[Spectrometer.scala 48:58]
-  wire [31:0] bus_auto_in_w_bits_data; // @[Spectrometer.scala 48:58]
-  wire [3:0] bus_auto_in_w_bits_strb; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_w_bits_last; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_b_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_b_valid; // @[Spectrometer.scala 48:58]
-  wire [1:0] bus_auto_in_b_bits_resp; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_ar_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_ar_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_ar_bits_id; // @[Spectrometer.scala 48:58]
-  wire [30:0] bus_auto_in_ar_bits_addr; // @[Spectrometer.scala 48:58]
-  wire [2:0] bus_auto_in_ar_bits_size; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_r_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_r_valid; // @[Spectrometer.scala 48:58]
-  wire [31:0] bus_auto_in_r_bits_data; // @[Spectrometer.scala 48:58]
-  wire [1:0] bus_auto_in_r_bits_resp; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_in_r_bits_last; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_aw_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_aw_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_aw_bits_id; // @[Spectrometer.scala 48:58]
-  wire [30:0] bus_auto_out_2_aw_bits_addr; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_w_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_w_valid; // @[Spectrometer.scala 48:58]
-  wire [31:0] bus_auto_out_2_w_bits_data; // @[Spectrometer.scala 48:58]
-  wire [3:0] bus_auto_out_2_w_bits_strb; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_b_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_b_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_b_bits_id; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_ar_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_ar_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_ar_bits_id; // @[Spectrometer.scala 48:58]
-  wire [30:0] bus_auto_out_2_ar_bits_addr; // @[Spectrometer.scala 48:58]
-  wire [2:0] bus_auto_out_2_ar_bits_size; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_r_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_r_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_2_r_bits_id; // @[Spectrometer.scala 48:58]
-  wire [31:0] bus_auto_out_2_r_bits_data; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_aw_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_aw_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_aw_bits_id; // @[Spectrometer.scala 48:58]
-  wire [30:0] bus_auto_out_1_aw_bits_addr; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_w_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_w_valid; // @[Spectrometer.scala 48:58]
-  wire [31:0] bus_auto_out_1_w_bits_data; // @[Spectrometer.scala 48:58]
-  wire [3:0] bus_auto_out_1_w_bits_strb; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_b_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_b_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_b_bits_id; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_ar_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_ar_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_ar_bits_id; // @[Spectrometer.scala 48:58]
-  wire [30:0] bus_auto_out_1_ar_bits_addr; // @[Spectrometer.scala 48:58]
-  wire [2:0] bus_auto_out_1_ar_bits_size; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_r_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_r_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_1_r_bits_id; // @[Spectrometer.scala 48:58]
-  wire [31:0] bus_auto_out_1_r_bits_data; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_aw_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_aw_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_aw_bits_id; // @[Spectrometer.scala 48:58]
-  wire [30:0] bus_auto_out_0_aw_bits_addr; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_w_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_w_valid; // @[Spectrometer.scala 48:58]
-  wire [31:0] bus_auto_out_0_w_bits_data; // @[Spectrometer.scala 48:58]
-  wire [3:0] bus_auto_out_0_w_bits_strb; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_b_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_b_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_b_bits_id; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_ar_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_ar_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_ar_bits_id; // @[Spectrometer.scala 48:58]
-  wire [30:0] bus_auto_out_0_ar_bits_addr; // @[Spectrometer.scala 48:58]
-  wire [2:0] bus_auto_out_0_ar_bits_size; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_r_ready; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_r_valid; // @[Spectrometer.scala 48:58]
-  wire  bus_auto_out_0_r_bits_id; // @[Spectrometer.scala 48:58]
-  wire [31:0] bus_auto_out_0_r_bits_data; // @[Spectrometer.scala 48:58]
+  wire  bus_clock; // @[Spectrometer.scala 49:58]
+  wire  bus_reset; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_aw_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_aw_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_aw_bits_id; // @[Spectrometer.scala 49:58]
+  wire [30:0] bus_auto_in_aw_bits_addr; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_w_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_w_valid; // @[Spectrometer.scala 49:58]
+  wire [31:0] bus_auto_in_w_bits_data; // @[Spectrometer.scala 49:58]
+  wire [3:0] bus_auto_in_w_bits_strb; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_w_bits_last; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_b_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_b_valid; // @[Spectrometer.scala 49:58]
+  wire [1:0] bus_auto_in_b_bits_resp; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_ar_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_ar_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_ar_bits_id; // @[Spectrometer.scala 49:58]
+  wire [30:0] bus_auto_in_ar_bits_addr; // @[Spectrometer.scala 49:58]
+  wire [2:0] bus_auto_in_ar_bits_size; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_r_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_r_valid; // @[Spectrometer.scala 49:58]
+  wire [31:0] bus_auto_in_r_bits_data; // @[Spectrometer.scala 49:58]
+  wire [1:0] bus_auto_in_r_bits_resp; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_in_r_bits_last; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_aw_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_aw_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_aw_bits_id; // @[Spectrometer.scala 49:58]
+  wire [30:0] bus_auto_out_2_aw_bits_addr; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_w_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_w_valid; // @[Spectrometer.scala 49:58]
+  wire [31:0] bus_auto_out_2_w_bits_data; // @[Spectrometer.scala 49:58]
+  wire [3:0] bus_auto_out_2_w_bits_strb; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_b_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_b_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_b_bits_id; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_ar_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_ar_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_ar_bits_id; // @[Spectrometer.scala 49:58]
+  wire [30:0] bus_auto_out_2_ar_bits_addr; // @[Spectrometer.scala 49:58]
+  wire [2:0] bus_auto_out_2_ar_bits_size; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_r_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_r_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_2_r_bits_id; // @[Spectrometer.scala 49:58]
+  wire [31:0] bus_auto_out_2_r_bits_data; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_aw_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_aw_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_aw_bits_id; // @[Spectrometer.scala 49:58]
+  wire [30:0] bus_auto_out_1_aw_bits_addr; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_w_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_w_valid; // @[Spectrometer.scala 49:58]
+  wire [31:0] bus_auto_out_1_w_bits_data; // @[Spectrometer.scala 49:58]
+  wire [3:0] bus_auto_out_1_w_bits_strb; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_b_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_b_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_b_bits_id; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_ar_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_ar_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_ar_bits_id; // @[Spectrometer.scala 49:58]
+  wire [30:0] bus_auto_out_1_ar_bits_addr; // @[Spectrometer.scala 49:58]
+  wire [2:0] bus_auto_out_1_ar_bits_size; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_r_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_r_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_1_r_bits_id; // @[Spectrometer.scala 49:58]
+  wire [31:0] bus_auto_out_1_r_bits_data; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_aw_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_aw_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_aw_bits_id; // @[Spectrometer.scala 49:58]
+  wire [30:0] bus_auto_out_0_aw_bits_addr; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_w_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_w_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_b_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_b_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_b_bits_id; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_ar_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_ar_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_ar_bits_id; // @[Spectrometer.scala 49:58]
+  wire [30:0] bus_auto_out_0_ar_bits_addr; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_r_ready; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_r_valid; // @[Spectrometer.scala 49:58]
+  wire  bus_auto_out_0_r_bits_id; // @[Spectrometer.scala 49:58]
+  wire [31:0] bus_auto_out_0_r_bits_data; // @[Spectrometer.scala 49:58]
   wire  converter_auto_in_aw_ready; // @[Node.scala 65:31]
   wire  converter_auto_in_aw_valid; // @[Node.scala 65:31]
   wire  converter_auto_in_aw_bits_id; // @[Node.scala 65:31]
@@ -26245,7 +23326,7 @@ module AXI4Spectrometer(
     .auto_out_bits_data(widthAdapter_auto_out_bits_data),
     .auto_out_bits_last(widthAdapter_auto_out_bits_last)
   );
-  AXI4FFTBlock fft ( // @[Spectrometer.scala 61:76]
+  AXI4FFTBlock fft ( // @[Spectrometer.scala 62:76]
     .clock(fft_clock),
     .reset(fft_reset),
     .auto_mem_in_aw_ready(fft_auto_mem_in_aw_ready),
@@ -26254,8 +23335,6 @@ module AXI4Spectrometer(
     .auto_mem_in_aw_bits_addr(fft_auto_mem_in_aw_bits_addr),
     .auto_mem_in_w_ready(fft_auto_mem_in_w_ready),
     .auto_mem_in_w_valid(fft_auto_mem_in_w_valid),
-    .auto_mem_in_w_bits_data(fft_auto_mem_in_w_bits_data),
-    .auto_mem_in_w_bits_strb(fft_auto_mem_in_w_bits_strb),
     .auto_mem_in_b_ready(fft_auto_mem_in_b_ready),
     .auto_mem_in_b_valid(fft_auto_mem_in_b_valid),
     .auto_mem_in_b_bits_id(fft_auto_mem_in_b_bits_id),
@@ -26263,7 +23342,6 @@ module AXI4Spectrometer(
     .auto_mem_in_ar_valid(fft_auto_mem_in_ar_valid),
     .auto_mem_in_ar_bits_id(fft_auto_mem_in_ar_bits_id),
     .auto_mem_in_ar_bits_addr(fft_auto_mem_in_ar_bits_addr),
-    .auto_mem_in_ar_bits_size(fft_auto_mem_in_ar_bits_size),
     .auto_mem_in_r_ready(fft_auto_mem_in_r_ready),
     .auto_mem_in_r_valid(fft_auto_mem_in_r_valid),
     .auto_mem_in_r_bits_id(fft_auto_mem_in_r_bits_id),
@@ -26277,7 +23355,7 @@ module AXI4Spectrometer(
     .auto_stream_out_bits_data(fft_auto_stream_out_bits_data),
     .auto_stream_out_bits_last(fft_auto_stream_out_bits_last)
   );
-  AXI4LogMagMuxBlock mag ( // @[Spectrometer.scala 62:76]
+  AXI4LogMagMuxBlock mag ( // @[Spectrometer.scala 63:76]
     .clock(mag_clock),
     .reset(mag_reset),
     .auto_mem_in_aw_ready(mag_auto_mem_in_aw_ready),
@@ -26309,7 +23387,7 @@ module AXI4Spectrometer(
     .auto_slave_in_bits_data(mag_auto_slave_in_bits_data),
     .auto_slave_in_bits_last(mag_auto_slave_in_bits_last)
   );
-  AXI4CFARBlock cfar ( // @[Spectrometer.scala 63:76]
+  AXI4CFARBlock cfar ( // @[Spectrometer.scala 64:76]
     .clock(cfar_clock),
     .reset(cfar_reset),
     .auto_mem_in_aw_ready(cfar_auto_mem_in_aw_ready),
@@ -26401,7 +23479,7 @@ module AXI4Spectrometer(
     .auto_out_bits_data(buffer_3_auto_out_bits_data),
     .auto_out_bits_last(buffer_3_auto_out_bits_last)
   );
-  AXI4Xbar bus ( // @[Spectrometer.scala 48:58]
+  AXI4Xbar bus ( // @[Spectrometer.scala 49:58]
     .clock(bus_clock),
     .reset(bus_reset),
     .auto_in_aw_ready(bus_auto_in_aw_ready),
@@ -26472,8 +23550,6 @@ module AXI4Spectrometer(
     .auto_out_0_aw_bits_addr(bus_auto_out_0_aw_bits_addr),
     .auto_out_0_w_ready(bus_auto_out_0_w_ready),
     .auto_out_0_w_valid(bus_auto_out_0_w_valid),
-    .auto_out_0_w_bits_data(bus_auto_out_0_w_bits_data),
-    .auto_out_0_w_bits_strb(bus_auto_out_0_w_bits_strb),
     .auto_out_0_b_ready(bus_auto_out_0_b_ready),
     .auto_out_0_b_valid(bus_auto_out_0_b_valid),
     .auto_out_0_b_bits_id(bus_auto_out_0_b_bits_id),
@@ -26481,7 +23557,6 @@ module AXI4Spectrometer(
     .auto_out_0_ar_valid(bus_auto_out_0_ar_valid),
     .auto_out_0_ar_bits_id(bus_auto_out_0_ar_bits_id),
     .auto_out_0_ar_bits_addr(bus_auto_out_0_ar_bits_addr),
-    .auto_out_0_ar_bits_size(bus_auto_out_0_ar_bits_size),
     .auto_out_0_r_ready(bus_auto_out_0_r_ready),
     .auto_out_0_r_valid(bus_auto_out_0_r_valid),
     .auto_out_0_r_bits_id(bus_auto_out_0_r_bits_id),
@@ -26580,13 +23655,10 @@ module AXI4Spectrometer(
   assign fft_auto_mem_in_aw_bits_id = bus_auto_out_0_aw_bits_id; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_aw_bits_addr = bus_auto_out_0_aw_bits_addr; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_w_valid = bus_auto_out_0_w_valid; // @[LazyModule.scala 167:31]
-  assign fft_auto_mem_in_w_bits_data = bus_auto_out_0_w_bits_data; // @[LazyModule.scala 167:31]
-  assign fft_auto_mem_in_w_bits_strb = bus_auto_out_0_w_bits_strb; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_b_ready = bus_auto_out_0_b_ready; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_ar_valid = bus_auto_out_0_ar_valid; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_ar_bits_id = bus_auto_out_0_ar_bits_id; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_ar_bits_addr = bus_auto_out_0_ar_bits_addr; // @[LazyModule.scala 167:31]
-  assign fft_auto_mem_in_ar_bits_size = bus_auto_out_0_ar_bits_size; // @[LazyModule.scala 167:31]
   assign fft_auto_mem_in_r_ready = bus_auto_out_0_r_ready; // @[LazyModule.scala 167:31]
   assign fft_auto_stream_in_valid = buffer_2_auto_out_valid; // @[LazyModule.scala 167:31]
   assign fft_auto_stream_in_bits_data = buffer_2_auto_out_bits_data; // @[LazyModule.scala 167:31]
@@ -26767,43 +23839,4 @@ module SRAM_depth_256_width_32_mem(
   assign SRAM_depth_256_width_32_mem_ext_W0_en = W0_en;
   assign SRAM_depth_256_width_32_mem_ext_W0_addr = W0_addr;
   assign SRAM_depth_256_width_32_mem_ext_W0_data = {W0_data_real,W0_data_imag};
-endmodule
-module SRAM_depth_512_width_32_mem(
-  input  [8:0]  R0_addr,
-  input         R0_clk,
-  output [15:0] R0_data_real,
-  output [15:0] R0_data_imag,
-  input  [8:0]  W0_addr,
-  input         W0_en,
-  input         W0_clk,
-  input  [15:0] W0_data_real,
-  input  [15:0] W0_data_imag
-);
-  wire [8:0] SRAM_depth_512_width_32_mem_ext_R0_addr;
-  wire  SRAM_depth_512_width_32_mem_ext_R0_en;
-  wire  SRAM_depth_512_width_32_mem_ext_R0_clk;
-  wire [31:0] SRAM_depth_512_width_32_mem_ext_R0_data;
-  wire [8:0] SRAM_depth_512_width_32_mem_ext_W0_addr;
-  wire  SRAM_depth_512_width_32_mem_ext_W0_en;
-  wire  SRAM_depth_512_width_32_mem_ext_W0_clk;
-  wire [31:0] SRAM_depth_512_width_32_mem_ext_W0_data;
-  SRAM_depth_512_width_32_mem_ext SRAM_depth_512_width_32_mem_ext (
-    .R0_addr(SRAM_depth_512_width_32_mem_ext_R0_addr),
-    .R0_en(SRAM_depth_512_width_32_mem_ext_R0_en),
-    .R0_clk(SRAM_depth_512_width_32_mem_ext_R0_clk),
-    .R0_data(SRAM_depth_512_width_32_mem_ext_R0_data),
-    .W0_addr(SRAM_depth_512_width_32_mem_ext_W0_addr),
-    .W0_en(SRAM_depth_512_width_32_mem_ext_W0_en),
-    .W0_clk(SRAM_depth_512_width_32_mem_ext_W0_clk),
-    .W0_data(SRAM_depth_512_width_32_mem_ext_W0_data)
-  );
-  assign SRAM_depth_512_width_32_mem_ext_R0_clk = R0_clk;
-  assign SRAM_depth_512_width_32_mem_ext_R0_en = 1'h1;
-  assign SRAM_depth_512_width_32_mem_ext_R0_addr = R0_addr;
-  assign R0_data_imag = SRAM_depth_512_width_32_mem_ext_R0_data[15:0];
-  assign R0_data_real = SRAM_depth_512_width_32_mem_ext_R0_data[31:16];
-  assign SRAM_depth_512_width_32_mem_ext_W0_clk = W0_clk;
-  assign SRAM_depth_512_width_32_mem_ext_W0_en = W0_en;
-  assign SRAM_depth_512_width_32_mem_ext_W0_addr = W0_addr;
-  assign SRAM_depth_512_width_32_mem_ext_W0_data = {W0_data_real,W0_data_imag};
 endmodule
