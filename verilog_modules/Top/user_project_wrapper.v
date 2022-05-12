@@ -56,16 +56,6 @@ module user_project_wrapper #(
     output [2:0] user_irq
 );
 
-// Logic Analyzer Signals
-    wire [127:0] la_data_in;
-    wire [127:0] la_data_out;
-    wire [127:0] la_oenb;
-
-// IOs
-    wire [`MPRJ_IO_PADS-1:0] io_in;
-    wire [`MPRJ_IO_PADS-1:0] io_out;
-    wire [`MPRJ_IO_PADS-1:0] io_oeb;
-
 // AXI write address channel signals
     wire         w_o_axi_awvalid;    // Write address valid
     wire         w_i_axi_awready;     // Slave is ready to accept
@@ -136,12 +126,12 @@ module user_project_wrapper #(
 
     assign w_outStream_ready = io_in[11];
     assign io_out[12]        = w_outStream_valid;
-    assign io_out[28:13]      = w_outStream_data[15:0];
-    assign io_out[29]         = w_outStream_last;
+    assign io_out[28:13]     = w_outStream_data[15:0];
+    assign io_out[29]        = w_outStream_last;
 
 // Drive remaining io pins
-    assign io_out[`MPRJ_IO_PADS-1:30] = 7'h1666;
-    assign io_oeb[`MPRJ_IO_PADS-1:30] = 7'hFFFF;
+    assign io_out[`MPRJ_IO_PADS-1:30] = 8'h66;
+    assign io_oeb[`MPRJ_IO_PADS-1:30] = 8'hFF;
 
 // Drive LA with zeroes
     assign la_data_out = {128{1'b0}};
@@ -261,13 +251,13 @@ module user_project_wrapper #(
         .ioMem_0_r_bits_last(w_i_axi_rlast),
     // AXI-stream
         .in_0_ready(w_inStream_ready),
-          .in_0_valid(w_inStream_valid),
-          .in_0_bits_data(w_inStream_data),
-          .in_0_bits_last(w_inStream_last),
+        .in_0_valid(w_inStream_valid),
+        .in_0_bits_data(w_inStream_data),
+        .in_0_bits_last(w_inStream_last),
         .out_0_ready(w_outStream_ready),
-          .out_0_valid(w_outStream_valid),
-          .out_0_bits_data(w_outStream_data),
-          .out_0_bits_last(w_outStream_last),
+        .out_0_valid(w_outStream_valid),
+        .out_0_bits_data(w_outStream_data),
+        .out_0_bits_last(w_outStream_last)
     );
 
 endmodule    // user_project_wrapper

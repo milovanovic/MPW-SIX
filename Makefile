@@ -19,12 +19,11 @@ test_spectrometer:
 	cd $(SPECTROMETER_PATH); SBT_OPTS="-DfftSize=$(FFT_SIZE) -DminSRAMDepth=$(FFT_SIZE) -DenablePlot=$(ENABLE_PLOT)" sbt "testOnly spectrometer_v2.SpectrometerTestSpec"; cd -;
 
 lint:
-	verilator --lint-only -Wno-STMTDLY  -DSIM \
+	verilator --lint-only -Wno-STMTDLY  -DSIM -DMPRJ_IO_PADS=38 \
 	-I./verilog_modules/SpectrometerV2 \
-	-I./verilog_modules/wb2axip \
+	-I./verilog_modules/wb2axip/rtl \
 	-I./verilog_modules/SRAM \
-	./verilog_modules/SpectrometerV2/AXI4Spectrometer.v \
-
+	./verilog_modules/Top/user_project_wrapper.v
 
 check-env:
 ifndef PDK_ROOT
