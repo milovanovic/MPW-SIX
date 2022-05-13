@@ -134,7 +134,7 @@ class HyperSpaceParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
         useBitReverse   = false,
         minSRAMdepth    = minSRAMdepth,
       ),
-      fftAddress = AddressSet(0x60001100, 0xFF)
+      fftAddress = AddressSet(0x30000000, 0xFF)
     )),
     magParams = Some(MagParamsAndAddresses(
       magParams = MAGParams(
@@ -147,7 +147,7 @@ class HyperSpaceParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
         numAddPipes = 1,
         numMulPipes = 1
       ),
-      magAddress = AddressSet(0x60001200, 0xFF),
+      magAddress = AddressSet(0x30000100, 0xFF),
     )),
     cfarParams = Some(CFARParamsAndAddresses(
       cfarParams = CFARParams(
@@ -165,7 +165,7 @@ class HyperSpaceParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
         numAddPipes = 1,                  // number of add pipeline registers
         numMulPipes = 1                   // number of mull pipeline registers
       ),
-      cfarAddress   = AddressSet(0x60001400, 0xFF),
+      cfarAddress   = AddressSet(0x30000200, 0xFF),
     ))
   )
 }
