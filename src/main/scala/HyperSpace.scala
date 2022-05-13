@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package spectrometer_v2
+package hyperspace
 
 import chisel3._
 import chisel3.stage.{ChiselGeneratorAnnotation, ChiselStage}
@@ -20,8 +20,8 @@ import fft._
 import magnitude._
 import cfar._
 
-/* Spectrometer parameters */
-case class SpectrometerParameters[T <: Data: Real: BinaryRepresentation] (
+/* HyperSpace parameters */
+case class HyperSpaceParameters[T <: Data: Real: BinaryRepresentation] (
   fftParams  : Option[FFTParamsAndAddresses[T]],
   magParams  : Option[MagParamsAndAddresses[T]],
   cfarParams : Option[CFARParamsAndAddresses[T]]
@@ -44,7 +44,7 @@ case class CFARParamsAndAddresses[T <: Data: Real: BinaryRepresentation] (
   cfarAddress : AddressSet
 )
 
-class AXI4Spectrometer[T <: Data : Real: BinaryRepresentation](params: SpectrometerParameters[T], beatBytes: Int)(implicit p: Parameters) extends Spectrometer[T, AXI4MasterPortParameters, AXI4SlavePortParameters, AXI4EdgeParameters, AXI4EdgeParameters, AXI4Bundle](params, beatBytes) with AXI4DspBlock {
+class AXI4HyperSpace[T <: Data : Real: BinaryRepresentation](params: HyperSpaceParameters[T], beatBytes: Int)(implicit p: Parameters) extends HyperSpace[T, AXI4MasterPortParameters, AXI4SlavePortParameters, AXI4EdgeParameters, AXI4EdgeParameters, AXI4Bundle](params, beatBytes) with AXI4DspBlock {
   /* Optional memory mapped port */
   val bus = if (blocks.isEmpty) None else Some(LazyModule(new AXI4Xbar))
   override val mem = if (blocks.isEmpty) None else Some(bus.get.node)
@@ -53,7 +53,7 @@ class AXI4Spectrometer[T <: Data : Real: BinaryRepresentation](params: Spectrome
   }
 }
 
-abstract class Spectrometer [T <: Data : Real: BinaryRepresentation, D, U, E, O, B <: Data] (params: SpectrometerParameters[T], beatBytes: Int) extends LazyModule()(Parameters.empty) with DspBlock[D, U, E, O, B] {
+abstract class HyperSpace [T <: Data : Real: BinaryRepresentation, D, U, E, O, B <: Data] (params: HyperSpaceParameters[T], beatBytes: Int) extends LazyModule()(Parameters.empty) with DspBlock[D, U, E, O, B] {
 
   /* Type of Blocks */
   type Block = AXI4DspBlock
@@ -82,7 +82,7 @@ abstract class Spectrometer [T <: Data : Real: BinaryRepresentation, D, U, E, O,
   lazy val module = new LazyModuleImp(this) {}
 }
 
-trait AXI4SpectrometerPins extends AXI4Spectrometer[FixedPoint] {
+trait AXI4HyperSpacePins extends AXI4HyperSpace[FixedPoint] {
   def beatBytes: Int = 4
 
   // Generate AXI4 slave output
@@ -105,8 +105,8 @@ trait AXI4SpectrometerPins extends AXI4Spectrometer[FixedPoint] {
 }
 
 
-class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
-  val params : SpectrometerParameters[FixedPoint] = SpectrometerParameters (
+class HyperSpaceParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
+  val params : HyperSpaceParameters[FixedPoint] = HyperSpaceParameters (
     fftParams = Some(FFTParamsAndAddresses(
       fftParams = FFTParams.fixed(
         dataWidth       = 16,
@@ -170,7 +170,7 @@ class SpectrometerParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
   )
 }
 
-object SpectrometerApp extends App
+object HyperSpaceApp extends App
 {
   implicit val p: Parameters = Parameters.empty
 
@@ -189,14 +189,14 @@ object SpectrometerApp extends App
   }
 
   
-  val params = (new SpectrometerParams(fftParams(0), fftParams(1))).params
-  val lazyDut = LazyModule(new AXI4Spectrometer(params, 4) with AXI4SpectrometerPins)
+  val params = (new HyperSpaceParams(fftParams(0), fftParams(1))).params
+  val lazyDut = LazyModule(new AXI4HyperSpace(params, 4) with AXI4HyperSpacePins)
 
   val arguments = Array(
     "-X", "verilog",
-    "--repl-seq-mem","-c:AXI4Spectrometer:-o:./verilog/rtl/SpectrometerV2/mem.conf",
+    "--repl-seq-mem","-c:AXI4HyperSpace:-o:./verilog/rtl/HyperSpace/mem.conf",
     "--log-level", "info",
-    "--target-dir", "verilog/rtl/SpectrometerV2"
+    "--target-dir", "verilog/rtl/HyperSpace"
   )
 
   (new ChiselStage).execute(arguments, Seq(ChiselGeneratorAnnotation(() => lazyDut.module)))

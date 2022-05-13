@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package spectrometer_v2
+package hyperspace
 
 import breeze.math.Complex
 import breeze.signal.fourierTr
@@ -10,7 +10,7 @@ import breeze.plot._
 import chisel3.util.log2Up
 
 
-object SpectrometerTesterUtils {
+object HyperSpaceTesterUtils {
     
   /**
   * Convert int data to binary string

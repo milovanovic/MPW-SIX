@@ -26,7 +26,7 @@ def javacOptionsVersion(scalaVersion: String): Seq[String] = {
   }
 }
 
-name := "spectrometer_v2"
+name := "hyperspace"
 
 val commonSettings = Seq(
   version := "1.0-SNAPSHOT",
@@ -44,12 +44,6 @@ val commonSettings = Seq(
   )
 )
 
-lazy val crc = (project in file("generators/chisel-crc"))
-  .settings(commonSettings: _*)
-
-lazy val preproc = (project in file("generators/xWRdataPreProc"))
-  .settings(commonSettings: _*)
-
 lazy val fft = (project in file("generators/sdf-fft"))
   .settings(commonSettings: _*)
   
@@ -59,7 +53,7 @@ lazy val logMagMux = (project in file("generators/logMagMux"))
 lazy val cfar = (project in file("generators/cfar"))
   .settings(commonSettings: _*)
 
-lazy val spectrometer_v2 = (project in file("."))
+lazy val hyperspace = (project in file("."))
   .dependsOn(fft, logMagMux, cfar)
   .settings(commonSettings: _*)
   .settings( // Settings for scalafix

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package spectrometer_v2
+package hyperspace
 
 import chisel3._
 import chisel3.util.{log2Ceil, log2Up}
@@ -23,11 +23,11 @@ import java.io._
 import cfar._
 import fft._
 
-/* AXI4Spectrometer */
-class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
+/* AXI4HyperSpace */
+class HyperSpaceTester[T <: Data : Real: BinaryRepresentation]
 (
-  dut: AXI4Spectrometer[T] with AXI4SpectrometerPins,
-  params: SpectrometerParameters[T],
+  dut: AXI4HyperSpace[T] with AXI4HyperSpacePins,
+  params: HyperSpaceParameters[T],
   fftSize : Int,
   runTime : Boolean = false,
   enablePlot: Boolean = false,
@@ -40,13 +40,13 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
 
   // Define signals
   val numStages = log2Up(fftSize)
-  val s1 = SpectrometerTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/4.0,   f1i = 1.0/4.0,   addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
-  val s2 = SpectrometerTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/32.0,  f1i = 1.0/32.0,  addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
-  val s3 = SpectrometerTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/128.0, f1i = 1.0/128.0, addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
+  val s1 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/4.0,   f1i = 1.0/4.0,   addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
+  val s2 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/32.0,  f1i = 1.0/32.0,  addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
+  val s3 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/128.0, f1i = 1.0/128.0, addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
   val testTone = s1.zip(s2).map{ case (c, d) => c + d }.zip(s3).map{ case (e, f)  => e + f }
-  val inp = if (params.fftParams.get.fftParams.decimType == DITDecimType) SpectrometerTesterUtils.bitrevorder_data(testTone) else testTone
+  val inp = if (params.fftParams.get.fftParams.decimType == DITDecimType) HyperSpaceTesterUtils.bitrevorder_data(testTone) else testTone
   val input = inp.map(m => m * math.pow(2,14))
-  val out = if (params.fftParams.get.fftParams.decimType == DITDecimType) fourierTr(DenseVector(testTone.toArray)).toScalaVector else SpectrometerTesterUtils.bitrevorder_data(fourierTr(DenseVector(inp.toArray)).toScalaVector)
+  val out = if (params.fftParams.get.fftParams.decimType == DITDecimType) fourierTr(DenseVector(testTone.toArray)).toScalaVector else HyperSpaceTesterUtils.bitrevorder_data(fourierTr(DenseVector(inp.toArray)).toScalaVector)
   var scalingFactor = if (params.fftParams.get.fftParams.expandLogic.sum != 0) {
     if (params.fftParams.get.fftParams.decimType == DIFDecimType) math.pow(2, params.fftParams.get.fftParams.expandLogic.drop(numStages - log2Up(fftSize)).filter(_ != 1).size).toInt
     else math.pow(2, params.fftParams.get.fftParams.expandLogic.take(log2Up(fftSize)).filter(_ != 1).size).toInt
@@ -171,7 +171,7 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
     var tempString: String = ""
     
     for (i <- 0 until outSeq.length by 3) {
-      tempString = SpectrometerTesterUtils.asNdigitBinary(outSeq(i + 2), 16) ++ SpectrometerTesterUtils.asNdigitBinary(outSeq(i + 1), 16) ++ SpectrometerTesterUtils.asNdigitBinary(outSeq(i), 16)
+      tempString = HyperSpaceTesterUtils.asNdigitBinary(outSeq(i + 2), 16) ++ HyperSpaceTesterUtils.asNdigitBinary(outSeq(i + 1), 16) ++ HyperSpaceTesterUtils.asNdigitBinary(outSeq(i), 16)
       outTreshold = outTreshold :+ (java.lang.Integer.parseInt(tempString.substring(6,22) ,2).toShort).toInt
       outCUT      = outCUT      :+ (java.lang.Integer.parseInt(tempString.substring(22,38) ,2).toShort).toInt
       outBIN      = outBIN      :+ (java.lang.Integer.parseInt(tempString.substring(38,47) ,2).toShort).toInt
@@ -182,26 +182,26 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
 
     // Plot data
     if (enablePlot) {
-      SpectrometerTesterUtils.plot_data(inputData = outCUT, plotName = "MAgnitude", fileName = "./AXI4Spectrometer/plot_mag.pdf")
-      SpectrometerTesterUtils.plot_data(inputData = fftMagScala, plotName = "MAgnitude", fileName = "./AXI4Spectrometer/plot_mag_scala.pdf")
+      HyperSpaceTesterUtils.plot_data(inputData = outCUT, plotName = "MAgnitude", fileName = "./AXI4HyperSpace/plot_mag.pdf")
+      HyperSpaceTesterUtils.plot_data(inputData = fftMagScala, plotName = "MAgnitude", fileName = "./AXI4HyperSpace/plot_mag_scala.pdf")
     }
 
     if (enablePlot) {
-      SpectrometerTesterUtils.plot_data(inputData = testTone.map(m => m * math.pow(2,14)).map(c => c.real.toInt), plotName = "Input real data without reordering", fileName = "AXI4Spectrometer/in_real.pdf")
-      SpectrometerTesterUtils.plot_data(inputData = testTone.map(m => m * math.pow(2,14)).map(c => c.imag.toInt), plotName = "Input imag data without reordering", fileName = "AXI4Spectrometer/in_imag.pdf")
-      SpectrometerTesterUtils.plot_data(inputData = input.map(c => c.real.toInt), plotName = "Input real data with reordering", fileName = "AXI4Spectrometer/in_real_reordered.pdf")
-      SpectrometerTesterUtils.plot_data(inputData = input.map(c => c.imag.toInt), plotName = "Input imag data with reordering", fileName = "AXI4Spectrometer/in_imag_reordered.pdf")
+      HyperSpaceTesterUtils.plot_data(inputData = testTone.map(m => m * math.pow(2,14)).map(c => c.real.toInt), plotName = "Input real data without reordering", fileName = "AXI4HyperSpace/in_real.pdf")
+      HyperSpaceTesterUtils.plot_data(inputData = testTone.map(m => m * math.pow(2,14)).map(c => c.imag.toInt), plotName = "Input imag data without reordering", fileName = "AXI4HyperSpace/in_imag.pdf")
+      HyperSpaceTesterUtils.plot_data(inputData = input.map(c => c.real.toInt), plotName = "Input real data with reordering", fileName = "AXI4HyperSpace/in_real_reordered.pdf")
+      HyperSpaceTesterUtils.plot_data(inputData = input.map(c => c.imag.toInt), plotName = "Input imag data with reordering", fileName = "AXI4HyperSpace/in_imag_reordered.pdf")
     }
 
     // Write data to text files
-    val f_output = new File("./test_run_dir/AXI4Spectrometer/output_data.txt")
+    val f_output = new File("./test_run_dir/AXI4HyperSpace/output_data.txt")
     val w_output = new BufferedWriter(new FileWriter(f_output))
     for (i <- 0 until outSeq.length ) {
       w_output.write(f"${outSeq(i)}%04x" + "\n")
     }
     w_output.close
 
-    val f_input = new File("./test_run_dir/AXI4Spectrometer/input_data.txt")
+    val f_input = new File("./test_run_dir/AXI4HyperSpace/input_data.txt")
     val w_input = new BufferedWriter(new FileWriter(f_input))
     for (i <- 0 until dataByte.length ) {
       w_input.write(f"${dataByte(i)}%02x" + "\n")
@@ -209,56 +209,8 @@ class SpectrometerTester[T <: Data : Real: BinaryRepresentation]
     w_input.close
 
     // check tolerance
-    SpectrometerTesterUtils.checkDataError(outCUT, fftMagScala, 3)
+    HyperSpaceTesterUtils.checkDataError(outCUT, fftMagScala, 3)
   }
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-  
-
-
-    
-  // var realSeq = Seq[Int]()
-  // var imagSeq = Seq[Int]()
-  // var tmpReal: Short = 0
-  // var tmpImag: Short = 0
-  
-  // for (i <- 0 until outSeq.length by 6) {
-  //   tmpReal = java.lang.Integer.parseInt(SpectrometerTesterUtils.asNdigitBinary(outSeq(i + 3), 8) ++ SpectrometerTesterUtils.asNdigitBinary(outSeq(i + 2), 8), 2).toShort
-  //   tmpImag = java.lang.Long.parseLong(SpectrometerTesterUtils.asNdigitBinary(outSeq(i + 1), 8)   ++ SpectrometerTesterUtils.asNdigitBinary(outSeq(i), 8), 2).toShort
-  //   realSeq = realSeq :+ tmpReal.toInt
-  //   imagSeq = imagSeq :+ tmpImag.toInt
-  // }
-  
-  // // Scala fft
-  // val fftScala = fourierTr(DenseVector(inData.toArray)).toScalaVector.map(c => Complex(c.real/fftSize, c.imag/fftSize))
-  // val fftMagScala = fftScala.map(c => c.abs.toInt)
-  
-  // imagSeq.foreach( c => println(c.toString))
-  // fftMagScala.foreach( c => println(c.toString))
-  
-  // // check tolerance
-  // if (params.fftParams.useBitReverse) {
-  //   SpectrometerTesterUtils.checkDataError(imagSeq, fftMagScala, 3)
-  // }
-  // else {
-  //   val bRImag = SpectrometerTesterUtils.bitrevorder_data(imagSeq)
-  //   SpectrometerTesterUtils.checkDataError(bRImag, fftMagScala, 3)
-  // }
-
-
-  
   step(20000)
   stepToCompletion(silentFail = silentFail)
 }
