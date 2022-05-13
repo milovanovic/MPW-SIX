@@ -40,9 +40,9 @@ class HyperSpaceTester[T <: Data : Real: BinaryRepresentation]
 
   // Define signals
   val numStages = log2Up(fftSize)
-  val s1 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/4.0,   f1i = 1.0/4.0,   addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
-  val s2 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/32.0,  f1i = 1.0/32.0,  addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
-  val s3 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/128.0, f1i = 1.0/128.0, addNoise = 1.0, scalingFactor = 3, scalingFactor2 = 2)
+  val s1 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/4.0,   f1i = 1.0/4.0,   addNoise = 1.0, scalingFactor = 4, scalingFactor2 = 2)
+  val s2 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/32.0,  f1i = 1.0/32.0,  addNoise = 1.0, scalingFactor = 4, scalingFactor2 = 2)
+  val s3 = HyperSpaceTesterUtils.getTone(numSamples = fftSize, f1r = 1.0/128.0, f1i = 1.0/128.0, addNoise = 1.0, scalingFactor = 4, scalingFactor2 = 2)
   val testTone = s1.zip(s2).map{ case (c, d) => c + d }.zip(s3).map{ case (e, f)  => e + f }
   val inp = if (params.fftParams.get.fftParams.decimType == DITDecimType) HyperSpaceTesterUtils.bitrevorder_data(testTone) else testTone
   val input = inp.map(m => m * math.pow(2,14))
