@@ -12,4 +12,4 @@
 	url = https://github.com/milovanovic/cfar.git
 [submodule "verilog/rtl/wb2axip"]
 	path = verilog/rtl/wb2axip
-	url = https://github.com/milovanovic/wb2axip.git
+	url = git@github.com:milovanovic/wb2axip.git
