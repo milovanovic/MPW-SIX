@@ -146,16 +146,19 @@ class HyperSpaceTester[T <: Data : Real: BinaryRepresentation]
         }
 
         step(2) // be sure that control registers are first initilized and then set ready and valid signals
-        poke(dut.out.ready, 1)
-
       }
     }
+  }
 
-    var outSeq = Seq[Int]()
-    var peekedVal: BigInt = 0
-    var tempCounter = 0
+  step(2) // be sure that control registers are first initilized and then set ready and valid signals
+  poke(dut.out.ready, 1)
+
+  var outSeq = Seq[Int]()
+  var peekedVal: BigInt = 0
+  var tempCounter = 0
     
-    while (outSeq.length < fftSize * 3 && tempCounter < 10000) {
+  if (params.cfarParams != None) {
+    while (outSeq.length < (fftSize) * 3 && tempCounter < 10000) {
       if (peek(dut.out.valid) == 1 && peek(dut.out.ready) == 1) {
         peekedVal = peek(dut.out.bits.data)
         outSeq = outSeq :+ peekedVal.toInt
@@ -170,6 +173,8 @@ class HyperSpaceTester[T <: Data : Real: BinaryRepresentation]
     var outTreshold = Seq[Int]()
     var tempString: String = ""
     
+    print(s"Output length is : ${outSeq.length}")
+
     for (i <- 0 until outSeq.length by 3) {
       tempString = HyperSpaceTesterUtils.asNdigitBinary(outSeq(i + 2), 16) ++ HyperSpaceTesterUtils.asNdigitBinary(outSeq(i + 1), 16) ++ HyperSpaceTesterUtils.asNdigitBinary(outSeq(i), 16)
       outTreshold = outTreshold :+ (java.lang.Integer.parseInt(tempString.substring(6,22) ,2).toShort).toInt
@@ -177,14 +182,37 @@ class HyperSpaceTester[T <: Data : Real: BinaryRepresentation]
       outBIN      = outBIN      :+ (java.lang.Integer.parseInt(tempString.substring(38,47) ,2).toShort).toInt
       outPEAK     = outPEAK     :+ (java.lang.Integer.parseInt(tempString.substring(47,48) ,2).toShort).toInt
     }
-
-    println(s"Output sequence length : ${outTreshold.length}")
-
+    // check tolerance
+    HyperSpaceTesterUtils.checkDataError(outCUT, fftMagScala, 3)
     // Plot data
     if (enablePlot) {
       HyperSpaceTesterUtils.plot_data(inputData = outCUT, plotName = "MAgnitude", fileName = "./AXI4HyperSpace/plot_mag.pdf")
       HyperSpaceTesterUtils.plot_data(inputData = fftMagScala, plotName = "MAgnitude", fileName = "./AXI4HyperSpace/plot_mag_scala.pdf")
     }
+  }
+  else {
+    while (outSeq.length < fftSize && tempCounter < 10000) {
+      if (peek(dut.out.valid) == 1 && peek(dut.out.ready) == 1) {
+        peekedVal = peek(dut.out.bits.data)
+        outSeq = outSeq :+ peekedVal.toInt
+      }
+      step(1)
+      tempCounter = tempCounter + 1
+    }
+    var outCUT  = Seq[Int]()
+    var tempString: String = ""
+    for (i <- 0 until outSeq.length) {
+      tempString = HyperSpaceTesterUtils.asNdigitBinary(outSeq(i), 16)
+      outCUT     = outCUT :+ (java.lang.Integer.parseInt(tempString ,2).toShort).toInt
+    }
+    // check tolerance
+    HyperSpaceTesterUtils.checkDataError(outCUT, fftMagScala, 3)
+    // Plot data
+    if (enablePlot) {
+      HyperSpaceTesterUtils.plot_data(inputData = outCUT, plotName = "MAgnitude", fileName = "./AXI4HyperSpace/plot_mag.pdf")
+      HyperSpaceTesterUtils.plot_data(inputData = fftMagScala, plotName = "MAgnitude", fileName = "./AXI4HyperSpace/plot_mag_scala.pdf")
+    }
+  }
 
     if (enablePlot) {
       HyperSpaceTesterUtils.plot_data(inputData = testTone.map(m => m * math.pow(2,14)).map(c => c.real.toInt), plotName = "Input real data without reordering", fileName = "AXI4HyperSpace/in_real.pdf")
@@ -208,9 +236,6 @@ class HyperSpaceTester[T <: Data : Real: BinaryRepresentation]
     }
     w_input.close
 
-    // check tolerance
-    HyperSpaceTesterUtils.checkDataError(outCUT, fftMagScala, 3)
-  }
   step(20000)
   stepToCompletion(silentFail = silentFail)
 }
