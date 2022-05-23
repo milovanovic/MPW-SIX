@@ -77,7 +77,7 @@ class HyperSpaceTester[T <: Data : Real: BinaryRepresentation]
 
   if(params.cfarParams != None) {
     val beatBytes = 4
-    val cfarModeString = "CASH"
+    val cfarModeString = "Cell Averaging"
     val thresholdScaler = 2.8
     val binPointThresholdScaler = 10
     val thresholdScalerReg = (thresholdScaler * scala.math.pow(2,binPointThresholdScaler)).toInt

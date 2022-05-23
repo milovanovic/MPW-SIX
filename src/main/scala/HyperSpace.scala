@@ -157,10 +157,11 @@ class HyperSpaceParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
         leadLaggWindowSize = 64,
         guardWindowSize = 8,
         logOrLinReg = false,
+        retiming = false,
         fftSize = fftSize,
         sendCut = true,
-        minSubWindowSize = Some(4),
-        includeCASH = true, //true
+        minSubWindowSize = None,
+        includeCASH = false,
         CFARAlgorithm = CACFARType,
         numAddPipes = 1,                  // number of add pipeline registers
         numMulPipes = 1                   // number of mull pipeline registers
