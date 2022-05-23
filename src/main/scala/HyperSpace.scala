@@ -195,7 +195,7 @@ object HyperSpaceApp extends App
 
   val arguments = Array(
     "-X", "verilog",
-    "--repl-seq-mem","-c:AXI4HyperSpace:-o:./verilog/rtl/HyperSpace/mem.conf",
+    "--repl-seq-mem","-c:AXI4HyperSpace/AXI4FFTBlock:-o:./verilog/rtl/HyperSpace/mem.conf",
     "--log-level", "info",
     "--target-dir", "verilog/rtl/HyperSpace"
   )
