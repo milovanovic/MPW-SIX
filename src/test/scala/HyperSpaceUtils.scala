@@ -236,9 +236,11 @@ object HyperSpaceTesterUtils {
   * Check magnitude error, nco error, used also for checking output of the accumulator
   */
   def checkDataError(expected: Seq[Int], received: Seq[Int], tolerance: Int = 2) {
+    var i = 0
     expected.zip(received).foreach {
       case (in, out) => {
-        require(math.abs(in - out) <= tolerance, "Tolerance is not satisfied")
+        i = i+1
+        require(math.abs(in - out) <= tolerance, f"Tolerance is not satisfied, in = ${in}%04x, out = ${out}%04x, at ${i}")
       }
     }
   }
