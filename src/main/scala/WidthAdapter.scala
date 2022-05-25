@@ -148,27 +148,48 @@ object WidthAdapter {
   def oneToNSliceAdapter(n: Int): AdapterFun = (d, iv, or) => {
     require(((d.getWidth + n - 1) / n) * n == d.getWidth, s"width ${d.getWidth} must be divisible by $n")
     val l = d.getWidth / n
+
+    val regs = if(l > 1) Some(RegInit(0.U(((n-1)*l).W))) else None
+
     val slices = VecInit(for (i <- n-1 to 0 by -1) yield {
       if (d.getWidth == 0) {
         d
-      } else {
+      }
+      else if (i == (n-1)) {
         d(d.getWidth - 1 - i * l, max(0, d.getWidth - (i + 1) * l))
+      } 
+      else {
+        if (regs != None) {
+          regs.get(d.getWidth - 1 - (i + 1) * l, max(0, d.getWidth - (i + 2) * l))
+        }
+        else {
+          d(d.getWidth - 1 - i * l, max(0, d.getWidth - (i + 1) * l))
+        }
       }
     })
 
     val cnt = RegInit(0.U(log2Ceil(n).W))
-    when (iv && or) { cnt := Mux(cnt === (n-1).U, 0.U, cnt +& 1.U) }
+    val ov = (cnt > 0.U) || (cnt === 0.U && iv)
+    val ir = (cnt === 0.U && or)
+    
+    when (ov && or) { cnt := Mux(cnt === (n-1).U, 0.U, cnt +& 1.U) }
+    if (regs != None) {
+      when (iv && ir) { regs.get := d(d.getWidth - 1, l)} 
+    }
 
     val dOut = slices(cnt)
 
-    (dOut, iv, cnt === (n - 1).U && or)
+    (dOut, ov, ir)
   }
 
   def oneToNLastAdapter(n: Int): AdapterFun = (d, iv, or) => {
     val cnt = RegInit(0.U(log2Ceil(n).W))
-    when (iv && or) { cnt := Mux(cnt === (n-1).U, 0.U, cnt +& 1.U) }
+    val ov = (cnt > 0.U) || (cnt === 0.U && iv)
+    val ir = (cnt === 0.U && or)
 
-    (d =/= 0.U && cnt === (n - 1).U, iv, cnt === (n - 1).U && or)
+    when (ov && or) { cnt := Mux(cnt === (n-1).U, 0.U, cnt +& 1.U) }
+
+    (d =/= 0.U && cnt === (n - 1).U, ov, ir)
   }
 
   def oneToN(n: Int): AXI4StreamAdapterNode =
