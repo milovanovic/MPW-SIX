@@ -71,14 +71,11 @@ abstract class HyperSpace [T <: Data : Real: BinaryRepresentation, D, U, E, O, B
   /* Connect nodes */
   lazy val connections = for (i <- 1 until blocks.length) yield (blocks(i), blocks(i-1))
   for ((lhs, rhs) <- connections) {
-    lhs.streamNode := rhs.streamNode
-    // lhs.streamNode := AXI4StreamBuffer() := rhs.streamNode
+    lhs.streamNode := AXI4StreamBuffer() := rhs.streamNode
   }
 
-  blocks.head.streamNode := one2N
+  blocks.head.streamNode := AXI4StreamBuffer() := one2N
   n2One := AXI4StreamBuffer() := blocks.last.streamNode
-  // blocks.head.streamNode := AXI4StreamBuffer() := one2N
-  // n2One := AXI4StreamBuffer() := blocks.last.streamNode
   /* Optional streamNode */
   val streamNode = NodeHandle(one2N, n2One)
 
