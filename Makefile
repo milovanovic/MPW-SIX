@@ -2,7 +2,7 @@ HYPERSPACE_PATH = .
 
 SIZE?=512
 DEPTH?=128
-ENABLE_PLOT?=true
+ENABLE_PLOT?=false
 
 export FFT_SIZE=$(SIZE)
 export FFT_DEPTH=$(DEPTH)
