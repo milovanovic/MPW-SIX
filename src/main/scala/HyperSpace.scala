@@ -71,11 +71,14 @@ abstract class HyperSpace [T <: Data : Real: BinaryRepresentation, D, U, E, O, B
   /* Connect nodes */
   lazy val connections = for (i <- 1 until blocks.length) yield (blocks(i), blocks(i-1))
   for ((lhs, rhs) <- connections) {
-    lhs.streamNode := AXI4StreamBuffer() := rhs.streamNode
+    lhs.streamNode := rhs.streamNode
+    // lhs.streamNode := AXI4StreamBuffer() := rhs.streamNode
   }
 
-  blocks.head.streamNode := AXI4StreamBuffer() := one2N
+  blocks.head.streamNode := one2N
   n2One := AXI4StreamBuffer() := blocks.last.streamNode
+  // blocks.head.streamNode := AXI4StreamBuffer() := one2N
+  // n2One := AXI4StreamBuffer() := blocks.last.streamNode
   /* Optional streamNode */
   val streamNode = NodeHandle(one2N, n2One)
 
@@ -195,7 +198,8 @@ object HyperSpaceApp extends App
 
   val arguments = Array(
     "-X", "verilog",
-    "--repl-seq-mem","-c:AXI4HyperSpace/AXI4FFTBlock:-o:./verilog/rtl/HyperSpace/mem.conf",
+    // "--repl-seq-mem","-c:AXI4HyperSpace:-o:./verilog/rtl/HyperSpace/mem.conf",
+    "-frsq","-c:AXI4HyperSpace:-m:AXI4FFTBlock:-o:./verilog/rtl/HyperSpace/mem.conf",
     "--log-level", "info",
     "--target-dir", "verilog/rtl/HyperSpace"
   )
