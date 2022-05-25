@@ -58,11 +58,11 @@ abstract class HyperSpace [T <: Data : Real: BinaryRepresentation, D, U, E, O, B
   /* Type of Blocks */
   type Block = AXI4DspBlock
 
-  val one2N = WidthAdapter.nToOne(beatBytes)
+  val one2N = AXI4StreamWidthAdapter.nToOne(beatBytes)
   val fft  : Option[Block] = if (params.fftParams  != None) Some(LazyModule(new AXI4FFTBlock(address = params.fftParams.get.fftAddress, params = params.fftParams.get.fftParams, _beatBytes = beatBytes, configInterface = false))) else None
   val mag  : Option[Block] = if (params.magParams  != None) Some(LazyModule(new AXI4LogMagMuxBlock(params.magParams.get.magParams, params.magParams.get.magAddress, _beatBytes = beatBytes))) else None
   val cfar : Option[Block] = if (params.cfarParams != None) Some(LazyModule(new AXI4CFARBlock(params.cfarParams.get.cfarParams, params.cfarParams.get.cfarAddress, _beatBytes = beatBytes))) else None
-  val n2One = WidthAdapter.oneToN(3)
+  val n2One = AXI4StreamWidthAdapter.oneToN(3)
 
   /* Blocks */
   val blocks: Seq[Block]  = Seq(fft, mag, cfar).flatten
