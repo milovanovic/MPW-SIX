@@ -3,6 +3,7 @@ HYPERSPACE_PATH = .
 SIZE?=512
 DEPTH?=128
 ENABLE_PLOT?=false
+FLATTEN?=false
 
 export FFT_SIZE=$(SIZE)
 export FFT_DEPTH=$(DEPTH)
@@ -13,7 +14,7 @@ init:
 
 # Create verilog for hyperspace
 verilog_hyperspace:
-	cd $(HYPERSPACE_PATH); sbt "runMain hyperspace.HyperSpaceApp $(FFT_SIZE) $(FFT_DEPTH)"; cd -;
+	cd $(HYPERSPACE_PATH); SBT_OPTS="-DfftSize=$(FFT_SIZE) -DminSRAMDepth=$(FFT_DEPTH) -DFLATTEN=$(FLATTEN)" sbt "runMain hyperspace.HyperSpaceApp $(FFT_SIZE) $(FFT_DEPTH)"; cd -;
 
 
 # Copy hyperspace verilog to the caravel_user_project verilog/rtl

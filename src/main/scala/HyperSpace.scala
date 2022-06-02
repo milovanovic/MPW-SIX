@@ -6,6 +6,7 @@ import chisel3._
 import chisel3.stage.{ChiselGeneratorAnnotation, ChiselStage}
 import chisel3.util._
 import chisel3.experimental.FixedPoint
+import chisel3.util.experimental.FlattenInstance
 
 import dsptools._
 import dsptools.numbers._
@@ -79,7 +80,8 @@ abstract class HyperSpace [T <: Data : Real: BinaryRepresentation, D, U, E, O, B
   /* Optional streamNode */
   val streamNode = NodeHandle(one2N, n2One)
 
-  lazy val module = new LazyModuleImp(this) {}
+  lazy val module = if (sys.props.getOrElse("FLATTEN", "false") == "true") new LazyModuleImp(this) with FlattenInstance {}
+                    else new LazyModuleImp(this) {}
 }
 
 trait AXI4HyperSpacePins extends AXI4HyperSpace[FixedPoint] {
@@ -173,33 +175,24 @@ class HyperSpaceParams(fftSize: Int = 512, minSRAMdepth: Int = 512) {
 
 object HyperSpaceApp extends App
 {
+
+
   implicit val p: Parameters = Parameters.empty
 
-  // Input arguments
-  val fftParams: Seq[Int] = if (args.length == 0) {
-    println("Arguments were not provided. Setting default arguments. FFTSize = 512, MinSRAMDepth = 512.")
-    Seq(512, 512)
-  }
-  else if (args.length == 1) {
-    println(s"Only one arguments was provided. Setting FTSize to ${args(0).toInt}, and MinSRAMDepth to default value 512.")
-    Seq(args(0).toInt, 512)
-  }
-  else {
-    println(s"Both arguments were provided. Setting FTSize = ${args(0).toInt}, MinSRAMDepth = ${args(1).toInt}.")
-    Seq(args(0).toInt, args(1).toInt)
-  }
+  val fftSize = sys.props.getOrElse("fftSize", "512").toInt
+  val minSRAMDepth = sys.props.getOrElse("minSRAMDepth", "512").toInt
 
-  
-  val params = (new HyperSpaceParams(fftParams(0), fftParams(1))).params
+  val params = (new HyperSpaceParams(fftSize, minSRAMDepth)).params
+
   val lazyDut = LazyModule(new AXI4HyperSpace(params, 4) with AXI4HyperSpacePins)
+  
 
   val arguments = Array(
     "-X", "verilog",
-    // "--repl-seq-mem","-c:AXI4HyperSpace:-o:./verilog/rtl/HyperSpace/mem.conf",
-    "-frsq","-c:AXI4HyperSpace:-m:AXI4FFTBlock:-o:./verilog/rtl/HyperSpace/mem.conf",
+    "--repl-seq-mem","-c:AXI4HyperSpace:-o:./verilog/rtl/HyperSpace/mem.conf",
     "--log-level", "info",
     "--target-dir", "verilog/rtl/HyperSpace"
   )
 
   (new ChiselStage).execute(arguments, Seq(ChiselGeneratorAnnotation(() => lazyDut.module)))
-}
+} 
