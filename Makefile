@@ -32,7 +32,7 @@ test_hyperspace:
 lint:
 	verilator --lint-only -Wno-STMTDLY  -DSIM -DMPRJ_IO_PADS=38 \
 	-I$(HYPERSPACE_PATH)/../verilog/rtl \
-	$(HYPERSPACE_PATH)/../verilog/rtl/user_proj_example.v
+	$(HYPERSPACE_PATH)/../verilog/rtl/user_project_wrapper.v
 
 check-env:
 ifndef PDK_ROOT
